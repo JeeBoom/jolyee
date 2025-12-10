@@ -23,29 +23,13 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Deploy to Hostinger via SSH
-        uses: appleboy/ssh-action@master
+      - name: Upload to Hostinger via SFTP
+        uses: sand4rt/ftp-deployer@v1.8.0
         with:
-          host: ${{ secrets.HOSTINGER_HOST }}
+          server: ${{ secrets.HOSTINGER_HOST }}
           port: ${{ secrets.HOSTINGER_PORT }}
           username: ${{ secrets.HOSTINGER_USER }}
-          key: ${{ secrets.HOSTINGER_SSH_KEY }}
-          script: |
-            set -e
-            export PATH=$PATH:/usr/local/bin
-            cd /home/${{ secrets.HOSTINGER_USER }}/domains/jolyee.net/public_html
-            echo "Clearing old files..."
-            find . -maxdepth 1 -type f -delete
-            find . -maxdepth 1 -type d ! -name . -exec rm -rf {} + 2>/dev/null || true
-            echo "Downloading latest build..."
-            git clone --depth 1 --single-branch -b main https://github.com/${{ github.repository }}.git temp_deploy
-            echo "Copying dist files..."
-            if [ -d "temp_deploy/dist" ]; then
-              cp -r temp_deploy/dist/* .
-            else
-              echo "Warning: dist folder not found!"
-              exit 1
-            fi
-            echo "Cleaning up..."
-            rm -rf temp_deploy
-            echo "Deployment completed successfully!"
+          password: ${{ secrets.HOSTINGER_PASSWORD }}
+          local_dir: ./dist
+          remote_dir: /domains/jolyee.net/public_html
+          dangerous_clean_up: true
