@@ -58,6 +58,9 @@
 
     <!-- 快捷键帮助 -->
     <ShortcutsHelp ref="shortcutsHelpRef" />
+
+    <!-- 右侧浮动菜单 -->
+    <FloatingMenu :sections="menuSections" />
   </div>
 </template>
 
@@ -68,6 +71,7 @@ import Sidebar from "./components/Sidebar.vue";
 import BackToTop from "./components/BackToTop.vue";
 import Footer from "./components/Footer.vue";
 import ShortcutsHelp from "./components/ShortcutsHelp.vue";
+import FloatingMenu from "./components/FloatingMenu.vue";
 import Communities from "./components/Communities.vue";
 import Waline from "./components/Waline.vue";
 import It from "./components/IT.vue";

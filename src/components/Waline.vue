@@ -75,5 +75,19 @@ onMounted(() => {
 :deep(.disqus-footer__wrapper .disqus-footer__wrapper--refresh){
   display: none !important;
 }
+
+/* 隐藏 "What do you think?" 文字 */
+/* :deep(.disqus-text-post-close-box){
+  display: none !important;
+}
+:deep(.disqus-post-close-box){
+  display: none !important;
+}
+:deep(.disqus-iframe-container .disqus-iframe-container-inner .disqus-container .disqus-header){
+  display: none !important;
+}
+:deep(h3 a[href*="disqus"]) {
+  display: none !important;
+} */
 </style>
 
