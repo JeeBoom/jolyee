@@ -1,6 +1,6 @@
 <template>
   <section class="communities" id="backend-section">
-    <h2 class="section-title">后端</h2>
+    <h2 class="section-title">后端技术</h2>
     <div class="cards-grid">
       <article 
         v-for="community in communities" 
@@ -145,7 +145,7 @@ const communities = ref([
 
 // 注册链接数据到全局store
 onMounted(() => {
-  addLinks(4, '后端', communities.value)
+  addLinks(6, '后端', communities.value)
 })
 
 const handleCommunityCardClick = (community) => {

@@ -108,7 +108,7 @@ const communities = ref([
 
 // 注册链接数据到全局store
 onMounted(() => {
-  addLinks(5, '测试运维', communities.value)
+  addLinks(7, '测试运维', communities.value)
 })
 
 const handleCommunityCardClick = (community) => {

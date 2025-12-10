@@ -183,6 +183,10 @@ const searchResults = computed(() => {
       if (link.url && link.url.toLowerCase().includes(query)) {
         matchedFields.push('url')
       }
+      // 搜索分类标题
+      if (link.categoryTitle && link.categoryTitle.toLowerCase().includes(query)) {
+        matchedFields.push('category')
+      }
 
       if (matchedFields.length > 0) {
         const sectionIndex = link.categoryId || 0

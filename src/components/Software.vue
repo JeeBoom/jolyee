@@ -101,7 +101,7 @@ const communities = ref([
 
 // 注册链接数据到全局store
 onMounted(() => {
-  addLinks(8, '软件下载', communities.value)
+  addLinks(11, '软件下载', communities.value)
 })
 
 const handleCommunityCardClick = (community) => {

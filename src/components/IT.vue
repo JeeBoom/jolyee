@@ -87,13 +87,13 @@ const communities = ref([
   {
     name: "知乎",
     desc: "中文互联网高质量的问答社区和创意内容平台，在这里可以找到有趣的答案和观点",
-    logo: "",
+    logo: "https://static.zhihu.com/heifetz/favicon.ico",
     url: "https://www.zhihu.com/",
   },
   {
     name: "简书",
     desc: "一个优质的内容创作和分享平台，汇集了众多优秀写手和专业内容创作者",
-    logo: "",
+    logo: "https://www.jianshu.com/favicon.ico",
     url: "https://www.jianshu.com/",
   },
   {

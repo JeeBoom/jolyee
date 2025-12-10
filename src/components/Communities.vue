@@ -43,53 +43,17 @@ const { addLinks } = useLinksStore();
 
 const communities = ref([
   {
-    name: "LINUX DO - 新的理想...",
-    desc: "佬友你好，里面个个都是人才，说话又好听，氛围超好，国内数一数二的优质社区",
-    logo: "https://linux.do/uploads/default/optimized/3X/9/d/9dd49731091ce8656e94433a26a3ef36062b3994_2_32x32.png",
-    url: "https://linux.do",
-  },
-  {
-    name: "reddit",
-    desc: "数百万用户在此聚集，讨论各自关心的话题,需科学",
-    logo: "https://www.reddit.com/favicon.ico", 
-    url: "https://www.reddit.com",
-  },
-  {
-    name: "2Libra",
-    desc: "「 2Libra 」，To Balance，走向平衡，一个以工作与生活平衡为核心的社区。",
-    logo: "https://2libra.com/favicon.ico", 
-    url: "https://2libra.com/",
-  },
-  {
-    name: "虫部落",
-    desc: "虫部落是一个纯粹的搜索知识、技术和经验分享平台，虫部落快搜、虫部落学术搜索等搜索聚合工具均为虫部落原创出品，搜索世界的乐趣，就在虫部落！",
-    logo: "https://www.chongbuluo.com/static/image/common/logo-light-icon.svg", 
-    url: "https://www.chongbuluo.com",
-  },
-  {
     name: "V2EX - 一个关于分享...",
     desc: "V2EX是一个面向程序员、极客人群的分享交流社区，需科学",
-    logo: "https://www.v2ex.com/static/favicon.ico", 
+    logo: "https://www.v2ex.com/static/favicon.ico",
     url: "https://www.v2ex.com",
   },
-  {
-    name: "V2EX（镜像）",
-    desc: "V2EX是一个面向程序员、极客人群的分享交流社区，需科学",
-    logo: "https://www.v2ex.com/static/favicon.ico", 
-    url: "https://v2ex.jscdn.cn",
-  },
   // {
-  //   name: "SegmentFault（思否）",
-  //   desc: "国内主流的技术问答与社区平台，功能类似 Stack Overflow，同时提供技术博客、专栏、课程等内容。支持提问、回答、文章投稿，还有技术招聘板块，适合开发者解决问题、分享经验和求职交流。",
-  //   logo: "https://img2.baidu.com/it/u=1761179647,3217879606&fm=253&fmt=auto&app=138&f=PNG?w=500&h=750", 
-  //   url: "https://segmentfault.com/",
+  //   name: "V2EX（镜像）",
+  //   desc: "V2EX是一个面向程序员、极客人群的分享交流社区，需科学",
+  //   logo: "https://www.v2ex.com/static/favicon.ico",
+  //   url: "https://v2ex.jscdn.cn",
   // },
-  {
-    name: "豆瓣小组",
-    desc: "豆瓣小组",
-    logo: "https://www.douban.com/favicon.ico", // 请填入豆瓣的 logo URL
-    url: "https://www.douban.com/group",
-  },
   {
     name: "吾爱破解",
     desc: "逆向破解爱好者聚集地",
@@ -101,6 +65,42 @@ const communities = ref([
     desc: "百度贴吧是中国最大的中文交互论坛，讨论各种话题。",
     logo: "https://files.codelife.cc/itab/search/baidu.svg", // 请填入百度贴吧的 logo URL
     url: "https://tieba.baidu.com",
+  },
+  {
+    name: "LINUX DO - 新的理想...",
+    desc: "佬友你好，里面个个都是人才，说话又好听，氛围超好，国内数一数二的优质社区",
+    logo: "https://linux.do/uploads/default/optimized/3X/9/d/9dd49731091ce8656e94433a26a3ef36062b3994_2_32x32.png",
+    url: "https://linux.do",
+  },
+  {
+    name: "reddit",
+    desc: "数百万用户在此聚集，讨论各自关心的话题,需科学",
+    logo: "https://www.reddit.com/favicon.ico",
+    url: "https://www.reddit.com",
+  },
+  {
+    name: "2Libra",
+    desc: "「 2Libra 」，To Balance，走向平衡，一个以工作与生活平衡为核心的社区。",
+    logo: "https://2libra.com/favicon.ico",
+    url: "https://2libra.com/",
+  },
+  {
+    name: "虫部落",
+    desc: "虫部落是一个纯粹的搜索知识、技术和经验分享平台，虫部落快搜、虫部落学术搜索等搜索聚合工具均为虫部落原创出品，搜索世界的乐趣，就在虫部落！",
+    logo: "https://www.chongbuluo.com/static/image/common/logo-light-icon.svg",
+    url: "https://www.chongbuluo.com",
+  },
+  // {
+  //   name: "SegmentFault（思否）",
+  //   desc: "国内主流的技术问答与社区平台，功能类似 Stack Overflow，同时提供技术博客、专栏、课程等内容。支持提问、回答、文章投稿，还有技术招聘板块，适合开发者解决问题、分享经验和求职交流。",
+  //   logo: "https://img2.baidu.com/it/u=1761179647,3217879606&fm=253&fmt=auto&app=138&f=PNG?w=500&h=750",
+  //   url: "https://segmentfault.com/",
+  // },
+  {
+    name: "豆瓣小组",
+    desc: "豆瓣小组",
+    logo: "https://www.douban.com/favicon.ico", // 请填入豆瓣的 logo URL
+    url: "https://www.douban.com/group",
   },
   {
     name: "NewsNow",
@@ -195,14 +195,56 @@ const communities = ref([
   {
     name: "摸鱼派",
     desc: "如果你也是奋斗在一线、热爱工作的苦逼青年，期待与众多鱼油聚集起来，那就加入友好的摸鱼派社区吧！",
-    logo: "https://fishpi.cn/images/favicon.png?2.9.9", 
+    logo: "https://fishpi.cn/images/favicon.png?2.9.9",
     url: "https://www.sheyupi.com",
   },
   {
     name: "OSChina（开源中国）",
     desc: "国内老牌开源社区，提供开源项目托管、技术资讯、问答社区、代码分享等服务。聚集了大量国内开源爱好者，是了解国产开源项目、参与本土开源协作的重要平台。",
-    logo: "https://img0.baidu.com/it/u=3493317179,646773639&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500", 
+    logo: "https://img0.baidu.com/it/u=3493317179,646773639&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500",
     url: "https://www.oschina.net/",
+  },
+  {
+    name: "Product Hunt",
+    desc: "全球最大的新产品发现平台，每天分享最新的应用和网站",
+    logo: "https://www.producthunt.com/favicon.ico",
+    url: "https://www.producthunt.com",
+  },
+  {
+    name: "Hacker News",
+    desc: "Y Combinator旗下的技术新闻聚合平台，技术极客必看",
+    logo: "https://news.ycombinator.com/favicon.ico",
+    url: "https://news.ycombinator.com",
+  },
+  {
+    name: "IndieHackers",
+    desc: "独立开发者社区，分享创业经验和产品开发心得",
+    logo: "https://www.indiehackers.com/images/favicons/favicon--32x32.png",
+    url: "https://www.indiehackers.com",
+  },
+  {
+    name: "DEV Community",
+    desc: "程序员技术写作和分享平台，活跃的开发者社区",
+    logo: "https://dev.to/favicon.ico",
+    url: "https://dev.to",
+  },
+  {
+    name: "Hashnode",
+    desc: "开发者博客平台，专注于技术内容创作",
+    logo: "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242173172/AOX1gE2jc.png",
+    url: "https://hashnode.com",
+  },
+  {
+    name: "电鸭社区",
+    desc: "远程工作招聘和交流平台，寻找远程工作机会",
+    logo: "https://eleduck.com/static/favicon.ico	",
+    url: "https://eleduck.com",
+  },
+  {
+    name: "酷壳 CoolShell",
+    desc: "陈皓(左耳朵耗子)的技术博客，深度技术文章",
+    logo: "https://coolshell.cn/favicon.ico",
+    url: "https://coolshell.cn",
   },
 ]);
 
@@ -222,13 +264,13 @@ const handleCommunityCardClick = (community) => {
 
 const handleImageError = (event) => {
   // 当图片加载失败时，用备用图标替换
-  event.target.style.display = 'none';
+  event.target.style.display = "none";
   const parent = event.target.parentElement;
-  const fallbackIcon = parent.querySelector('.fallback-icon');
+  const fallbackIcon = parent.querySelector(".fallback-icon");
   if (!fallbackIcon) {
-    const span = document.createElement('span');
-    span.className = 'fallback-icon';
-    span.textContent = '🔗';
+    const span = document.createElement("span");
+    span.className = "fallback-icon";
+    span.textContent = "🔗";
     parent.appendChild(span);
   }
 };

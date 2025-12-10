@@ -18,30 +18,36 @@
         <Ai />
       </div>
       <div id="section-3" class="content-section">
-        <Front />
+        <News />
       </div>
       <div id="section-4" class="content-section">
-        <Backend />
+        <Crypto />
       </div>
       <div id="section-5" class="content-section">
-        <Devops />
+        <Front />
       </div>
       <div id="section-6" class="content-section">
-        <Tools />
+        <Backend />
       </div>
       <div id="section-7" class="content-section">
-        <Movie />
+        <Devops />
       </div>
       <div id="section-8" class="content-section">
-        <Music />
+        <Tools />
       </div>
       <div id="section-9" class="content-section">
-        <Software />
+        <Movie />
       </div>
       <div id="section-10" class="content-section">
-        <English />
+        <Music />
       </div>
       <div id="section-11" class="content-section">
+        <Software />
+      </div>
+      <div id="section-12" class="content-section">
+        <English />
+      </div>
+      <div id="section-13" class="content-section">
         <Crossborder />
       </div>
       
@@ -85,6 +91,8 @@ import Backend from "./components/Backend.vue";
 import Devops from "./components/Devops.vue";
 import Tools from "./components/Tools.vue";
 import Crossborder from "./components/Crossborder.vue";
+import News from "./components/News.vue";
+import Crypto from "./components/Crypto.vue";
 import { useLinksStore } from "./utils/linksStore"
 import { setPageMeta, generateSchemaMarkup } from "./utils/seoManager"
 import { setupKeyboardShortcuts } from "./utils/keyboardShortcuts"
@@ -96,15 +104,17 @@ const menuSections = ref([
   { title: "优质社区", icon: "🌐", group: "学习资源", count: 0, shortcut: "1" },
   { title: "IT平台", icon: "💻", group: "学习资源", count: 0, shortcut: "2" },
   { title: "AI工具", icon: "🤖", group: "开发工具", count: 0, shortcut: "3" },
-  { title: "前端", icon: "⚛️", group: "开发工具", count: 0, shortcut: "4" },
-  { title: "后端", icon: "🔧", group: "开发工具", count: 0, shortcut: "5" },
-  { title: "测试运维", icon: "🚀", group: "开发工具", count: 0, shortcut: "6" },
-  { title: "工具合集", icon: "🛠️", group: "开发工具", count: 0, shortcut: "7" },
-  { title: "影视资源", icon: "🎬", group: "娱乐资源", count: 0, shortcut: "8" },
-  { title: "音乐资源", icon: "🎵", group: "娱乐资源", count: 0, shortcut: "9" },
-  { title: "软件下载", icon: "📦", group: "娱乐资源", count: 0, shortcut: "10" },
-  { title: "英语", icon: "🌍", group: "学习资源", count: 0, shortcut: "11" },
-  { title: "跨境出海", icon: "🚢", group: "商业资源", count: 0, shortcut: "12" },
+  { title: "新闻资讯", icon: "📰", group: "学习资源", count: 0, shortcut: "4" },
+  { title: "股票虚拟币", icon: "💰", group: "商业资源", count: 0, shortcut: "5" },
+  { title: "前端", icon: "⚛️", group: "开发工具", count: 0, shortcut: "6" },
+  { title: "后端", icon: "🔧", group: "开发工具", count: 0, shortcut: "7" },
+  { title: "测试运维", icon: "🚀", group: "开发工具", count: 0, shortcut: "8" },
+  { title: "工具合集", icon: "🛠️", group: "开发工具", count: 0, shortcut: "9" },
+  { title: "影视资源", icon: "🎬", group: "娱乐资源", count: 0, shortcut: "10" },
+  { title: "音乐资源", icon: "🎵", group: "娱乐资源", count: 0, shortcut: "11" },
+  { title: "软件下载", icon: "📦", group: "娱乐资源", count: 0, shortcut: "12" },
+  { title: "英语", icon: "🌍", group: "学习资源", count: 0, shortcut: "13" },
+  { title: "跨境出海", icon: "🚢", group: "商业资源", count: 0, shortcut: "14" },
 ]);
 
 const communitiesRef = ref(null);

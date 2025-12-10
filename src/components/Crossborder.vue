@@ -205,7 +205,7 @@ const logUserInteraction = (type, target) => {
 };
 
 onMounted(() => {
-  addLinks(11, "跨境出海", resources.value);
+  addLinks(13, "跨境出海", resources.value);
 });
 </script>
 

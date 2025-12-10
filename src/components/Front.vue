@@ -1,6 +1,6 @@
 <template>
   <section class="communities" id="front-section">
-    <h2 class="section-title">前端</h2>
+    <h2 class="section-title">前端技术</h2>
     <div class="cards-grid">
       <article
         v-for="community in communities"
@@ -199,7 +199,7 @@ const communities = ref([
 
 // 注册链接数据到全局store
 onMounted(() => {
-  addLinks(3, '前端', communities.value)
+  addLinks(5, '前端', communities.value)
 })
 
 const handleCommunityCardClick = (community) => {

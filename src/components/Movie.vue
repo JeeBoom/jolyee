@@ -117,7 +117,7 @@ const communities = ref([
 
 // 注册链接数据到全局store
 onMounted(() => {
-  addLinks(6, "影视资源", communities.value);
+  addLinks(9, "影视资源", communities.value);
 });
 
 const handleCommunityCardClick = (community) => {

@@ -205,7 +205,7 @@ const logUserInteraction = (type, target) => {
 };
 
 onMounted(() => {
-  addLinks(6, "工具合集", tools.value);
+  addLinks(8, "工具合集", tools.value);
 });
 </script>
 

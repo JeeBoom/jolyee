@@ -30,52 +30,118 @@ const { addLinks } = useLinksStore()
 
 const communities = ref([
   {
-    name: '汽水音乐',
-    desc: '汽水音乐 - 懂年轻人的品质音乐APP',
-    logo: 'https://lf-luna.qishui.com/obj/music-luna-fe/luna/home/1.0.0.200/favicon.png', 
-    url: 'https://www.qishui.com/'
-  },
-    {
-    name: 'HiFiNi - 音乐磁场',
-    desc: 'HiFiNi 是一个由音乐爱好者维护的分享平台, 旨在解决问题互帮互助, 如果您有需求, 请注册账号并发布信息、详细描述歌曲信息等, 我们会尽力帮您寻找HiFiNi MUSIC BBS - HiFiNi.COM',
-    logo: 'https://hifiti.com/favicon.ico', 
-    url: 'https://hifiti.com/'
-  },
-   {
     name: 'QQ音乐',
-    desc: '音乐,QQ音乐,在线听歌,音乐下载,音乐播放器,音乐网站,MV,巅峰榜,音乐排行榜,翻译歌曲,热门歌曲,经典老歌,无损音乐,无损曲库',
+    desc: '在线听歌、音乐下载、无损音乐、热门歌曲、经典老歌',
     logo: 'https://y.qq.com/favicon.ico', 
     url: 'https://y.qq.com/'
   },
   {
     name: '网易云音乐',
-    desc: '网易云音乐是一款专注于发现与分享的音乐产品，依托专业音乐人、DJ、好友推荐及社交功能，为用户打造全新的音乐生活。',
-    logo: 'https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/98/bd/94/98bd9409-ae62-519b-ebb3-add5714ad406/AppIcon-1x_U007emarketing-0-9-0-0-85-220-0.png/512x512bb.jpg', 
+    desc: '专注于发现与分享的音乐产品，依托专业音乐人、DJ、好友推荐',
+    logo: 'https://s1.music.126.net/style/favicon.ico', 
     url: 'https://music.163.com/'
   },
   {
     name: '酷狗音乐',
-    desc: '酷狗音乐在线正版音乐网站，为您提供酷狗音乐播放器下载 、在线音乐试听下载，提供听书、长音频、频道、听小说和MV播放服务。酷狗音乐，就是歌多！小说相声也很多！场景音乐也很多！',
+    desc: '在线正版音乐网站，提供在线音乐试听下载、听书、长音频',
     logo: 'https://www.kugou.com/favicon.ico', 
     url: 'https://www.kugou.com/'
   },
   {
-    name: '酷我音乐-无损音质正版在线试听网站',
-    desc: '酷我音乐-无损音质正版在线试听网站，酷我音乐为您提供高品质音乐，无损音乐下载，拥有各类音乐榜单，快捷的新歌速递，完善的主题电台，个性化的歌曲推荐，高品质音乐在线听，好音质，用酷我。陪着我，不要停',
+    name: '酷我音乐',
+    desc: '无损音质正版在线试听，高品质音乐在线听',
     logo: 'https://www.kuwo.cn/favicon.ico?v=1', 
     url: 'https://www.kuwo.cn/'
   },
   {
+    name: '汽水音乐',
+    desc: '懂年轻人的品质音乐APP',
+    logo: 'https://lf-luna.qishui.com/obj/music-luna-fe/luna/home/1.0.0.200/favicon.png', 
+    url: 'https://www.qishui.com/'
+  },
+  {
+    name: 'Spotify',
+    desc: '全球最大的流媒体音乐平台，数百万首歌曲随心听',
+    logo: 'https://www.spotify.com/favicon.ico', 
+    url: 'https://www.spotify.com/'
+  },
+  {
+    name: 'Apple Music',
+    desc: '苹果音乐流媒体服务，超过1亿首歌曲无损播放',
+    logo: 'https://www.apple.com/favicon.ico', 
+    url: 'https://music.apple.com/'
+  },
+  {
+    name: 'YouTube Music',
+    desc: 'YouTube官方音乐平台，海量MV和音乐视频',
+    logo: 'https://music.youtube.com/favicon.ico', 
+    url: 'https://music.youtube.com/'
+  },
+  {
+    name: 'SoundCloud',
+    desc: '全球最大的独立音乐分享平台，发现新兴音乐人',
+    logo: 'https://soundcloud.com/favicon.ico', 
+    url: 'https://soundcloud.com/'
+  },
+  {
+    name: 'Bandcamp',
+    desc: '独立音乐人作品销售平台，直接支持艺术家',
+    logo: 'https://s4.bcbits.com/client-bundle/1/PageLayout_1/favicon-78ff127104384a042453aca8d73be7dc.static/favicon/favicon-32x32.png', 
+    url: 'https://bandcamp.com/'
+  },
+  {
+    name: 'HiFiNi 音乐磁场',
+    desc: '由音乐爱好者维护的高品质音乐分享平台',
+    logo: 'https://hifiti.com/favicon.ico', 
+    url: 'https://hifiti.com/'
+  },
+  {
     name: '喜马拉雅',
-    desc: '国内专业音频分享平台，随时随地，听我想听！4亿用户选择的在线音频平台。马东、郭德纲、吴晓波等20多万大咖入驻，1亿多条原创有声内容覆盖有声书、儿童、相声评书、财经新闻、音乐等328类',
+    desc: '专业音频分享平台，有声书、儿童、相声评书、财经新闻',
     logo: 'https://www.ximalaya.com/favicon.ico', 
     url: 'https://www.ximalaya.com/'
+  },
+  {
+    name: '豆瓣音乐',
+    desc: '发现音乐、分享音乐、讨论音乐的社区',
+    logo: 'https://www.douban.com/favicon.ico', 
+    url: 'https://music.douban.com/'
+  },
+  {
+    name: 'Audiomack',
+    desc: '免费音乐流媒体平台，专注说唱和嘻哈音乐',
+    logo: 'https://www.audiomack.com/favicon.ico', 
+    url: 'https://www.audiomack.com/'
+  },
+  {
+    name: 'TIDAL',
+    desc: '高保真音乐流媒体服务，提供无损和母带级音质',
+    logo: 'https://tidal.com/favicon.ico', 
+    url: 'https://tidal.com/'
+  },
+  {
+    name: 'Deezer',
+    desc: '国际音乐流媒体平台，支持全球180个国家',
+    logo: 'https://www.deezer.com/favicon.ico', 
+    url: 'https://www.deezer.com/'
+  },
+  {
+    name: 'Last.fm',
+    desc: '音乐推荐和统计平台，记录你的音乐品味',
+    logo: 'https://www.last.fm/favicon.ico', 
+    url: 'https://www.last.fm/'
+  },
+  {
+    name: 'Genius',
+    desc: '歌词注解平台，了解歌曲背后的故事和含义',
+    logo: 'https://genius.com/favicon.ico', 
+    url: 'https://genius.com/'
   },
 ])
 
 // 注册链接数据到全局store
 onMounted(() => {
-  addLinks(7, '音乐资源', communities.value)
+  addLinks(10, '音乐资源', communities.value)
 })
 
 const handleCommunityCardClick = (community) => {
