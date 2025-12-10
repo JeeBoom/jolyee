@@ -57,8 +57,9 @@ const loadTheme = () => {
   if (saved) {
     isDark.value = saved === 'dark'
   } else {
-    // 检测系统主题
-    isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+    // 根据时间自动判断深色模式（18:00-06:00 为深色模式）
+    const hour = new Date().getHours()
+    isDark.value = hour >= 18 || hour < 6
   }
   document.documentElement.setAttribute('data-theme', isDark.value ? 'dark' : 'light')
 }

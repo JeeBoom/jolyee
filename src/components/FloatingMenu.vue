@@ -43,7 +43,7 @@ const scrollToSection = (index) => {
 <style scoped>
 .floating-menu {
   position: fixed;
-  right: 20px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 100;
