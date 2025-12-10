@@ -27,16 +27,22 @@
         <Devops />
       </div>
       <div id="section-6" class="content-section">
-        <Movie />
+        <Tools />
       </div>
       <div id="section-7" class="content-section">
-        <Music />
+        <Movie />
       </div>
       <div id="section-8" class="content-section">
-        <Software />
+        <Music />
       </div>
       <div id="section-9" class="content-section">
+        <Software />
+      </div>
+      <div id="section-10" class="content-section">
         <English />
+      </div>
+      <div id="section-11" class="content-section">
+        <Crossborder />
       </div>
       
       <!-- Waline 评论区 -->
@@ -73,6 +79,8 @@ import Ai from "./components/AI.vue";
 import Front from "./components/Front.vue";
 import Backend from "./components/Backend.vue";
 import Devops from "./components/Devops.vue";
+import Tools from "./components/Tools.vue";
+import Crossborder from "./components/Crossborder.vue";
 import { useLinksStore } from "./utils/linksStore"
 import { setPageMeta, generateSchemaMarkup } from "./utils/seoManager"
 import { setupKeyboardShortcuts } from "./utils/keyboardShortcuts"
@@ -87,10 +95,12 @@ const menuSections = ref([
   { title: "前端", icon: "⚛️", group: "开发工具", count: 0, shortcut: "4" },
   { title: "后端", icon: "🔧", group: "开发工具", count: 0, shortcut: "5" },
   { title: "测试运维", icon: "🚀", group: "开发工具", count: 0, shortcut: "6" },
-  { title: "影视资源", icon: "🎬", group: "娱乐资源", count: 0, shortcut: "7" },
-  { title: "音乐资源", icon: "🎵", group: "娱乐资源", count: 0, shortcut: "8" },
-  { title: "软件下载", icon: "📦", group: "娱乐资源", count: 0, shortcut: "9" },
-  { title: "英语", icon: "🌍", group: "学习资源", count: 0, shortcut: "10" },
+  { title: "工具合集", icon: "🛠️", group: "开发工具", count: 0, shortcut: "7" },
+  { title: "影视资源", icon: "🎬", group: "娱乐资源", count: 0, shortcut: "8" },
+  { title: "音乐资源", icon: "🎵", group: "娱乐资源", count: 0, shortcut: "9" },
+  { title: "软件下载", icon: "📦", group: "娱乐资源", count: 0, shortcut: "10" },
+  { title: "英语", icon: "🌍", group: "学习资源", count: 0, shortcut: "11" },
+  { title: "跨境出海", icon: "🚢", group: "商业资源", count: 0, shortcut: "12" },
 ]);
 
 const communitiesRef = ref(null);

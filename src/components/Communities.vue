@@ -78,12 +78,12 @@ const communities = ref([
     logo: "https://www.v2ex.com/static/favicon.ico", 
     url: "https://v2ex.jscdn.cn",
   },
-  {
-    name: "SegmentFault（思否）",
-    desc: "国内主流的技术问答与社区平台，功能类似 Stack Overflow，同时提供技术博客、专栏、课程等内容。支持提问、回答、文章投稿，还有技术招聘板块，适合开发者解决问题、分享经验和求职交流。",
-    logo: "https://img2.baidu.com/it/u=1761179647,3217879606&fm=253&fmt=auto&app=138&f=PNG?w=500&h=750", 
-    url: "https://segmentfault.com/",
-  },
+  // {
+  //   name: "SegmentFault（思否）",
+  //   desc: "国内主流的技术问答与社区平台，功能类似 Stack Overflow，同时提供技术博客、专栏、课程等内容。支持提问、回答、文章投稿，还有技术招聘板块，适合开发者解决问题、分享经验和求职交流。",
+  //   logo: "https://img2.baidu.com/it/u=1761179647,3217879606&fm=253&fmt=auto&app=138&f=PNG?w=500&h=750", 
+  //   url: "https://segmentfault.com/",
+  // },
   {
     name: "豆瓣小组",
     desc: "豆瓣小组",

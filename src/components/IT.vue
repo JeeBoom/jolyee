@@ -75,8 +75,44 @@ const communities = ref([
   {
     name: "博客园",
     desc: "博客园是一个面向开发者的知识分享社区",
-    logo: "https://www.cnblogs.com/images/logo.svg?v=2SMrXdIvlZwVoB1akyXm38WIKuTHVqvGD0CweV-B6cY", // 请填入摄鱼派的 logo URL
-    url: "https://2libra.com/",
+    logo: "https://www.cnblogs.com/images/logo.svg?v=2SMrXdIvlZwVoB1akyXm38WIKuTHVqvGD0CweV-B6cY",
+    url: "https://www.cnblogs.com/",
+  },
+  // {
+  //   name: "V2EX",
+  //   desc: "一个关于分享和探索的地方，V2EX 上面有很多有趣的人和内容",
+  //   logo: "https://www.v2ex.com/favicon.ico",
+  //   url: "https://www.v2ex.com/",
+  // },
+  {
+    name: "知乎",
+    desc: "中文互联网高质量的问答社区和创意内容平台，在这里可以找到有趣的答案和观点",
+    logo: "",
+    url: "https://www.zhihu.com/",
+  },
+  {
+    name: "简书",
+    desc: "一个优质的内容创作和分享平台，汇集了众多优秀写手和专业内容创作者",
+    logo: "",
+    url: "https://www.jianshu.com/",
+  },
+  {
+    name: "Ruby China",
+    desc: "Ruby 社区的中文讨论区，众多 Ruby on Rails 开发者在这里交流",
+    logo: "https://l.ruby-china.com/photo/2016/c309db0b49cab85a32f756541ea0e2b0.png",
+    url: "https://ruby-china.org/",
+  },
+  {
+    name: "开源中国",
+    desc: "中国最大的开源技术社区，提供开源软件、技术博客、问答社区等服务",
+    logo: "https://www.oschina.net/favicon.ico",
+    url: "https://www.oschina.net/",
+  },
+  {
+    name: "思否",
+    desc: "SegmentFault，中国领先的开发者技术社区",
+    logo: "https://img2.baidu.com/it/u=1761179647,3217879606&fm=253&fmt=auto&app=138&f=PNG?w=500&h=750",
+    url: "https://segmentfault.com/",
   },
 ]);
 
