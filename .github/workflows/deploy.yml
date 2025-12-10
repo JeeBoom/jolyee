@@ -31,10 +31,21 @@ jobs:
           username: ${{ secrets.HOSTINGER_USER }}
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           script: |
-            cd ~/domains/jolyee.net/public_html
-            rm -rf *
-            cd ~
-            git -C domains/jolyee.net/public_html clone --depth 1 https://github.com/${{ github.repository }}.git temp_clone
-            cp -r temp_clone/dist/* domains/jolyee.net/public_html/
-            rm -rf temp_clone
-            echo "Deployment completed!"
+            set -e
+            export PATH=$PATH:/usr/local/bin
+            cd /home/${{ secrets.HOSTINGER_USER }}/domains/jolyee.net/public_html
+            echo "Clearing old files..."
+            find . -maxdepth 1 -type f -delete
+            find . -maxdepth 1 -type d ! -name . -exec rm -rf {} + 2>/dev/null || true
+            echo "Downloading latest build..."
+            git clone --depth 1 --single-branch -b main https://github.com/${{ github.repository }}.git temp_deploy
+            echo "Copying dist files..."
+            if [ -d "temp_deploy/dist" ]; then
+              cp -r temp_deploy/dist/* .
+            else
+              echo "Warning: dist folder not found!"
+              exit 1
+            fi
+            echo "Cleaning up..."
+            rm -rf temp_deploy
+            echo "Deployment completed successfully!"
