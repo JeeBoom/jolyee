@@ -21,7 +21,11 @@
               :src="community.logo"
               :alt="community.name"
               class="logo-image"
+              @error="handleImageError"
             />
+          </div>
+          <div v-else class="platform-icon" :class="community.iconClass">
+            <span class="fallback-icon">🔗</span>
           </div>
           <h3 class="card-title">{{ community.name }}</h3>
         </div>
@@ -47,37 +51,37 @@ const communities = ref([
   {
     name: "reddit",
     desc: "数百万用户在此聚集，讨论各自关心的话题,需科学",
-    logo: "https://www.reddit.com/favicon.ico", // 请填入 reddit 的 logo URL
+    logo: "https://www.reddit.com/favicon.ico", 
     url: "https://www.reddit.com",
   },
   {
     name: "2Libra",
     desc: "「 2Libra 」，To Balance，走向平衡，一个以工作与生活平衡为核心的社区。",
-    logo: "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSI3MCA0MCAxNjAgMTMwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSJkaXNwbGF5OmJsb2NrO21hcmdpbjowO3BhZGRpbmc6MDtib3JkZXI6MCI+PGVsbGlwc2UgY3g9IjE1MCIgY3k9IjE2MCIgcng9IjM1IiByeT0iOCIgZmlsbD0idmFyKC0tY29sb3ItcHJpbWFyeSkiPjwvZWxsaXBzZT48cGF0aCBkPSJNMTQ1IDE2MCBMMTU1IDE2MCBMMTUyIDEwMCBMMTQ4IDEwMCBaIiBmaWxsPSJ2YXIoLS1jb2xvci1hY2NlbnQpIj48L3BhdGg+PGcgdHJhbnNmb3JtPSJyb3RhdGUoNi4yNzIwMDAwMDAwMDAwMDMgMTUwIDEwMCkiIHN0eWxlPSJ0cmFuc2l0aW9uOnRyYW5zZm9ybSAwLjVzIGVhc2Utb3V0Ij48cmVjdCB4PSI5MCIgeT0iOTUiIHdpZHRoPSIxMjAiIGhlaWdodD0iMTAiIHJ4PSI1IiBmaWxsPSJ2YXIoLS1jb2xvci1pbmZvKSI+PC9yZWN0PjxyZWN0IHg9Ijk0IiB5PSI2MCIgd2lkdGg9IjI4IiBoZWlnaHQ9IjI4IiByeD0iNiIgZmlsbD0idmFyKC0tY29sb3Itc3VjY2VzcykiPjwvcmVjdD48Y2lyY2xlIGN4PSIxOTciIGN5PSI3NCIgcj0iMTQiIGZpbGw9InZhcigtLWNvbG9yLWVycm9yKSI+PC9jaXJjbGU+PC9nPjwvc3ZnPg==", // 请填入摄鱼派的 logo URL
+    logo: "https://2libra.com/favicon.ico", 
     url: "https://2libra.com/",
   },
   {
     name: "虫部落",
     desc: "虫部落是一个纯粹的搜索知识、技术和经验分享平台，虫部落快搜、虫部落学术搜索等搜索聚合工具均为虫部落原创出品，搜索世界的乐趣，就在虫部落！",
-    logo: "https://www.chongbuluo.com/static/image/common/logo-light-icon.svg", // 请填入虫部落的 logo URL
+    logo: "https://www.chongbuluo.com/static/image/common/logo-light-icon.svg", 
     url: "https://www.chongbuluo.com",
   },
   {
     name: "V2EX - 一个关于分享...",
     desc: "V2EX是一个面向程序员、极客人群的分享交流社区，需科学",
-    logo: "https://www.v2ex.com/static/favicon.ico", // 请填入 V2EX 的 logo URL
+    logo: "https://www.v2ex.com/static/favicon.ico", 
     url: "https://www.v2ex.com",
   },
   {
     name: "V2EX（镜像）",
     desc: "V2EX是一个面向程序员、极客人群的分享交流社区，需科学",
-    logo: "https://www.v2ex.com/static/favicon.ico", // 请填入 V2EX 的 logo URL
+    logo: "https://www.v2ex.com/static/favicon.ico", 
     url: "https://v2ex.jscdn.cn",
   },
   {
     name: "SegmentFault（思否）",
     desc: "国内主流的技术问答与社区平台，功能类似 Stack Overflow，同时提供技术博客、专栏、课程等内容。支持提问、回答、文章投稿，还有技术招聘板块，适合开发者解决问题、分享经验和求职交流。",
-    logo: "https://img2.baidu.com/it/u=1761179647,3217879606&fm=253&fmt=auto&app=138&f=PNG?w=500&h=750", // 请填入摄鱼派的 logo URL
+    logo: "https://img2.baidu.com/it/u=1761179647,3217879606&fm=253&fmt=auto&app=138&f=PNG?w=500&h=750", 
     url: "https://segmentfault.com/",
   },
   {
@@ -191,13 +195,13 @@ const communities = ref([
   {
     name: "摸鱼派",
     desc: "如果你也是奋斗在一线、热爱工作的苦逼青年，期待与众多鱼油聚集起来，那就加入友好的摸鱼派社区吧！",
-    logo: "https://fishpi.cn/images/favicon.png?2.9.9", // 请填入摄鱼派的 logo URL
+    logo: "https://fishpi.cn/images/favicon.png?2.9.9", 
     url: "https://www.sheyupi.com",
   },
   {
     name: "OSChina（开源中国）",
     desc: "国内老牌开源社区，提供开源项目托管、技术资讯、问答社区、代码分享等服务。聚集了大量国内开源爱好者，是了解国产开源项目、参与本土开源协作的重要平台。",
-    logo: "https://img0.baidu.com/it/u=3493317179,646773639&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500", // 请填入摄鱼派的 logo URL
+    logo: "https://img0.baidu.com/it/u=3493317179,646773639&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500", 
     url: "https://www.oschina.net/",
   },
 ]);
@@ -213,6 +217,19 @@ const handleCommunityCardClick = (community) => {
 
   if (community.url) {
     window.open(community.url, "_blank");
+  }
+};
+
+const handleImageError = (event) => {
+  // 当图片加载失败时，用备用图标替换
+  event.target.style.display = 'none';
+  const parent = event.target.parentElement;
+  const fallbackIcon = parent.querySelector('.fallback-icon');
+  if (!fallbackIcon) {
+    const span = document.createElement('span');
+    span.className = 'fallback-icon';
+    span.textContent = '🔗';
+    parent.appendChild(span);
   }
 };
 

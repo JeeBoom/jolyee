@@ -13,7 +13,7 @@
       >
         <div class="card-header">
           <div v-if="community.logo" class="platform-icon" :class="community.iconClass">
-            <img :src="community.logo" :alt="community.name" class="logo-image" />
+            <img :src="community.logo" :alt="community.name" class="logo-image" @error="handleImageError" />
           </div>
           <h3 class="card-title">{{ community.name }}</h3>
         </div>

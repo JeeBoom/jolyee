@@ -90,7 +90,7 @@ const communities = ref([
     {
     name: "木瓜AI",
     desc: "丰富的内置AI工具，涵盖文本生成、图像生成、代码生成等多种功能，满足不同用户的需求。",
-    logo: "", 
+    logo: "https://www.mooko.ai/favicon.ico", 
     url: "https://www.papayagpt.com/",
   },
   {

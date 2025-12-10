@@ -21,7 +21,11 @@
               :src="community.logo"
               :alt="community.name"
               class="logo-image"
+              @error="handleImageError"
             />
+          </div>
+          <div v-else class="platform-icon" :class="community.iconClass">
+            <span class="fallback-icon">🔗</span>
           </div>
           <h3 class="card-title">{{ community.name }}</h3>
         </div>

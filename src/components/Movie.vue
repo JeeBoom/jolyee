@@ -21,7 +21,11 @@
               :src="community.logo"
               :alt="community.name"
               class="logo-image"
+              @error="handleImageError"
             />
+          </div>
+          <div v-else class="platform-icon" :class="community.iconClass">
+            <span class="fallback-icon">🔗</span>
           </div>
           <h3 class="card-title">{{ community.name }}</h3>
         </div>
@@ -52,7 +56,7 @@ const communities = ref([
   {
     name: "哔哩哔哩",
     desc: "哔哩哔哩（bilibili.com)是国内知名的视频弹幕网站，这里有及时的动漫新番，活跃的ACG氛围，有创意的Up主。大家可以在这里找到许多欢乐。",
-    logo: "https://static.hdslb.com/mobile/img/512.png",
+    logo: "https://www.bilibili.com/favicon.ico",
     url: "https://www.bilibili.com/",
   },
   {
