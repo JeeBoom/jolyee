@@ -23,13 +23,14 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Upload to Hostinger via SFTP
-        uses: sand4rt/ftp-deployer@v1.8.0
+      - name: Deploy to Hostinger
+        uses: appleboy/scp-action@master
         with:
-          server: ${{ secrets.HOSTINGER_HOST }}
+          host: ${{ secrets.HOSTINGER_HOST }}
           port: ${{ secrets.HOSTINGER_PORT }}
           username: ${{ secrets.HOSTINGER_USER }}
           password: ${{ secrets.HOSTINGER_PASSWORD }}
-          local_dir: ./dist
-          remote_dir: /domains/jolyee.net/public_html
-          dangerous_clean_up: true
+          source: "dist/*"
+          target: "/home/${{ secrets.HOSTINGER_USER }}/domains/jolyee.net/public_html"
+          strip_components: 1
+          overwrite: true
