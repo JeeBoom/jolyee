@@ -57,7 +57,7 @@ onMounted(() => {
   max-width: 100%;
   margin-top: 3rem;
   padding: 2rem 0;
-  border-top: 1px solid var(--border-color);
+  /* border-top: 1px solid var(--border-color); */
 }
 
 :deep(#disqus_thread) {
@@ -67,6 +67,13 @@ onMounted(() => {
 /* Disqus iframe 响应式 */
 :deep(iframe) {
   max-width: 100%;
+}
+
+:deep(.disqus-footer--refresh){
+  display: none !important;
+}
+:deep(.disqus-footer__wrapper .disqus-footer__wrapper--refresh){
+  display: none !important;
 }
 </style>
 

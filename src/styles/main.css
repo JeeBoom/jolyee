@@ -660,9 +660,10 @@ body {
    Waline 评论区样式
    ================================================ */
 .waline-wrapper {
-  max-width: 1200px;
+  /* max-width: 1200px; */
+  width: 60%;
   margin: 3rem auto;
   padding: 0 2rem;
-  border-top: 1px solid var(--border-color);
+  /* border-top: 1px solid var(--border-color); */
   padding-top: 2rem;
 }
