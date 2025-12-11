@@ -1,93 +1,112 @@
 <template>
-  <div class="disqus-container">
-    <div id="disqus_thread"></div>
+  <div class="giscus-container">
+    <div class="giscus"></div>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 
 const props = defineProps({
-  shortname: {
+  repo: {
     type: String,
-    default: 'https-jolyee-net' // 你的 Disqus shortname
+    default: 'JeeBoom/jolyee' // 你的 GitHub 仓库 owner/repo
+  },
+  repoId: {
+    type: String,
+    default: 'R_kgDOQmB3Qg' // 从 giscus.app 获取
+  },
+  category: {
+    type: String,
+    default: 'General' // Discussions 分类
+  },
+  categoryId: {
+    type: String,
+    default: 'DIC_kwDOQmB3Qs4Czp2o' // 从 giscus.app 获取
   }
 })
 
-onMounted(() => {
-  // Disqus 配置
-  window.disqus_config = function () {
-    this.page.url = window.location.href
-    this.page.identifier = window.location.pathname
-    this.page.title = document.title
-  }
+// 获取当前主题
+const getTheme = () => {
+  return document.documentElement.getAttribute('data-theme') === 'dark' 
+    ? 'dark' 
+    : 'light'
+}
 
-  // 异步加载 Disqus 脚本
-  if (document.getElementById('disqus-script')) {
-    // 脚本已加载，重新重置评论
-    if (window.DISQUS) {
-      window.DISQUS.reset({
-        reload: true
-      })
-    }
-  } else {
-    // 加载 Disqus 脚本
-    const script = document.createElement('script')
-    script.id = 'disqus-script'
-    script.src = `https://${props.shortname}.disqus.com/embed.js`
-    script.async = true
-    script.setAttribute('data-timestamp', new Date().getTime())
-    
-    script.onload = () => {
-      console.log('Disqus script loaded successfully')
-    }
-    
-    script.onerror = () => {
-      console.error('Failed to load Disqus script')
-    }
-    
-    document.body.appendChild(script)
+// 加载 Giscus
+const loadGiscus = () => {
+  const container = document.querySelector('.giscus')
+  if (!container) return
+
+  // 清空容器
+  container.innerHTML = ''
+
+  // 创建 script 标签
+  const script = document.createElement('script')
+  script.src = 'https://giscus.app/client.js'
+  script.setAttribute('data-repo', props.repo)
+  script.setAttribute('data-repo-id', props.repoId)
+  script.setAttribute('data-category', props.category)
+  script.setAttribute('data-category-id', props.categoryId)
+  script.setAttribute('data-mapping', 'pathname')
+  script.setAttribute('data-strict', '0')
+  script.setAttribute('data-reactions-enabled', '1')
+  script.setAttribute('data-emit-metadata', '0')
+  script.setAttribute('data-input-position', 'top')
+  script.setAttribute('data-theme', getTheme())
+  script.setAttribute('data-lang', 'zh-CN')
+  script.setAttribute('data-loading', 'lazy')
+  script.crossOrigin = 'anonymous'
+  script.async = true
+
+  container.appendChild(script)
+}
+
+// 监听主题变化
+const updateGiscusTheme = () => {
+  const iframe = document.querySelector('.giscus-frame')
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.postMessage(
+      { giscus: { setConfig: { theme: getTheme() } } },
+      'https://giscus.app'
+    )
   }
+}
+
+onMounted(() => {
+  loadGiscus()
+
+  // 监听主题切换
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'data-theme') {
+        setTimeout(updateGiscusTheme, 100)
+      }
+    })
+  })
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme']
+  })
 })
 
 </script>
 
 <style scoped>
-.disqus-container {
+.giscus-container {
   max-width: 100%;
   margin-top: 3rem;
   padding: 2rem 0;
-  /* border-top: 1px solid var(--border-color); */
 }
 
-:deep(#disqus_thread) {
-  color: var(--text-primary);
+.giscus {
+  width: 100%;
 }
 
-/* Disqus iframe 响应式 */
-:deep(iframe) {
+/* 响应式 */
+:deep(.giscus-frame) {
   max-width: 100%;
 }
-
-:deep(.disqus-footer--refresh){
-  display: none !important;
-}
-:deep(.disqus-footer__wrapper .disqus-footer__wrapper--refresh){
-  display: none !important;
-}
-
-/* 隐藏 "What do you think?" 文字 */
-/* :deep(.disqus-text-post-close-box){
-  display: none !important;
-}
-:deep(.disqus-post-close-box){
-  display: none !important;
-}
-:deep(.disqus-iframe-container .disqus-iframe-container-inner .disqus-container .disqus-header){
-  display: none !important;
-}
-:deep(h3 a[href*="disqus"]) {
-  display: none !important;
-} */
 </style>
 
