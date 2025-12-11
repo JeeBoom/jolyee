@@ -128,10 +128,11 @@ const followMouse = () => {
     return
   }
   
-  // 缓慢移动
-  const speed = 4
-  const moveX = (dx / distance) * speed
-  const moveY = (dy / distance) * speed
+  // 使用缓动函数实现更平滑的跟随
+  // 距离越远，速度越快，自然减速
+  const easingFactor = 0.08 // 缓动系数（0-1之间）
+  const moveX = dx * easingFactor
+  const moveY = dy * easingFactor
   
   petX.value += moveX
   petY.value += moveY
@@ -203,8 +204,33 @@ const handleClick = (e) => {
 // 显示菜单
 const toggleMenu = (e) => {
   showMenu.value = !showMenu.value
-  menuX.value = e.clientX
-  menuY.value = e.clientY
+  
+  if (showMenu.value) {
+    // 菜单尺寸（估计值）
+    const menuWidth = 180
+    const menuHeight = 250
+    
+    // 计算菜单位置，确保不超出屏幕
+    let x = e.clientX
+    let y = e.clientY
+    
+    // 如果右侧空间不够，显示在左侧
+    if (x + menuWidth > window.innerWidth) {
+      x = e.clientX - menuWidth
+    }
+    
+    // 如果底部空间不够，显示在上方
+    if (y + menuHeight > window.innerHeight) {
+      y = e.clientY - menuHeight
+    }
+    
+    // 确保不超出左边和顶部
+    x = Math.max(10, x)
+    y = Math.max(10, y)
+    
+    menuX.value = x
+    menuY.value = y
+  }
 }
 
 // 喂食
@@ -269,6 +295,8 @@ const changePetType = () => {
   showMenu.value = false
   currentPetIndex.value = (currentPetIndex.value + 1) % petTypes.length
   showThought('嗨！是我~')
+  // 立即保存到localStorage
+  localStorage.setItem('petCompanionType', currentPetIndex.value.toString())
 }
 
 // 隐藏宠物
@@ -419,13 +447,12 @@ defineExpose({
   position: absolute;
   pointer-events: auto;
   cursor: grab;
-  transition: transform 0.1s ease;
   user-select: none;
+  will-change: left, top;
 }
 
 .pet.dragging {
   cursor: grabbing;
-  transition: none;
 }
 
 .pet-body {
