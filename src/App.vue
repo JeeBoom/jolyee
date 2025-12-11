@@ -327,6 +327,7 @@ onMounted(() => {
 <style scoped>
 .content-section {
   scroll-margin-top: 80px;
+  padding: 0 10%;
 }
 
 /* 日期时间显示 */
@@ -444,6 +445,10 @@ html[data-theme="dark"] .datetime-display:hover::before {
   
   .datetime-display .time {
     font-size: 32px;
+  }
+
+  .content-section {
+    padding: 0 ;
   }
 }
 
@@ -579,6 +584,10 @@ html[data-theme="dark"] .category-btn.active {
   
   .category-content {
     min-height: 250px;
+  }
+
+  .content-section {
+    padding: 0 ;
   }
 }
 </style>

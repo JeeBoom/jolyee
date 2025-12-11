@@ -178,7 +178,7 @@ html[data-theme="dark"] body {
 /* 5. 主内容区域 */
 .main-content {
   flex: 1;
-  width: 80%;
+  width: 100%;
   /* max-width: 1600px; */
   margin: 0 auto;
   padding: 3rem 4rem;
