@@ -107,9 +107,6 @@
     <!-- 快捷键帮助 -->
     <ShortcutsHelp ref="shortcutsHelpRef" />
 
-    <!-- 右侧浮动菜单 -->
-    <FloatingMenu :sections="menuSections" />
-
     <!-- 宠物伴侣 -->
     <PetCompanion />
 

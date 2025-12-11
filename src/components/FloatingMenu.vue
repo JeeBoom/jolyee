@@ -19,6 +19,15 @@
           <span class="menu-icon-emoji">{{ section.icon }}</span>
           <span class="menu-text">{{ section.title }}</span>
         </a>
+        <!-- 博客选项 -->
+        <a
+          href="#section-14"
+          class="floating-menu-item"
+          @click.prevent="scrollToSection(14)"
+        >
+          <span class="menu-icon-emoji">📝</span>
+          <span class="menu-text">博客</span>
+        </a>
       </nav>
     </Transition>
   </div>
@@ -34,13 +43,13 @@ defineProps({
   }
 })
 
+const emit = defineEmits(['switch-category'])
+
 const isExpanded = ref(false)
 
 const scrollToSection = (index) => {
-  const element = document.querySelector(`#section-${index}`)
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' })
-  }
+  emit('switch-category', index)
+  isExpanded.value = false
 }
 </script>
 
