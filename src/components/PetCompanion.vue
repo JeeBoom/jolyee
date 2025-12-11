@@ -62,11 +62,10 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 // 宠物类型
 const petTypes = [
   { name: 'capybara', emoji: '🦫', image: '/images/lulu.gif', sound: '噜噜~' },
-  { name: 'cat', emoji: '🐱', image: null, sound: '喵~' },
-  { name: 'dog', emoji: '🐶', image: null, sound: '汪!' },
-  { name: 'rabbit', emoji: '🐰', image: null, sound: '...' },
-  { name: 'hamster', emoji: '🐹', image: null, sound: '吱吱' },
-  { name: 'bird', emoji: '🐦', image: null, sound: '啾啾' }
+  { name: 'littleduck', emoji: '🦆', image: '/images/xly2.gif', sound: '小刘鸭~' },
+  { name: 'yellowduck', emoji: '🦆', image: '/images/pkq.gif', sound: '小黄鸭~' },
+  { name: 'paidaxing', emoji: '🦆', image: '/images/pdx.gif', sound: '派大星~' },
+  { name: 'jiqimao', emoji: '👧', image: '/images/jiqimao.gif', sound: '机器猫~' },
 ]
 
 // 状态
