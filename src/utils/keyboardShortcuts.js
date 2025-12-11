@@ -19,19 +19,12 @@ export const shortcuts = {
     description: "关闭搜索框",
     ctrl: false,
   },
-
-//   FAVORITES: {
-//     key: "b",
-//     description: "打开收藏夹",
-//     ctrl: true,
-//     alt: false,
-//   },
-//   TOP: {
-//     key: "t",
-//     description: "返回顶部",
-//     ctrl: true,
-//     alt: false,
-//   },
+  FAVORITES: {
+    key: "d",
+    description: "一键收藏",
+    ctrl: true,
+    alt: false,
+  },
   THEME: {
     key: "k",
     description: "切换深色/浅色主题",

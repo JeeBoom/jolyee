@@ -8,6 +8,9 @@
 
     <!-- 主内容区域 -->
     <main class="main-content">
+      <!-- 通用搜索框 -->
+      <UniversalSearch />
+      
       <div id="section-0" class="content-section">
         <Communities ref="communitiesRef" />
       </div>
@@ -78,6 +81,7 @@ import BackToTop from "./components/BackToTop.vue";
 import Footer from "./components/Footer.vue";
 import ShortcutsHelp from "./components/ShortcutsHelp.vue";
 import FloatingMenu from "./components/FloatingMenu.vue";
+import UniversalSearch from "./components/UniversalSearch.vue";
 import Communities from "./components/Communities.vue";
 import Waline from "./components/Waline.vue";
 import It from "./components/IT.vue";
