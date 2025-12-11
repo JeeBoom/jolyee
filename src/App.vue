@@ -1,7 +1,13 @@
 <template>
   <div id="app" class="page-wrapper">
     <!-- 页头 -->
-    <Header :sections="menuSections" :all-links="allLinks" @open-shortcuts="openShortcuts" />
+    <Header :all-links="allLinks" @open-shortcuts="openShortcuts" />
+    
+    <!-- 悬浮导航菜单 -->
+    <FloatingMenu
+      :sections="menuSections"
+      @switch-category="switchCategory"
+    />
 
     <!-- 侧边栏菜单 -->
     <!-- <Sidebar :sections="menuSections" /> -->

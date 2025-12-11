@@ -3,7 +3,7 @@
     <!-- 所有顶部按钮容器 -->
     <div class="header-buttons">
       <!-- 搜索框 -->
-      <SearchBar :sections="sections" :all-links="allLinks" />
+      <SearchBar :all-links="allLinks" />
       
       <!-- 快捷键帮助 -->
       <button
@@ -32,10 +32,6 @@ import { ref, onMounted } from 'vue'
 import SearchBar from './SearchBar.vue'
 
 defineProps({
-  sections: {
-    type: Array,
-    default: () => []
-  },
   allLinks: {
     type: Array,
     default: () => []
@@ -72,7 +68,7 @@ onMounted(() => {
 <style scoped>
 .site-header {
   position: fixed;
-  top: 0;
+  top: 100px;
   right: 0;
   left: 0;
   z-index: 9995 !important;
@@ -92,10 +88,10 @@ onMounted(() => {
 /* 按钮容器 - 统一管理所有顶部按钮 */
 .header-buttons {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 12px;
-  flex-wrap: wrap;
 }
 
 /* 统一的按钮样式 */
@@ -148,6 +144,7 @@ onMounted(() => {
 @media (max-width: 768px) {
   .site-header {
     padding-right: 80px;
+    display: none;
   }
 
   .header-buttons {
@@ -166,6 +163,7 @@ onMounted(() => {
 @media (max-width: 480px) {
   .site-header {
     padding-right: 70px;
+    display: none;
   }
 
   .header-buttons {

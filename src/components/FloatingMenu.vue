@@ -48,7 +48,7 @@ const scrollToSection = (index) => {
 .floating-menu {
   position: fixed;
   right: 20px;
-  top: 28%;
+  top: 17.5%;
   transform: translateY(-50%);
   z-index: 100;
 }
@@ -60,8 +60,8 @@ const scrollToSection = (index) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
   flex-shrink: 0;
   background: rgba(255, 255, 255, 0.95);
@@ -256,10 +256,16 @@ html[data-theme="dark"] .floating-menu-item:hover {
 }
 
 /* 响应式设计 */
+@media (max-width: 480px) {
+   .floating-menu {
+    display: none;
+  }
+}
 @media (max-width: 768px) {
   .floating-menu {
     right: 10px;
     min-width: 45px;
+    display: none;
   }
 
   .floating-menu-toggle {
