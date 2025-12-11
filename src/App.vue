@@ -183,6 +183,12 @@ onMounted(() => {
   
   // 设置全局快捷键
   setupKeyboardShortcuts((e) => {
+    // 禁用Tab键
+    if (e.key === 'Tab') {
+      e.preventDefault()
+      return
+    }
+    
     // Ctrl+S 打开搜索框
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
       e.preventDefault()

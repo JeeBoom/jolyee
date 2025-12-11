@@ -407,6 +407,7 @@ onUnmounted(() => {
   border-right: 1px solid var(--border-color);
   white-space: nowrap;
   user-select: none;
+  border-radius: 60px 0px 0px 60px;
 }
 
 .engine-selector:hover {

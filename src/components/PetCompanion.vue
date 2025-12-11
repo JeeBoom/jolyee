@@ -12,7 +12,13 @@
       >
         <!-- 宠物图标 -->
         <div class="pet-body">
-          <span class="pet-emoji">{{ currentPet.emoji }}</span>
+          <img 
+            v-if="currentPet.image" 
+            :src="currentPet.image" 
+            :alt="currentPet.name"
+            class="pet-image"
+          />
+          <span v-else class="pet-emoji">{{ currentPet.emoji }}</span>
         </div>
         
         <!-- 状态图标 -->
@@ -32,6 +38,7 @@
         <div class="menu-item" @click="playWithPet">🎾 玩耍</div>
         <div class="menu-item" @click="petPet">👋 抚摸</div>
         <div class="menu-divider"></div>
+        <div class="menu-item" @click="toggleFollow">{{ isFollowing ? '⏸️ 停止跟随' : '▶️ 恢复跟随' }}</div>
         <div class="menu-item" @click="changePetType">🔄 换宠物</div>
         <div class="menu-item" @click="hidePet">👻 隐藏 (Ctrl+P)</div>
       </div>
@@ -54,11 +61,12 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 // 宠物类型
 const petTypes = [
-  { name: 'cat', emoji: '🐱', sound: '喵~' },
-  { name: 'dog', emoji: '🐶', sound: '汪!' },
-  { name: 'rabbit', emoji: '🐰', sound: '...' },
-  { name: 'hamster', emoji: '🐹', sound: '吱吱' },
-  { name: 'bird', emoji: '🐦', sound: '啾啾' }
+  { name: 'cat', emoji: '🐱', image: null, sound: '喵~' },
+  { name: 'dog', emoji: '🐶', image: null, sound: '汪!' },
+  { name: 'rabbit', emoji: '🐰', image: null, sound: '...' },
+  { name: 'hamster', emoji: '🐹', image: null, sound: '吱吱' },
+  { name: 'bird', emoji: '🐦', image: null, sound: '啾啾' },
+  { name: 'capybara', emoji: '🦫', image: '/images/lulu.gif', sound: '噜噜~' }
 ]
 
 // 状态
@@ -73,6 +81,7 @@ const menuX = ref(0)
 const menuY = ref(0)
 const thought = ref('')
 const showStateIcon = ref(false)
+const isFollowing = ref(true)
 
 // 鼠标位置
 const mouseX = ref(0)
@@ -105,7 +114,7 @@ const stateIcon = computed(() => {
 
 // 跟随鼠标
 const followMouse = () => {
-  if (isDragging.value || currentState.value === 'sleeping') return
+  if (isDragging.value || currentState.value === 'sleeping' || showMenu.value) return
   
   const dx = mouseX.value - petX.value - 25
   const dy = mouseY.value - petY.value - 25
@@ -434,29 +443,42 @@ defineExpose({
   animation: petIdle 2s ease-in-out infinite;
 }
 
-/* 状态动画 */
-.pet.idle .pet-emoji {
+.pet-image {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
   animation: petIdle 2s ease-in-out infinite;
 }
 
-.pet.walking .pet-emoji {
+/* 状态动画 */
+.pet.idle .pet-emoji,
+.pet.idle .pet-image {
+  animation: petIdle 2s ease-in-out infinite;
+}
+
+.pet.walking .pet-emoji,
+.pet.walking .pet-image {
   animation: petWalk 0.3s ease-in-out infinite;
 }
 
-.pet.sleeping .pet-emoji {
+.pet.sleeping .pet-emoji,
+.pet.sleeping .pet-image {
   animation: petSleep 2s ease-in-out infinite;
   opacity: 0.7;
 }
 
-.pet.eating .pet-emoji {
+.pet.eating .pet-emoji,
+.pet.eating .pet-image {
   animation: petEat 0.5s ease-in-out infinite;
 }
 
-.pet.playing .pet-emoji {
+.pet.playing .pet-emoji,
+.pet.playing .pet-image {
   animation: petPlay 0.4s ease-in-out infinite;
 }
 
-.pet.happy .pet-emoji {
+.pet.happy .pet-emoji,
+.pet.happy .pet-image {
   animation: petHappy 0.3s ease-in-out 3;
 }
 
