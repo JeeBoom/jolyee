@@ -61,12 +61,12 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 // 宠物类型
 const petTypes = [
+  { name: 'capybara', emoji: '🦫', image: '/images/lulu.gif', sound: '噜噜~' },
   { name: 'cat', emoji: '🐱', image: null, sound: '喵~' },
   { name: 'dog', emoji: '🐶', image: null, sound: '汪!' },
   { name: 'rabbit', emoji: '🐰', image: null, sound: '...' },
   { name: 'hamster', emoji: '🐹', image: null, sound: '吱吱' },
-  { name: 'bird', emoji: '🐦', image: null, sound: '啾啾' },
-  { name: 'capybara', emoji: '🦫', image: '/images/lulu.gif', sound: '噜噜~' }
+  { name: 'bird', emoji: '🐦', image: null, sound: '啾啾' }
 ]
 
 // 状态
@@ -114,7 +114,7 @@ const stateIcon = computed(() => {
 
 // 跟随鼠标
 const followMouse = () => {
-  if (isDragging.value || currentState.value === 'sleeping' || showMenu.value) return
+  if (!isFollowing.value || isDragging.value || currentState.value === 'sleeping' || showMenu.value) return
   
   const dx = mouseX.value - petX.value - 25
   const dy = mouseY.value - petY.value - 25
@@ -297,6 +297,18 @@ const changePetType = () => {
   showThought('嗨！是我~')
   // 立即保存到localStorage
   localStorage.setItem('petCompanionType', currentPetIndex.value.toString())
+}
+
+// 切换跟随状态
+const toggleFollow = () => {
+  showMenu.value = false
+  isFollowing.value = !isFollowing.value
+  if (isFollowing.value) {
+    showThought('我来啦~')
+  } else {
+    showThought('好的，我在这里等你')
+    currentState.value = 'idle'
+  }
 }
 
 // 隐藏宠物
