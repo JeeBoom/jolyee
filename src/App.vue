@@ -8,6 +8,12 @@
 
     <!-- 主内容区域 -->
     <main class="main-content">
+      <!-- 实时日期时间 -->
+      <div class="datetime-display">
+        <div class="time">{{ currentTime }}</div>
+        <div class="date">{{ currentDate }}</div>
+      </div>
+
       <!-- 通用搜索框 -->
       <UniversalSearch />
       
@@ -104,6 +110,27 @@ import { setupKeyboardShortcuts } from "./utils/keyboardShortcuts"
 const { getAllLinks } = useLinksStore()
 const shortcutsHelpRef = ref(null)
 
+const currentDate = ref('')
+const currentTime = ref('')
+
+const updateDateTime = () => {
+  const now = new Date()
+  
+  // 格式化日期：2025年12月11日 星期三
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+  const weekday = weekdays[now.getDay()]
+  currentDate.value = `${year}年${month}月${day}日 ${weekday}`
+  
+  // 格式化时间：23:45:30
+  const hours = String(now.getHours()).padStart(2, '0')
+  const minutes = String(now.getMinutes()).padStart(2, '0')
+  const seconds = String(now.getSeconds()).padStart(2, '0')
+  currentTime.value = `${hours}:${minutes}:${seconds}`
+}
+
 const menuSections = ref([
   { title: "优质社区", icon: "🌐", group: "学习资源", count: 0, shortcut: "1" },
   { title: "IT平台", icon: "💻", group: "学习资源", count: 0, shortcut: "2" },
@@ -133,6 +160,11 @@ const openShortcuts = () => {
 
 // 初始化
 onMounted(() => {
+  // 初始化时间显示
+  updateDateTime()
+  // 每秒更新一次时间
+  setInterval(updateDateTime, 1000)
+  
   // 设置 SEO 元数据
   setPageMeta({
     title: '导航中心 - 优质资源导航平台 | 开发工具 | 学习社区 | AI应用',
@@ -176,6 +208,124 @@ onMounted(() => {
 <style scoped>
 .content-section {
   scroll-margin-top: 80px;
+}
+
+/* 日期时间显示 */
+.datetime-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 24px;
+  margin: 0 auto 10px;
+  width: fit-content;
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.08) 0%,
+    rgba(118, 75, 162, 0.08) 50%,
+    rgba(240, 147, 251, 0.08) 100%
+  );
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 16px;
+  box-shadow: 
+    0 4px 12px rgba(102, 126, 234, 0.15),
+    0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.datetime-display::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.4) 0%,
+    rgba(118, 75, 162, 0.4) 50%,
+    rgba(240, 147, 251, 0.4) 100%
+  );
+  border-radius: 16px;
+  z-index: -1;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.datetime-display:hover {
+  box-shadow: 
+    0 6px 20px rgba(102, 126, 234, 0.25),
+    0 2px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.datetime-display:hover::before {
+  opacity: 0.8;
+}
+
+.datetime-display .date {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.8px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.datetime-display .time {
+  font-size: 60px;
+  font-weight: 800;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--secondary-color) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 4px;
+  text-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+}
+
+/* 深色模式 */
+html[data-theme="dark"] .datetime-display {
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.12) 0%,
+    rgba(118, 75, 162, 0.12) 50%,
+    rgba(240, 147, 251, 0.12) 100%
+  );
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+html[data-theme="dark"] .datetime-display::before {
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.5) 0%,
+    rgba(118, 75, 162, 0.5) 50%,
+    rgba(240, 147, 251, 0.5) 100%
+  );
+  opacity: 0.3;
+}
+
+html[data-theme="dark"] .datetime-display:hover::before {
+  opacity: 0.6;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .datetime-display {
+    padding: 12px 16px;
+  }
+  
+  .datetime-display .date {
+    font-size: 13px;
+  }
+  
+  .datetime-display .time {
+    font-size: 32px;
+  }
 }
 </style>
 

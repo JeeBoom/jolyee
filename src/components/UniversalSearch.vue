@@ -468,6 +468,7 @@ onUnmounted(() => {
   justify-content: center;
   height: 100%;
   border-radius: 0 60px 60px 0;
+  outline: none;
 }
 
 .search-button:hover {
@@ -693,6 +694,7 @@ html[data-theme="dark"] .search-input::placeholder {
 
   .search-button {
     padding: 10px 16px;
+    outline: none;
   }
 
   .engine-menu {
