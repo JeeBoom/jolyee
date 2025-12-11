@@ -33,11 +33,11 @@
 **位置：** public/ads.txt
 **内容示例：**
 ```
-# 申请AdSense后，Google会提供具体内容
-google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+# 当前发布商ID
+google.com, pub-1581208435875899, DIRECT, f08c47fec0942fa0
 ```
-- [ ] 创建 ads.txt 文件
-- [ ] 等待AdSense审核通过后填入正确的发布商ID
+- [x] 创建 ads.txt 文件
+- [x] 填入正确的发布商ID（pub-1581208435875899）
 
 ### 4. 增强Cookie管理 (中优先级)
 **当前问题：** Cookie同意较简单，缺少详细管理
