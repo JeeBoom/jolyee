@@ -1,6 +1,6 @@
 <template>
   <section class="communities" id="english-section">
-    <h2 class="section-title">英语</h2>
+
     <div class="cards-grid">
       <article 
         v-for="community in communities" 

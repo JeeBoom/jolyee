@@ -4,7 +4,7 @@
     <Header :sections="menuSections" :all-links="allLinks" @open-shortcuts="openShortcuts" />
 
     <!-- 侧边栏菜单 -->
-    <Sidebar :sections="menuSections" />
+    <!-- <Sidebar :sections="menuSections" /> -->
 
     <!-- 主内容区域 -->
     <main class="main-content">
@@ -17,55 +17,82 @@
       <!-- 通用搜索框 -->
       <UniversalSearch />
       
-      <div id="section-0" class="content-section">
-        <Communities ref="communitiesRef" />
+      <!-- 分类导航栏 -->
+      <div class="category-nav">
+        <button
+          v-for="(section, index) in menuSections"
+          :key="index"
+          :class="['category-btn', { active: activeCategory === index }]"
+          @click="switchCategory(index)"
+        >
+          <span class="category-icon">{{ section.icon }}</span>
+          <span class="category-title">{{ section.title }}</span>
+        </button>
+        <!-- 博客按钮 -->
+        <button
+          :class="['category-btn', { active: activeCategory === 14 }]"
+          @click="switchCategory(14)"
+        >
+          <span class="category-icon">📝</span>
+          <span class="category-title">博客</span>
+        </button>
       </div>
-      <div id="section-1" class="content-section" ref="section1">
-        <It v-if="visibleSections.section1" />
-      </div>
-      <div id="section-2" class="content-section" ref="section2">
-        <Ai v-if="visibleSections.section2" />
-      </div>
-      <div id="section-3" class="content-section" ref="section3">
-        <News v-if="visibleSections.section3" />
-      </div>
-      <div id="section-4" class="content-section" ref="section4">
-        <Crypto v-if="visibleSections.section4" />
-      </div>
-      <div id="section-5" class="content-section" ref="section5">
-        <Front v-if="visibleSections.section5" />
-      </div>
-      <div id="section-6" class="content-section" ref="section6">
-        <Backend v-if="visibleSections.section6" />
-      </div>
-      <div id="section-7" class="content-section" ref="section7">
-        <Devops v-if="visibleSections.section7" />
-      </div>
-      <div id="section-8" class="content-section" ref="section8">
-        <Tools v-if="visibleSections.section8" />
-      </div>
-      <div id="section-9" class="content-section" ref="section9">
-        <Movie v-if="visibleSections.section9" />
-      </div>
-      <div id="section-10" class="content-section" ref="section10">
-        <Music v-if="visibleSections.section10" />
-      </div>
-      <div id="section-11" class="content-section" ref="section11">
-        <Software v-if="visibleSections.section11" />
-      </div>
-      <div id="section-12" class="content-section" ref="section12">
-        <English v-if="visibleSections.section12" />
-      </div>
-      <div id="section-13" class="content-section" ref="section13">
-        <Crossborder v-if="visibleSections.section13" />
+
+      <!-- 分类内容 -->
+      <div class="category-content">
+        <div v-show="activeCategory === 0" class="content-section">
+          <Communities ref="communitiesRef" />
+        </div>
+        <div v-show="activeCategory === 1" class="content-section" ref="section1">
+          <It v-if="visibleSections.section1" />
+        </div>
+        <div v-show="activeCategory === 2" class="content-section" ref="section2">
+          <Ai v-if="visibleSections.section2" />
+        </div>
+        <div v-show="activeCategory === 3" class="content-section" ref="section3">
+          <News v-if="visibleSections.section3" />
+        </div>
+        <div v-show="activeCategory === 4" class="content-section" ref="section4">
+          <Crypto v-if="visibleSections.section4" />
+        </div>
+        <div v-show="activeCategory === 5" class="content-section" ref="section5">
+          <Front v-if="visibleSections.section5" />
+        </div>
+        <div v-show="activeCategory === 6" class="content-section" ref="section6">
+          <Backend v-if="visibleSections.section6" />
+        </div>
+        <div v-show="activeCategory === 7" class="content-section" ref="section7">
+          <Devops v-if="visibleSections.section7" />
+        </div>
+        <div v-show="activeCategory === 8" class="content-section" ref="section8">
+          <Tools v-if="visibleSections.section8" />
+        </div>
+        <div v-show="activeCategory === 9" class="content-section" ref="section9">
+          <Movie v-if="visibleSections.section9" />
+        </div>
+        <div v-show="activeCategory === 10" class="content-section" ref="section10">
+          <Music v-if="visibleSections.section10" />
+        </div>
+        <div v-show="activeCategory === 11" class="content-section" ref="section11">
+          <Software v-if="visibleSections.section11" />
+        </div>
+        <div v-show="activeCategory === 12" class="content-section" ref="section12">
+          <English v-if="visibleSections.section12" />
+        </div>
+        <div v-show="activeCategory === 13" class="content-section" ref="section13">
+          <Crossborder v-if="visibleSections.section13" />
+        </div>
+        <div v-show="activeCategory === 14" class="content-section" ref="section14">
+          <Blog v-if="visibleSections.section14" />
+        </div>
       </div>
       
       <!-- Waline 评论区 -->
-      <div class="waline-wrapper" ref="walineSection">
-        <Waline v-if="visibleSections.waline" />
+      <div class="waline-wrapper">
+        <!-- <Waline /> -->
       </div>
       
-      <Footer />
+      <Footer ref="footerRef" />
     </main>
 
     <!-- 回到顶部按钮 -->
@@ -79,23 +106,30 @@
 
     <!-- 宠物伴侣 -->
     <PetCompanion />
+
+    <!-- Cookie 同意弹窗 -->
+    <CookieConsent 
+      @open-privacy="footerRef?.openPrivacy()" 
+      @open-terms="footerRef?.openTerms()" 
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, defineAsyncComponent } from "vue";
 import Header from "./components/Header.vue";
-import Sidebar from "./components/Sidebar.vue";
+// import Sidebar from "./components/Sidebar.vue";
 import BackToTop from "./components/BackToTop.vue";
 import Footer from "./components/Footer.vue";
 import ShortcutsHelp from "./components/ShortcutsHelp.vue";
 import FloatingMenu from "./components/FloatingMenu.vue";
 import UniversalSearch from "./components/UniversalSearch.vue";
 import PetCompanion from "./components/PetCompanion.vue";
+import CookieConsent from "./components/CookieConsent.vue";
 
 // 懒加载分类组件，减少初始加载时间
 const Communities = defineAsyncComponent(() => import("./components/Communities.vue"));
-const Waline = defineAsyncComponent(() => import("./components/Waline.vue"));
+// const Waline = defineAsyncComponent(() => import("./components/Waline.vue"));
 const It = defineAsyncComponent(() => import("./components/IT.vue"));
 const Software = defineAsyncComponent(() => import("./components/Software.vue"));
 const English = defineAsyncComponent(() => import("./components/English.vue"));
@@ -109,15 +143,55 @@ const Tools = defineAsyncComponent(() => import("./components/Tools.vue"));
 const Crossborder = defineAsyncComponent(() => import("./components/Crossborder.vue"));
 const News = defineAsyncComponent(() => import("./components/News.vue"));
 const Crypto = defineAsyncComponent(() => import("./components/Crypto.vue"));
+const Blog = defineAsyncComponent(() => import("./components/Blog.vue"));
 import { useLinksStore } from "./utils/linksStore"
 import { setPageMeta, generateSchemaMarkup } from "./utils/seoManager"
 import { setupKeyboardShortcuts } from "./utils/keyboardShortcuts"
 
 const { getAllLinks } = useLinksStore()
 const shortcutsHelpRef = ref(null)
+const footerRef = ref(null)
 
 const currentDate = ref('')
 const currentTime = ref('')
+
+// 当前激活的分类索引，默认为0（优质社区）
+const activeCategory = ref(0)
+
+// 切换分类
+const switchCategory = (index) => {
+  activeCategory.value = index
+  // 切换时懒加载对应的组件
+  if (index === 1 && !visibleSections.value.section1) {
+    visibleSections.value.section1 = true
+  } else if (index === 2 && !visibleSections.value.section2) {
+    visibleSections.value.section2 = true
+  } else if (index === 3 && !visibleSections.value.section3) {
+    visibleSections.value.section3 = true
+  } else if (index === 4 && !visibleSections.value.section4) {
+    visibleSections.value.section4 = true
+  } else if (index === 5 && !visibleSections.value.section5) {
+    visibleSections.value.section5 = true
+  } else if (index === 6 && !visibleSections.value.section6) {
+    visibleSections.value.section6 = true
+  } else if (index === 7 && !visibleSections.value.section7) {
+    visibleSections.value.section7 = true
+  } else if (index === 8 && !visibleSections.value.section8) {
+    visibleSections.value.section8 = true
+  } else if (index === 9 && !visibleSections.value.section9) {
+    visibleSections.value.section9 = true
+  } else if (index === 10 && !visibleSections.value.section10) {
+    visibleSections.value.section10 = true
+  } else if (index === 11 && !visibleSections.value.section11) {
+    visibleSections.value.section11 = true
+  } else if (index === 12 && !visibleSections.value.section12) {
+    visibleSections.value.section12 = true
+  } else if (index === 13 && !visibleSections.value.section13) {
+    visibleSections.value.section13 = true
+  } else if (index === 14 && !visibleSections.value.section14) {
+    visibleSections.value.section14 = true
+  }
+}
 
 // 懒加载状态：跟踪哪些分类已经可见
 const visibleSections = ref({
@@ -134,7 +208,7 @@ const visibleSections = ref({
   section11: false,
   section12: false,
   section13: false,
-  waline: false
+  section14: false
 })
 
 // 分类容器的 refs
@@ -151,7 +225,6 @@ const section10 = ref(null)
 const section11 = ref(null)
 const section12 = ref(null)
 const section13 = ref(null)
-const walineSection = ref(null)
 
 const updateDateTime = () => {
   const now = new Date()
@@ -247,59 +320,6 @@ onMounted(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   })
-
-  // 设置 Intersection Observer 实现懒加载
-  const observerOptions = {
-    root: null,
-    rootMargin: '200px', // 提前 200px 开始加载
-    threshold: 0.01
-  }
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const target = entry.target
-        const sectionId = target.id.replace('section-', 'section')
-        
-        if (sectionId === 'section') return // 跳过 section-0
-        
-        // 根据元素的 ref 名称设置可见
-        if (target === section1.value) visibleSections.value.section1 = true
-        else if (target === section2.value) visibleSections.value.section2 = true
-        else if (target === section3.value) visibleSections.value.section3 = true
-        else if (target === section4.value) visibleSections.value.section4 = true
-        else if (target === section5.value) visibleSections.value.section5 = true
-        else if (target === section6.value) visibleSections.value.section6 = true
-        else if (target === section7.value) visibleSections.value.section7 = true
-        else if (target === section8.value) visibleSections.value.section8 = true
-        else if (target === section9.value) visibleSections.value.section9 = true
-        else if (target === section10.value) visibleSections.value.section10 = true
-        else if (target === section11.value) visibleSections.value.section11 = true
-        else if (target === section12.value) visibleSections.value.section12 = true
-        else if (target === section13.value) visibleSections.value.section13 = true
-        else if (target === walineSection.value) visibleSections.value.waline = true
-        
-        // 一旦加载，停止观察
-        observer.unobserve(target)
-      }
-    })
-  }, observerOptions)
-
-  // 观察所有分类容器
-  if (section1.value) observer.observe(section1.value)
-  if (section2.value) observer.observe(section2.value)
-  if (section3.value) observer.observe(section3.value)
-  if (section4.value) observer.observe(section4.value)
-  if (section5.value) observer.observe(section5.value)
-  if (section6.value) observer.observe(section6.value)
-  if (section7.value) observer.observe(section7.value)
-  if (section8.value) observer.observe(section8.value)
-  if (section9.value) observer.observe(section9.value)
-  if (section10.value) observer.observe(section10.value)
-  if (section11.value) observer.observe(section11.value)
-  if (section12.value) observer.observe(section12.value)
-  if (section13.value) observer.observe(section13.value)
-  if (walineSection.value) observer.observe(walineSection.value)
 })
 
 </script>
@@ -424,6 +444,141 @@ html[data-theme="dark"] .datetime-display:hover::before {
   
   .datetime-display .time {
     font-size: 32px;
+  }
+}
+
+/* 分类导航栏样式 */
+.category-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 20px;
+  margin: 20px auto;
+  max-width: 1200px;
+}
+
+.category-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.category-btn:hover {
+  background: var(--bg-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+.category-btn.active {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  color: white;
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.category-icon {
+  font-size: 18px;
+}
+
+.category-title {
+  font-size: 14px;
+}
+
+/* 分类内容区域 */
+.category-content {
+  min-height: 400px;
+  position: relative;
+}
+
+.content-section {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 深色模式 */
+html[data-theme="dark"] .category-btn {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+html[data-theme="dark"] .category-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="dark"] .category-btn.active {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .category-nav {
+    gap: 6px;
+    padding: 12px 8px;
+    margin: 10px auto;
+  }
+  
+  .category-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+  .category-icon {
+    font-size: 14px;
+  }
+  
+  .category-title {
+    font-size: 12px;
+  }
+  
+  .category-content {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-nav {
+    gap: 4px;
+    padding: 10px 4px;
+    margin: 8px auto;
+  }
+  
+  .category-btn {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+  
+  .category-icon {
+    font-size: 13px;
+  }
+  
+  .category-title {
+    font-size: 11px;
+  }
+  
+  .category-content {
+    min-height: 250px;
   }
 }
 </style>

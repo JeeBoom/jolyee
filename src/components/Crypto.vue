@@ -1,6 +1,6 @@
 <template>
   <section class="communities" id="crypto-section">
-    <h2 class="section-title">股票 / 虚拟货币</h2>
+
     <div class="cards-grid">
       <article
         v-for="site in cryptoList"

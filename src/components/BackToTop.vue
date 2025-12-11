@@ -1,24 +1,30 @@
 <template>
   <div class="scroll-buttons">
     <!-- 回到顶部按钮 -->
-    <button 
-      :class="['back-to-top', { show: isVisible }]"
-      @click="scrollToTop"
-      aria-label="返回顶部"
-      title="返回顶部"
-    >
-      <span>⬆</span>
-    </button>
+    <transition name="slide-fade">
+      <button 
+        v-if="isVisible"
+        class="back-to-top"
+        @click="scrollToTop"
+        aria-label="返回顶部"
+        title="返回顶部"
+      >
+        <span>⬆</span>
+      </button>
+    </transition>
     
     <!-- 回到底部按钮 -->
-    <button 
-      :class="['back-to-bottom', { show: isVisible }]"
-      @click="scrollToBottom"
-      aria-label="滑到底部"
-      title="滑到底部"
-    >
-      <span>⬇</span>
-    </button>
+    <transition name="slide-fade">
+      <button 
+        v-if="isVisible"
+        class="back-to-bottom"
+        @click="scrollToBottom"
+        aria-label="滑到底部"
+        title="滑到底部"
+      >
+        <span>⬇</span>
+      </button>
+    </transition>
   </div>
 </template>
 
@@ -56,5 +62,22 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Styles are in main.css */
+/* 进入和离开动画 */
+.slide-fade-enter-active {
+  transition: all 0.4s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.4s ease-in;
+}
+
+.slide-fade-enter-from {
+  transform: translateX(100px);
+  opacity: 0;
+}
+
+.slide-fade-leave-to {
+  transform: translateX(100px);
+  opacity: 0;
+}
 </style>

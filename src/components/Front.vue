@@ -1,6 +1,6 @@
 <template>
   <section class="communities" id="front-section">
-    <h2 class="section-title">前端技术</h2>
+
     <div class="cards-grid">
       <article
         v-for="community in communities"

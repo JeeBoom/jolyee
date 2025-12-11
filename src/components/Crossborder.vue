@@ -1,6 +1,6 @@
 <template>
   <section class="communities" id="crossborder-section">
-    <h2 class="section-title">跨境出海</h2>
+
     <div class="cards-grid">
       <article
         v-for="resource in resources"

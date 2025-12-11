@@ -1,6 +1,6 @@
 <template>
   <section class="communities" id="software-section">
-    <h2 class="section-title">软件下载</h2>
+
     <div class="cards-grid">
       <article
         v-for="community in communities"

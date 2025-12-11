@@ -1,6 +1,6 @@
 <template>
   <section class="communities" id="tools-section">
-    <h2 class="section-title">工具合集</h2>
+
     <div class="cards-grid">
       <article
         v-for="tool in tools"
@@ -86,12 +86,12 @@ const tools = ref([
     logo: "https://www.mdnice.com/favicon.ico",
     url: "https://www.mdnice.com/",
   },
-//   {
-//     name: "Base64 编码解码",
-//     desc: "快速进行 Base64 编码和解码操作",
-//     logo: "",
-//     url: "https://www.base64decode.org/",
-//   },
+  {
+    name: "Bejson",
+    desc: "拥有一切你需要的文件转换工具！",
+    logo: "https://www.bejson.com/favicon.ico",
+    url: "https://www.bejson.com/",
+  },
   {
     name: "AI消除图片内容 - 无需登录",
     desc: "先进的AI图片文字移除工具，能在数秒内帮您清理照片、图形和文档。只需上传您的图片，即可清除不需要的文字、水印或标志。100%免费，在线使用，无需注册账户。",

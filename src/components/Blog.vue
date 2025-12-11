@@ -1,0 +1,494 @@
+<template>
+  <div class="blog-list">
+    <div class="blog-header">
+      <h2 class="blog-title">📝 博客文章</h2>
+      <p class="blog-subtitle">分享技术、记录生活、传递价值</p>
+    </div>
+
+    <div class="posts-grid">
+      <article
+        v-for="post in posts"
+        :key="post.id"
+        class="post-card"
+        @click="openPost(post)"
+      >
+        <div v-if="post.coverImage" class="post-cover">
+          <img :src="post.coverImage" :alt="post.title" />
+        </div>
+        
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category">{{ post.category }}</span>
+            <span class="post-date">{{ formatDate(post.date) }}</span>
+          </div>
+          
+          <h3 class="post-title">{{ post.title }}</h3>
+          
+          <p class="post-excerpt">{{ post.excerpt }}</p>
+          
+          <div class="post-footer">
+            <div class="post-tags">
+              <span v-for="tag in post.tags.slice(0, 3)" :key="tag" class="tag">
+                #{{ tag }}
+              </span>
+            </div>
+            <div class="post-info">
+              <span class="read-time">⏱️ {{ post.readTime }}</span>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- 如果没有文章 -->
+    <div v-if="posts.length === 0" class="no-posts">
+      <p>📭 暂无文章，敬请期待...</p>
+    </div>
+
+    <!-- 文章详情模态框 -->
+    <transition name="modal-fade">
+      <div v-if="selectedPost" class="post-modal-overlay" @click.self="closePost">
+        <div class="post-modal">
+          <button class="close-btn" @click="closePost">✕</button>
+          
+          <article class="post-detail">
+            <header class="post-header">
+              <div class="post-meta">
+                <span class="post-category">{{ selectedPost.category }}</span>
+                <span class="post-date">{{ formatDate(selectedPost.date) }}</span>
+                <span class="read-time">⏱️ {{ selectedPost.readTime }}</span>
+              </div>
+              
+              <h1 class="post-title">{{ selectedPost.title }}</h1>
+              
+              <div class="post-tags">
+                <span v-for="tag in selectedPost.tags" :key="tag" class="tag">
+                  #{{ tag }}
+                </span>
+              </div>
+              
+              <div class="post-author">
+                <span>作者：{{ selectedPost.author }}</span>
+              </div>
+            </header>
+            
+            <div v-if="selectedPost.coverImage" class="post-cover-large">
+              <img :src="selectedPost.coverImage" :alt="selectedPost.title" />
+            </div>
+            
+            <div class="post-body" v-html="renderedContent"></div>
+
+            <!-- 评论区 -->
+            <BlogGiscus 
+              v-if="selectedPost"
+              :article-id="selectedPost.id"
+            />
+          </article>
+        </div>
+      </div>
+    </transition>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+import { getAllPosts } from '../utils/blogData'
+import { marked } from 'marked'
+import BlogGiscus from './BlogGiscus.vue'
+
+const posts = ref(getAllPosts())
+const selectedPost = ref(null)
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+}
+
+const openPost = (post) => {
+  selectedPost.value = post
+  document.body.style.overflow = 'hidden'
+}
+
+const closePost = () => {
+  selectedPost.value = null
+  document.body.style.overflow = ''
+}
+
+const renderedContent = computed(() => {
+  if (!selectedPost.value) return ''
+  return marked(selectedPost.value.content)
+})
+</script>
+
+<style scoped>
+.blog-list {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.blog-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.blog-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.blog-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.post-card {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+}
+
+.post-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.post-cover {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+
+.post-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.post-card:hover .post-cover img {
+  transform: scale(1.05);
+}
+
+.post-content {
+  padding: 1.5rem;
+}
+
+.post-meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+.post-category {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.post-date {
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+}
+
+.post-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.post-excerpt {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.post-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.post-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 0.8rem;
+  color: var(--primary-color);
+  background: rgba(102, 126, 234, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.post-info {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.read-time {
+  white-space: nowrap;
+}
+
+.no-posts {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+}
+
+/* 模态框样式 */
+.post-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+.post-modal {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  max-width: 900px;
+  width: 100%;
+  height: 85vh;
+  max-height: 85vh;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--bg-secondary);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.close-btn:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: rotate(90deg);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.post-detail {
+  padding: 2rem;
+  padding-top: 4rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.post-header {
+  margin-bottom: 2rem;
+}
+
+.post-header .post-meta {
+  margin-bottom: 1rem;
+}
+
+.post-header .post-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+}
+
+.post-author {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.post-cover-large {
+  width: 100%;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.post-cover-large img {
+  width: 100%;
+  height: auto;
+}
+
+.post-body {
+  color: var(--text-primary);
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+.post-body :deep(h2) {
+  font-size: 1.5rem;
+  margin: 2rem 0 1rem;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.post-body :deep(h3) {
+  font-size: 1.3rem;
+  margin: 1.5rem 0 0.75rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.post-body :deep(p) {
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+}
+
+.post-body :deep(blockquote) {
+  border-left: 4px solid var(--primary-color);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  background: rgba(102, 126, 234, 0.05);
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.post-body :deep(strong) {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.post-body :deep(ul),
+.post-body :deep(ol) {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.post-body :deep(li) {
+  margin-bottom: 0.5rem;
+}
+
+.post-body :deep(hr) {
+  border: none;
+  border-top: 2px solid var(--border-color);
+  margin: 2rem 0;
+}
+
+/* 动画 */
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.modal-fade-enter-active .post-modal,
+.modal-fade-leave-active .post-modal {
+  transition: transform 0.3s ease;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+}
+
+.modal-fade-enter-from .post-modal,
+.modal-fade-leave-to .post-modal {
+  transform: scale(0.9);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .posts-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .blog-title {
+    font-size: 2rem;
+  }
+
+  .post-modal-overlay {
+    padding: 10px;
+  }
+
+  .post-modal {
+    height: 90vh;
+    max-height: 90vh;
+    border-radius: 8px;
+  }
+
+  .close-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1.3rem;
+  }
+
+  .post-detail {
+    padding: 1rem;
+    padding-top: 3rem;
+  }
+
+  .post-header .post-title {
+    font-size: 1.5rem;
+  }
+
+  .post-body {
+    font-size: 0.95rem;
+  }
+}
+</style>

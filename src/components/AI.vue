@@ -1,6 +1,5 @@
 <template>
   <section class="communities" id="ai-section">
-    <h2 class="section-title">AI</h2>
     <div class="cards-grid">
       <article
         v-for="community in communities"

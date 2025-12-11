@@ -1,6 +1,6 @@
 <template>
   <section class="communities" id="movie-section">
-    <h2 class="section-title">影视 / 动漫</h2>
+
     <div class="cards-grid">
       <article
         v-for="community in communities"

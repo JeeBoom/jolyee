@@ -1,6 +1,6 @@
 <template>
   <section class="communities" id="backend-section">
-    <h2 class="section-title">后端技术</h2>
+
     <div class="cards-grid">
       <article 
         v-for="community in communities" 

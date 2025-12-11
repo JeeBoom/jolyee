@@ -1,6 +1,6 @@
 <template>
   <section class="communities" id="music-section">
-    <h2 class="section-title">音乐</h2>
+
     <div class="cards-grid">
       <article 
         v-for="community in communities" 

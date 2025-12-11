@@ -85,23 +85,28 @@ html[data-theme="dark"] body {
 
 #app {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   min-height: 100vh;
   width: 100%;
-  margin: auto;
   background: transparent;
 }
 
 /* 2. 页面包装器 */
 .page-wrapper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   min-height: 100vh;
+  width: 100%;
 }
 
 /* 2.5 侧边栏预留空间 */
 .page-wrapper > aside {
   flex-shrink: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  z-index: 50;
 }
 
 /* 3. 页眉样式 */
@@ -173,17 +178,15 @@ html[data-theme="dark"] body {
 /* 5. 主内容区域 */
 .main-content {
   flex: 1;
-  width: 100%;
-  /* width: 1920px; */
-  margin: 0;
-  padding: 3rem 2rem;
-  margin-left: 0;
-  transition: margin-left 0.3s ease;
+  width: 80%;
+  /* max-width: 1600px; */
+  margin: 0 auto;
+  padding: 3rem 4rem;
 }
 
 /* 侧边栏收起时恢复到左边距 */
 .page-wrapper.sidebar-collapsed .main-content {
-  margin-left: 0;
+  margin: 0 auto;
 }
 
 /* 6. 分区标题 */
@@ -272,7 +275,7 @@ html[data-theme="dark"] body {
 /* 7. 卡片网格 */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 1.5rem;
   margin-bottom: 3rem;
 }
@@ -477,22 +480,17 @@ html[data-theme="dark"] body {
   border: none;
   cursor: pointer;
   font-size: 1.5rem;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-lg);
-  transition: var(--transition);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .back-to-top:hover,
 .back-to-bottom:hover {
   transform: scale(1.1);
   box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-}
-
-.back-to-top.show,
-.back-to-bottom.show {
-  display: flex;
 }
 
 /* 12. 页脚 */
@@ -577,7 +575,7 @@ html[data-theme="dark"] body {
   }
 
   .cards-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 1.2rem;
   }
 
@@ -597,7 +595,8 @@ html[data-theme="dark"] body {
   }
 
   .main-content {
-    margin-left: 0;
+    max-width: 100%;
+    margin: 0;
     padding: 1.5rem 1rem;
   }
 
@@ -626,10 +625,6 @@ html[data-theme="dark"] body {
     font-size: 0.8rem;
   }
 
-  .main-content {
-    padding: 1.5rem 1rem;
-  }
-
   .section-title {
     font-size: 1.5rem;
     margin-bottom: 1.2rem;
@@ -646,7 +641,7 @@ html[data-theme="dark"] body {
   }
 
   .cards-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: 1fr;
     gap: 1rem;
   }
 
@@ -694,7 +689,8 @@ html[data-theme="dark"] body {
   }
 
   .main-content {
-    padding: 1rem;
+    max-width: 100%;
+    padding: 1rem 0.5rem;
   }
 
   .section-title {
@@ -796,4 +792,20 @@ html[data-theme="dark"] body {
   padding: 0 2rem;
   /* border-top: 1px solid var(--border-color); */
   padding-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .waline-wrapper {
+    width: 90%;
+    padding: 0 1rem;
+    margin: 2rem auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .waline-wrapper {
+    width: 95%;
+    padding: 0 0.5rem;
+    margin: 1.5rem auto;
+  }
 }

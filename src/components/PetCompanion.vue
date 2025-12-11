@@ -666,8 +666,8 @@ html[data-theme="dark"] .pet-menu {
 /* 显示宠物按钮 */
 .show-pet-button {
   position: fixed;
-  right: 2rem;
-  bottom: 15rem;
+  left: 2rem;
+  bottom: 5rem;
   width: 60px;
   height: 60px;
   border-radius: 50%;

@@ -1,6 +1,6 @@
 <template>
   <section class="communities" id="devops-section">
-    <h2 class="section-title">运维/测试</h2>
+
     <div class="cards-grid">
       <article 
         v-for="community in communities" 

@@ -1,6 +1,6 @@
 <template>
   <section class="communities" id="news-section">
-    <h2 class="section-title">新闻资讯</h2>
+
     <div class="cards-grid">
       <article
         v-for="news in newsList"
