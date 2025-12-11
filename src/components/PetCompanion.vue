@@ -70,7 +70,7 @@ const petTypes = [
 ]
 
 // 状态
-const isVisible = ref(true)
+const isVisible = ref(false)
 const currentPetIndex = ref(0)
 const currentState = ref('idle') // idle, walking, sleeping, eating, playing, happy
 const petX = ref(100)
