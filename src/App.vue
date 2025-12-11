@@ -76,6 +76,9 @@
 
     <!-- 右侧浮动菜单 -->
     <FloatingMenu :sections="menuSections" />
+
+    <!-- 宠物伴侣 -->
+    <PetCompanion />
   </div>
 </template>
 
@@ -88,6 +91,7 @@ import Footer from "./components/Footer.vue";
 import ShortcutsHelp from "./components/ShortcutsHelp.vue";
 import FloatingMenu from "./components/FloatingMenu.vue";
 import UniversalSearch from "./components/UniversalSearch.vue";
+import PetCompanion from "./components/PetCompanion.vue";
 import Communities from "./components/Communities.vue";
 import Waline from "./components/Waline.vue";
 import It from "./components/IT.vue";
