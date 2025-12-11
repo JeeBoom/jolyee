@@ -20,49 +20,49 @@
       <div id="section-0" class="content-section">
         <Communities ref="communitiesRef" />
       </div>
-      <div id="section-1" class="content-section">
-        <It />
+      <div id="section-1" class="content-section" ref="section1">
+        <It v-if="visibleSections.section1" />
       </div>
-      <div id="section-2" class="content-section">
-        <Ai />
+      <div id="section-2" class="content-section" ref="section2">
+        <Ai v-if="visibleSections.section2" />
       </div>
-      <div id="section-3" class="content-section">
-        <News />
+      <div id="section-3" class="content-section" ref="section3">
+        <News v-if="visibleSections.section3" />
       </div>
-      <div id="section-4" class="content-section">
-        <Crypto />
+      <div id="section-4" class="content-section" ref="section4">
+        <Crypto v-if="visibleSections.section4" />
       </div>
-      <div id="section-5" class="content-section">
-        <Front />
+      <div id="section-5" class="content-section" ref="section5">
+        <Front v-if="visibleSections.section5" />
       </div>
-      <div id="section-6" class="content-section">
-        <Backend />
+      <div id="section-6" class="content-section" ref="section6">
+        <Backend v-if="visibleSections.section6" />
       </div>
-      <div id="section-7" class="content-section">
-        <Devops />
+      <div id="section-7" class="content-section" ref="section7">
+        <Devops v-if="visibleSections.section7" />
       </div>
-      <div id="section-8" class="content-section">
-        <Tools />
+      <div id="section-8" class="content-section" ref="section8">
+        <Tools v-if="visibleSections.section8" />
       </div>
-      <div id="section-9" class="content-section">
-        <Movie />
+      <div id="section-9" class="content-section" ref="section9">
+        <Movie v-if="visibleSections.section9" />
       </div>
-      <div id="section-10" class="content-section">
-        <Music />
+      <div id="section-10" class="content-section" ref="section10">
+        <Music v-if="visibleSections.section10" />
       </div>
-      <div id="section-11" class="content-section">
-        <Software />
+      <div id="section-11" class="content-section" ref="section11">
+        <Software v-if="visibleSections.section11" />
       </div>
-      <div id="section-12" class="content-section">
-        <English />
+      <div id="section-12" class="content-section" ref="section12">
+        <English v-if="visibleSections.section12" />
       </div>
-      <div id="section-13" class="content-section">
-        <Crossborder />
+      <div id="section-13" class="content-section" ref="section13">
+        <Crossborder v-if="visibleSections.section13" />
       </div>
       
       <!-- Waline 评论区 -->
-      <div class="waline-wrapper">
-        <Waline />
+      <div class="waline-wrapper" ref="walineSection">
+        <Waline v-if="visibleSections.waline" />
       </div>
       
       <Footer />
@@ -83,7 +83,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, defineAsyncComponent } from "vue";
 import Header from "./components/Header.vue";
 import Sidebar from "./components/Sidebar.vue";
 import BackToTop from "./components/BackToTop.vue";
@@ -92,21 +92,23 @@ import ShortcutsHelp from "./components/ShortcutsHelp.vue";
 import FloatingMenu from "./components/FloatingMenu.vue";
 import UniversalSearch from "./components/UniversalSearch.vue";
 import PetCompanion from "./components/PetCompanion.vue";
-import Communities from "./components/Communities.vue";
-import Waline from "./components/Waline.vue";
-import It from "./components/IT.vue";
-import Software from "./components/Software.vue";
-import English from "./components/English.vue";
-import Music from "./components/Music.vue";
-import Movie from "./components/Movie.vue";
-import Ai from "./components/AI.vue";
-import Front from "./components/Front.vue";
-import Backend from "./components/Backend.vue";
-import Devops from "./components/Devops.vue";
-import Tools from "./components/Tools.vue";
-import Crossborder from "./components/Crossborder.vue";
-import News from "./components/News.vue";
-import Crypto from "./components/Crypto.vue";
+
+// 懒加载分类组件，减少初始加载时间
+const Communities = defineAsyncComponent(() => import("./components/Communities.vue"));
+const Waline = defineAsyncComponent(() => import("./components/Waline.vue"));
+const It = defineAsyncComponent(() => import("./components/IT.vue"));
+const Software = defineAsyncComponent(() => import("./components/Software.vue"));
+const English = defineAsyncComponent(() => import("./components/English.vue"));
+const Music = defineAsyncComponent(() => import("./components/Music.vue"));
+const Movie = defineAsyncComponent(() => import("./components/Movie.vue"));
+const Ai = defineAsyncComponent(() => import("./components/AI.vue"));
+const Front = defineAsyncComponent(() => import("./components/Front.vue"));
+const Backend = defineAsyncComponent(() => import("./components/Backend.vue"));
+const Devops = defineAsyncComponent(() => import("./components/Devops.vue"));
+const Tools = defineAsyncComponent(() => import("./components/Tools.vue"));
+const Crossborder = defineAsyncComponent(() => import("./components/Crossborder.vue"));
+const News = defineAsyncComponent(() => import("./components/News.vue"));
+const Crypto = defineAsyncComponent(() => import("./components/Crypto.vue"));
 import { useLinksStore } from "./utils/linksStore"
 import { setPageMeta, generateSchemaMarkup } from "./utils/seoManager"
 import { setupKeyboardShortcuts } from "./utils/keyboardShortcuts"
@@ -116,6 +118,40 @@ const shortcutsHelpRef = ref(null)
 
 const currentDate = ref('')
 const currentTime = ref('')
+
+// 懒加载状态：跟踪哪些分类已经可见
+const visibleSections = ref({
+  section1: false,
+  section2: false,
+  section3: false,
+  section4: false,
+  section5: false,
+  section6: false,
+  section7: false,
+  section8: false,
+  section9: false,
+  section10: false,
+  section11: false,
+  section12: false,
+  section13: false,
+  waline: false
+})
+
+// 分类容器的 refs
+const section1 = ref(null)
+const section2 = ref(null)
+const section3 = ref(null)
+const section4 = ref(null)
+const section5 = ref(null)
+const section6 = ref(null)
+const section7 = ref(null)
+const section8 = ref(null)
+const section9 = ref(null)
+const section10 = ref(null)
+const section11 = ref(null)
+const section12 = ref(null)
+const section13 = ref(null)
+const walineSection = ref(null)
 
 const updateDateTime = () => {
   const now = new Date()
@@ -211,6 +247,59 @@ onMounted(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   })
+
+  // 设置 Intersection Observer 实现懒加载
+  const observerOptions = {
+    root: null,
+    rootMargin: '200px', // 提前 200px 开始加载
+    threshold: 0.01
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const target = entry.target
+        const sectionId = target.id.replace('section-', 'section')
+        
+        if (sectionId === 'section') return // 跳过 section-0
+        
+        // 根据元素的 ref 名称设置可见
+        if (target === section1.value) visibleSections.value.section1 = true
+        else if (target === section2.value) visibleSections.value.section2 = true
+        else if (target === section3.value) visibleSections.value.section3 = true
+        else if (target === section4.value) visibleSections.value.section4 = true
+        else if (target === section5.value) visibleSections.value.section5 = true
+        else if (target === section6.value) visibleSections.value.section6 = true
+        else if (target === section7.value) visibleSections.value.section7 = true
+        else if (target === section8.value) visibleSections.value.section8 = true
+        else if (target === section9.value) visibleSections.value.section9 = true
+        else if (target === section10.value) visibleSections.value.section10 = true
+        else if (target === section11.value) visibleSections.value.section11 = true
+        else if (target === section12.value) visibleSections.value.section12 = true
+        else if (target === section13.value) visibleSections.value.section13 = true
+        else if (target === walineSection.value) visibleSections.value.waline = true
+        
+        // 一旦加载，停止观察
+        observer.unobserve(target)
+      }
+    })
+  }, observerOptions)
+
+  // 观察所有分类容器
+  if (section1.value) observer.observe(section1.value)
+  if (section2.value) observer.observe(section2.value)
+  if (section3.value) observer.observe(section3.value)
+  if (section4.value) observer.observe(section4.value)
+  if (section5.value) observer.observe(section5.value)
+  if (section6.value) observer.observe(section6.value)
+  if (section7.value) observer.observe(section7.value)
+  if (section8.value) observer.observe(section8.value)
+  if (section9.value) observer.observe(section9.value)
+  if (section10.value) observer.observe(section10.value)
+  if (section11.value) observer.observe(section11.value)
+  if (section12.value) observer.observe(section12.value)
+  if (section13.value) observer.observe(section13.value)
+  if (walineSection.value) observer.observe(walineSection.value)
 })
 
 </script>
