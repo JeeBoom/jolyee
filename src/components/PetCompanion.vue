@@ -1,7 +1,7 @@
 <template>
   <div class="pet-companion-wrapper">
     <!-- 宠物主体 -->
-    <div v-if="isLoggedIn && isVisible" class="pet-companion">
+    <div v-if="isVisible" class="pet-companion">
       <div 
         class="pet"
         :class="[currentState, { 'dragging': isDragging }]"
@@ -84,10 +84,10 @@
 
     <!-- 唤出按钮 -->
     <button 
-      v-if="isLoggedIn && !isVisible"
+      v-if="!isVisible"
       class="show-pet-button"
       @click="showPet"
-      title="显示宠物伴侣 (Ctrl+P)"
+      :title="isLoggedIn ? '显示宠物伴侣 (Ctrl+P)' : '显示宠物伴侣 (登录后可保存状态)'"
     >
       🐾
     </button>
@@ -126,12 +126,28 @@
               </button>
             </div>
             
-            <!-- 上传自定义宠物 -->
-            <div class="pet-option upload-option" @click="triggerUpload">
+            <!-- 上传自定义宠物（仅登录用户可见） -->
+            <div 
+              v-if="isLoggedIn"
+              class="pet-option upload-option" 
+              @click="triggerUpload"
+            >
               <div class="pet-preview">
                 <span class="upload-icon">➕</span>
               </div>
               <div class="pet-name">上传GIF</div>
+            </div>
+            
+            <!-- 未登录提示 -->
+            <div 
+              v-else
+              class="pet-option upload-option disabled" 
+              @click="showThought('登录后可上传专属宠物哦~')"
+            >
+              <div class="pet-preview">
+                <span class="upload-icon">🔒</span>
+              </div>
+              <div class="pet-name">登录后上传</div>
             </div>
           </div>
           <input 
@@ -339,7 +355,11 @@ const feedPet = () => {
   showMenu.value = false
   currentState.value = 'eating'
   showStateIcon.value = true
-  showThought('好吃！')
+  
+  if (!isLoggedIn.value) {
+    showThought('好吃！')
+  } 
+  
   hunger.value = Math.max(0, hunger.value - 30)
   mood.value = Math.min(100, mood.value + 10)
   
@@ -354,7 +374,11 @@ const playWithPet = () => {
   showMenu.value = false
   currentState.value = 'playing'
   showStateIcon.value = true
-  showThought('真开心！')
+  
+  if (!isLoggedIn.value) {
+    showThought('真开心！')
+  }
+  
   mood.value = Math.min(100, mood.value + 5)
   energy.value = Math.max(0, energy.value - 20)
   
@@ -382,7 +406,13 @@ const petPet = () => {
   showMenu.value = false
   currentState.value = 'happy'
   showStateIcon.value = true
-  showThought(currentPet.value.sound)
+  
+  if (!isLoggedIn.value) {
+    showThought(currentPet.value.sound)
+  } else {
+    showThought(currentPet.value.sound)
+  }
+  
   mood.value = Math.min(100, mood.value + 5)
   
   setTimeout(() => {
@@ -401,13 +431,24 @@ const changePetType = () => {
 const selectPet = (index) => {
   showPetSelector.value = false
   currentPetIndex.value = index
-  showThought('嗨！是我~')
+  
+  if (!isLoggedIn.value) {
+    showThought('嗨！是我~ ')
+  } else {
+    showThought('嗨！是我~')
+  }
+  
   // 立即保存（会自动触发watch保存）
   savePetState()
 }
 
 // 删除自定义宠物
 const deleteCustomPet = (index) => {
+  if (!isLoggedIn.value) {
+    showThought('登录后才能删除自定义宠物哦~')
+    return
+  }
+  
   // 计算在customPets数组中的索引（需要减去默认宠物数量）
   const defaultPetsCount = 5
   const customIndex = index - defaultPetsCount
@@ -440,6 +481,10 @@ const fileInput = ref(null)
 
 // 触发文件上传
 const triggerUpload = () => {
+  if (!isLoggedIn.value) {
+    showThought('登录后才能上传专属宠物哦~')
+    return
+  }
   fileInput.value?.click()
 }
 
@@ -447,6 +492,12 @@ const triggerUpload = () => {
 const handleUploadPet = (event) => {
   const file = event.target.files?.[0]
   if (!file) return
+  
+  if (!isLoggedIn.value) {
+    showThought('登录后才能上传专属宠物哦~')
+    event.target.value = ''
+    return
+  }
   
   // 验证文件类型
   if (file.type !== 'image/gif') {
@@ -682,27 +733,44 @@ const savePetState = () => {
 // 监听用户登录状态变化
 watch(isLoggedIn, (newValue) => {
   if (newValue) {
-    // 用户登录后，加载云端数据并自动显示宠物
+    // 用户登录后，加载云端数据
     loadPetState()
-    isVisible.value = true
-    setTimeout(() => {
-      showThought('主人回来啦！')
-    }, 500)
+    if (isVisible.value) {
+      setTimeout(() => {
+        showThought('主人回来啦！现在可以保存状态啦~')
+      }, 500)
+    }
   } else {
-    // 用户登出后，隐藏宠物
-    isVisible.value = false
+    // 用户登出后，提示但不隐藏宠物
+    if (isVisible.value) {
+      setTimeout(() => {
+        showThought('登录后可以保存我的状态哦~')
+      }, 500)
+    }
   }
 })
 
-// 监听宠物状态变化，自动保存
+// 监听宠物状态变化，自动保存（仅登录用户）
 watch([currentPetIndex, isVisible, mood, hunger, energy, petX, petY, isFollowing], () => {
-  savePetState()
+  if (isLoggedIn.value) {
+    savePetState()
+  } else {
+    // 未登录用户只保存可见性到本地
+    localStorage.setItem('petCompanionVisible', isVisible.value.toString())
+  }
 }, { deep: true })
 
 // 生命周期
 onMounted(() => {
   // 加载宠物状态
   loadPetState()
+  
+  // 如果是首次访问（没有保存的可见性状态），默认显示宠物
+  const savedVisible = localStorage.getItem('petCompanionVisible')
+  if (savedVisible === null) {
+    // 首次访问，默认显示
+    isVisible.value = true
+  }
   
   // 如果没有设置初始位置，设置默认位置
   if (!petX.value) {
@@ -730,7 +798,9 @@ onMounted(() => {
   
   // 显示欢迎消息
   setTimeout(() => {
-    showThought('你好呀！')
+    if (isLoggedIn.value) {
+      showThought('你好呀！')
+    } 
   }, 1000)
 })
 
@@ -1319,6 +1389,27 @@ html[data-theme="dark"] .menu-status {
 .upload-option:hover .upload-icon {
   color: var(--primary-color);
   opacity: 1;
+}
+
+.upload-option.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.upload-option.disabled:hover {
+  border-color: var(--border-color);
+  transform: none;
+  box-shadow: none;
+}
+
+.upload-option.disabled .upload-icon {
+  color: var(--text-secondary);
+  opacity: 0.4;
+}
+
+.upload-option.disabled:hover .upload-icon {
+  color: var(--text-secondary);
+  opacity: 0.4;
 }
 
 .selector-fade-enter-active,
