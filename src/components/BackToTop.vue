@@ -9,7 +9,9 @@
         aria-label="返回顶部"
         title="返回顶部"
       >
-        <span>⬆</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 4L4 12H8V20H16V12H20L12 4Z" fill="currentColor"/>
+        </svg>
       </button>
     </transition>
     
@@ -22,7 +24,9 @@
         aria-label="滑到底部"
         title="滑到底部"
       >
-        <span>⬇</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 20L20 12H16V4H8V12H4L12 20Z" fill="currentColor"/>
+        </svg>
       </button>
     </transition>
   </div>
