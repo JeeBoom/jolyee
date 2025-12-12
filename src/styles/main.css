@@ -272,7 +272,8 @@ html[data-theme="dark"] body {
   border: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 150px;
+  height: auto;
 }
 
 .card:hover {
@@ -411,22 +412,20 @@ html[data-theme="dark"] body {
   color: var(--text-primary);
   line-height: 1.4;
   margin-bottom: 0.5rem;
-  /* 1. 强制文本在一行内显示 */
+  /* 单行省略 */
   white-space: nowrap;
-  /* 2. 溢出内容隐藏 */
   overflow: hidden;
-  /* 3. 溢出部分显示省略号 */
   text-overflow: ellipsis;
-  /* 可选：必须设置宽度（行内元素需转块级/行内块） */
-  width: 200px; /* 自定义宽度，如100%、30vw等 */
-  display: inline-block;
+  width: 100%;
+  flex-shrink: 0;
 }
 
 .card-desc {
   font-size: 0.9rem;
   color: var(--text-secondary);
   line-height: 1.5;
-  flex: 1;
+  min-height: 2.7rem; /* 固定2行的高度 (0.9rem * 1.5 * 2) */
+  max-height: 2.7rem;
   /* 多行省略 */
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -434,6 +433,7 @@ html[data-theme="dark"] body {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex-shrink: 0;
 }
 
 /* 11. 返回顶部和底部按钮 */
