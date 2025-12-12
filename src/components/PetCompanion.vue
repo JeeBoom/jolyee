@@ -7,6 +7,7 @@
         :class="[currentState, { 'dragging': isDragging }]"
         :style="{ left: petX + 'px', top: petY + 'px' }"
         @mousedown="startDrag"
+        @touchstart="startTouchDrag"
         @click="handleClick"
         @contextmenu.prevent="toggleMenu"
       >
@@ -279,6 +280,25 @@ const handleMouseMove = (e) => {
   }
 }
 
+// 触摸移动处理
+const handleTouchMove = (e) => {
+  if (!isDragging.value) return
+  
+  e.preventDefault() // 阻止页面滚动
+  
+  const touch = e.touches[0]
+  mouseX.value = touch.clientX
+  mouseY.value = touch.clientY
+  lastMouseMoveTime.value = Date.now()
+  
+  petX.value = petStartX.value + touch.clientX - dragStartX.value
+  petY.value = petStartY.value + touch.clientY - dragStartY.value
+  
+  // 限制在窗口内
+  petX.value = Math.max(0, Math.min(window.innerWidth - 60, petX.value))
+  petY.value = Math.max(0, Math.min(window.innerHeight - 60, petY.value))
+}
+
 // 开始拖拽
 const startDrag = (e) => {
   if (e.button !== 0) return // 只响应左键
@@ -291,12 +311,32 @@ const startDrag = (e) => {
   currentState.value = 'idle'
 }
 
+// 触摸开始拖拽
+const startTouchDrag = (e) => {
+  const touch = e.touches[0]
+  
+  isDragging.value = true
+  dragStartX.value = touch.clientX
+  dragStartY.value = touch.clientY
+  petStartX.value = petX.value
+  petStartY.value = petY.value
+  currentState.value = 'idle'
+  
+  // 阻止默认的长按菜单和页面滚动
+  e.preventDefault()
+}
+
 // 结束拖拽
 const endDrag = () => {
   if (isDragging.value) {
     isDragging.value = false
     showThought('你想带我去哪？')
   }
+}
+
+// 触摸结束处理
+const endTouchDrag = () => {
+  endDrag()
 }
 
 // 点击宠物
@@ -793,6 +833,11 @@ onMounted(() => {
   window.addEventListener('click', handleClickOutside)
   window.addEventListener('keydown', handleKeydown)
   
+  // 触摸事件监听
+  window.addEventListener('touchmove', handleTouchMove, { passive: false })
+  window.addEventListener('touchend', endTouchDrag)
+  window.addEventListener('touchcancel', endTouchDrag)
+  
   // 启动游戏循环
   gameLoop()
   
@@ -808,6 +853,12 @@ onUnmounted(() => {
   window.removeEventListener('mousemove', handleMouseMove)
   window.removeEventListener('mouseup', endDrag)
   window.removeEventListener('keydown', handleKeydown)
+  
+  // 移除触摸事件监听
+  window.removeEventListener('touchmove', handleTouchMove)
+  window.removeEventListener('touchend', endTouchDrag)
+  window.removeEventListener('touchcancel', endTouchDrag)
+  
   cancelAnimationFrame(animationFrame)
   
   // 最后保存一次状态
@@ -841,6 +892,8 @@ defineExpose({
   cursor: grab;
   user-select: none;
   will-change: left, top;
+  touch-action: none; /* 禁用浏览器默认的触摸行为 */
+  -webkit-touch-callout: none; /* 禁用iOS长按菜单 */
 }
 
 .pet.dragging {
