@@ -3,14 +3,7 @@
     <!-- 页头 -->
     <Header :all-links="allLinks" @open-shortcuts="openShortcuts" />
     
-    <!-- 悬浮导航菜单 -->
-    <FloatingMenu
-      :sections="menuSections"
-      @switch-category="switchCategory"
-    />
 
-    <!-- 侧边栏菜单 -->
-    <!-- <Sidebar :sections="menuSections" /> -->
 
     <!-- 主内容区域 -->
     <main class="main-content">
@@ -93,11 +86,6 @@
         </div>
       </div>
       
-      <!-- Waline 评论区 -->
-      <div class="waline-wrapper">
-        <!-- <Waline /> -->
-      </div>
-      
       <Footer ref="footerRef" />
     </main>
 
@@ -121,18 +109,15 @@
 <script setup>
 import { ref, computed, onMounted, defineAsyncComponent } from "vue";
 import Header from "./components/Header.vue";
-// import Sidebar from "./components/Sidebar.vue";
 import BackToTop from "./components/BackToTop.vue";
 import Footer from "./components/Footer.vue";
 import ShortcutsHelp from "./components/ShortcutsHelp.vue";
-import FloatingMenu from "./components/FloatingMenu.vue";
 import UniversalSearch from "./components/UniversalSearch.vue";
 import PetCompanion from "./components/PetCompanion.vue";
 import CookieConsent from "./components/CookieConsent.vue";
 
 // 懒加载分类组件，减少初始加载时间
 const Communities = defineAsyncComponent(() => import("./components/Communities.vue"));
-// const Waline = defineAsyncComponent(() => import("./components/Waline.vue"));
 const It = defineAsyncComponent(() => import("./components/IT.vue"));
 const Software = defineAsyncComponent(() => import("./components/Software.vue"));
 const English = defineAsyncComponent(() => import("./components/English.vue"));
@@ -164,35 +149,12 @@ const activeCategory = ref(0)
 // 切换分类
 const switchCategory = (index) => {
   activeCategory.value = index
-  // 切换时懒加载对应的组件
-  if (index === 1 && !visibleSections.value.section1) {
-    visibleSections.value.section1 = true
-  } else if (index === 2 && !visibleSections.value.section2) {
-    visibleSections.value.section2 = true
-  } else if (index === 3 && !visibleSections.value.section3) {
-    visibleSections.value.section3 = true
-  } else if (index === 4 && !visibleSections.value.section4) {
-    visibleSections.value.section4 = true
-  } else if (index === 5 && !visibleSections.value.section5) {
-    visibleSections.value.section5 = true
-  } else if (index === 6 && !visibleSections.value.section6) {
-    visibleSections.value.section6 = true
-  } else if (index === 7 && !visibleSections.value.section7) {
-    visibleSections.value.section7 = true
-  } else if (index === 8 && !visibleSections.value.section8) {
-    visibleSections.value.section8 = true
-  } else if (index === 9 && !visibleSections.value.section9) {
-    visibleSections.value.section9 = true
-  } else if (index === 10 && !visibleSections.value.section10) {
-    visibleSections.value.section10 = true
-  } else if (index === 11 && !visibleSections.value.section11) {
-    visibleSections.value.section11 = true
-  } else if (index === 12 && !visibleSections.value.section12) {
-    visibleSections.value.section12 = true
-  } else if (index === 13 && !visibleSections.value.section13) {
-    visibleSections.value.section13 = true
-  } else if (index === 14 && !visibleSections.value.section14) {
-    visibleSections.value.section14 = true
+  // 切换时懒加载对应的组件（跳过第0个，因为默认已加载）
+  if (index > 0 && index <= 14) {
+    const sectionKey = `section${index}`
+    if (!visibleSections.value[sectionKey]) {
+      visibleSections.value[sectionKey] = true
+    }
   }
 }
 
@@ -213,21 +175,6 @@ const visibleSections = ref({
   section13: false,
   section14: false
 })
-
-// 分类容器的 refs
-const section1 = ref(null)
-const section2 = ref(null)
-const section3 = ref(null)
-const section4 = ref(null)
-const section5 = ref(null)
-const section6 = ref(null)
-const section7 = ref(null)
-const section8 = ref(null)
-const section9 = ref(null)
-const section10 = ref(null)
-const section11 = ref(null)
-const section12 = ref(null)
-const section13 = ref(null)
 
 const updateDateTime = () => {
   const now = new Date()
@@ -263,8 +210,6 @@ const menuSections = ref([
   { title: "英语", icon: "🌍", group: "学习资源", count: 0, shortcut: "13" },
   { title: "跨境出海", icon: "🚢", group: "商业资源", count: 0, shortcut: "14" },
 ]);
-
-const communitiesRef = ref(null);
 
 // 获取所有链接数据
 const allLinks = computed(() => getAllLinks())

@@ -69,7 +69,7 @@ const communities = ref([
   {
     name: "Stack Overflow",
     desc: "全球最大的技术问答网站",
-    logo: "https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon.png?v=c78bd457575a", // 请填入掘金的 logo URL
+    logo: "https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon.png?v=c78bd457575a",
     url: "https://stackoverflow.com/",
   },
   {
@@ -78,12 +78,6 @@ const communities = ref([
     logo: "https://www.cnblogs.com/images/logo.svg?v=2SMrXdIvlZwVoB1akyXm38WIKuTHVqvGD0CweV-B6cY",
     url: "https://www.cnblogs.com/",
   },
-  // {
-  //   name: "V2EX",
-  //   desc: "一个关于分享和探索的地方，V2EX 上面有很多有趣的人和内容",
-  //   logo: "https://www.v2ex.com/favicon.ico",
-  //   url: "https://www.v2ex.com/",
-  // },
   {
     name: "知乎",
     desc: "中文互联网高质量的问答社区和创意内容平台，在这里可以找到有趣的答案和观点",

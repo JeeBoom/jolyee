@@ -99,26 +99,7 @@ html[data-theme="dark"] body {
   width: 100%;
 }
 
-/* 2.5 侧边栏预留空间 */
-.page-wrapper > aside {
-  flex-shrink: 0;
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  z-index: 50;
-}
-
 /* 3. 页眉样式 */
-/* .site-header {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    color: white;
-    padding: 1.5rem 0;
-    box-shadow: var(--shadow-md);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-} */
 
 .header-container {
   max-width: 1920px;
@@ -182,11 +163,6 @@ html[data-theme="dark"] body {
   /* max-width: 1600px; */
   margin: 0 auto;
   padding: 3rem 4rem;
-}
-
-/* 侧边栏收起时恢复到左边距 */
-.page-wrapper.sidebar-collapsed .main-content {
-  margin: 0 auto;
 }
 
 /* 6. 分区标题 */
@@ -494,13 +470,7 @@ html[data-theme="dark"] body {
 }
 
 /* 12. 页脚 */
-/* .site-footer {
-    background: var(--text-primary);
-    color: white;
-    text-align: center;
-    padding: 2rem;
-    margin-top: 3rem;
-} */
+
 
 .site-footer p {
   margin: 0.5rem 0;
@@ -563,6 +533,14 @@ html[data-theme="dark"] body {
    响应式设计
    ================================================ */
 
+/* 大屏平板/小屏笔记本 (1200px) */
+@media (max-width: 1200px) {
+  .cards-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+  }
+}
+
 /* 平板设备 (1024px) */
 @media (max-width: 1024px) {
   .header-container {
@@ -575,16 +553,24 @@ html[data-theme="dark"] body {
   }
 
   .cards-grid {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.2rem;
   }
 
-  /* 平板设备 (1024px) */
-  @media (max-width: 1024px) {
-    .main-content {
-      margin-left: 150px;
-      padding: 2rem 1.5rem;
-    }
+  .main-content {
+    /* margin-left: 150px; */
+    padding: 2rem 1.5rem;
+  }
+  .content-section {
+    padding: 0 !important;
+  }
+}
+
+/* 小平板 (900px) */
+@media (max-width: 900px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
 }
 
@@ -597,7 +583,7 @@ html[data-theme="dark"] body {
   .main-content {
     max-width: 100%;
     margin: 0;
-    padding: 1.5rem 1rem;
+    padding: 1.5rem 0rem;
   }
 
   .header-container {

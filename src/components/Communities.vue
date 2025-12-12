@@ -47,22 +47,16 @@ const communities = ref([
     logo: "https://www.v2ex.com/static/favicon.ico",
     url: "https://www.v2ex.com",
   },
-  // {
-  //   name: "V2EX（镜像）",
-  //   desc: "V2EX是一个面向程序员、极客人群的分享交流社区，需科学",
-  //   logo: "https://www.v2ex.com/static/favicon.ico",
-  //   url: "https://v2ex.jscdn.cn",
-  // },
   {
     name: "吾爱破解",
     desc: "逆向破解爱好者聚集地",
-    logo: "https://www.52pojie.cn/favicon.ico", // 请填入豆瓣的 logo URL
+    logo: "https://www.52pojie.cn/favicon.ico",
     url: "https://www.52pojie.cn/",
   },
   {
     name: "百度贴吧",
     desc: "百度贴吧是中国最大的中文交互论坛，讨论各种话题。",
-    logo: "https://files.codelife.cc/itab/search/baidu.svg", // 请填入百度贴吧的 logo URL
+    logo: "https://files.codelife.cc/itab/search/baidu.svg",
     url: "https://tieba.baidu.com",
   },
   {
@@ -89,42 +83,24 @@ const communities = ref([
     logo: "https://www.chongbuluo.com/static/image/common/logo-light-icon.svg",
     url: "https://www.chongbuluo.com",
   },
-  // {
-  //   name: "SegmentFault（思否）",
-  //   desc: "国内主流的技术问答与社区平台，功能类似 Stack Overflow，同时提供技术博客、专栏、课程等内容。支持提问、回答、文章投稿，还有技术招聘板块，适合开发者解决问题、分享经验和求职交流。",
-  //   logo: "https://img2.baidu.com/it/u=1761179647,3217879606&fm=253&fmt=auto&app=138&f=PNG?w=500&h=750",
-  //   url: "https://segmentfault.com/",
-  // },
   {
     name: "豆瓣小组",
     desc: "豆瓣小组",
-    logo: "https://www.douban.com/favicon.ico", // 请填入豆瓣的 logo URL
+    logo: "https://www.douban.com/favicon.ico",
     url: "https://www.douban.com/group",
   },
   {
     name: "NewsNow",
     desc: "NewsNow - 实时新闻聚合阅读器，汇集全球热点新闻，提供优雅的阅读体验",
-    logo: "https://newsnow.busiyi.world/icon.svg", // 请填入 NewsNow 的 logo URL
+    logo: "https://newsnow.busiyi.world/icon.svg",
     url: "https://www.newsnow.co.uk",
   },
   {
     name: "少数派 - 高效工作、品...",
     desc: "少数派致力于更好地运用数字产品或科学方法，帮助用户提升工作效率和生活品质",
-    logo: "https://cdn-static.sspai.com/favicon/sspai.ico", // 请填入少数派的 logo URL
+    logo: "https://cdn-static.sspai.com/favicon/sspai.ico",
     url: "https://sspai.com",
   },
-  // {
-  //   name: '稀土掘金',
-  //   desc: '分享挖掘有价值的技术。',
-  //   logo: '//lf-web-assets.juejin.cn/obj/juejin-web/xitu_juejin_web/6c61ae65d1c41ae8221a670fa32d05aa.svg', // 请填入掘金的 logo URL
-  //   url: 'https://juejin.cn'
-  // },
-  // {
-  //   name: 'SOV2EX - 一个关于的 V2EX...',
-  //   desc: 'SOV2EX，一个关于的V2EX社区版本的讨论、问答平台。',
-  //   logo: '', // 请填入 SOV2EX 的 logo URL
-  //   url: 'https://sov2ex.com'
-  // },
   {
     name: "今日榜单",
     desc: "今日热榜汇聚全网热搜：知乎热榜、微博热搜、百度热搜、IT之家、36氪、少数派、豆瓣、小红书、百度贴吧、虎扑、虎嗅、天涯、哔哩哔哩、小众软件、抖音、吾爱破解、GitHub、技术期刊 全网热点 新闻 热词 排行榜 摸鱼神器",

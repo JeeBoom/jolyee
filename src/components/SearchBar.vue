@@ -63,7 +63,7 @@
 
           <!-- 搜索热门提示 -->
           <div v-else class="search-tips">
-            <p class="tips-title">💡 搜索提示</p>
+            <!-- <p class="tips-title">💡 搜索提示</p> -->
             <ul class="tips-list">
               <li v-for="(section, index) in sections" :key="index">
                 <a

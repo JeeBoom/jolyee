@@ -17,9 +17,8 @@
       <h3>💌 邮件联系</h3>
       <p>
         您也可以通过邮件与我们联系：<br>
-        <strong>邮箱：</strong><a href="mail to:15012988587@163.com" style="color: var(--primary-color)">15012988587@163.com</a>
+        <strong>邮箱：</strong><a href="mailto:15012988587@163.com" style="color: var(--primary-color)">15012988587@163.com</a>
       </p>
-      <!-- <p class="note">（请将邮箱地址替换为您的实际邮箱）</p> -->
     </section>
 
     <section>
