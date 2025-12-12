@@ -533,15 +533,18 @@ html[data-theme="dark"] body {
    响应式设计
    ================================================ */
 
-/* 大屏平板/小屏笔记本 (1200px) */
+/* 大屏平板/小屏笔记本 (≤1200px) */
 @media (max-width: 1200px) {
   .cards-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 1.2rem;
   }
+  .content-section {
+    padding: 0 !important;
+  }
 }
 
-/* 平板设备 (1024px) */
+/* 平板设备 (≤1024px) */
 @media (max-width: 1024px) {
   .header-container {
     flex-direction: column;
@@ -552,38 +555,36 @@ html[data-theme="dark"] body {
     justify-content: center;
   }
 
+  .main-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .content-section {
+    padding: 0 !important;
+  }
+
   .cards-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 1.2rem;
   }
+}
 
-  .main-content {
-    /* margin-left: 150px; */
-    padding: 2rem 1.5rem;
+/* 小平板 (≤900px) */
+@media (max-width: 900px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
   .content-section {
     padding: 0 !important;
   }
 }
 
-/* 小平板 (900px) */
-@media (max-width: 900px) {
-  .cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-}
-
-/* 手机设备 (768px) */
+/* 手机设备 (≤768px) */
 @media (max-width: 768px) {
+  /* 头部样式 */
   .site-header {
     padding: 1rem 0;
-  }
-
-  .main-content {
-    max-width: 100%;
-    margin: 0;
-    padding: 1.5rem 0rem;
   }
 
   .header-container {
@@ -600,6 +601,7 @@ html[data-theme="dark"] body {
     font-size: 1.5rem;
   }
 
+  /* 导航样式 */
   .main-nav {
     justify-content: center;
     flex-wrap: wrap;
@@ -611,6 +613,14 @@ html[data-theme="dark"] body {
     font-size: 0.8rem;
   }
 
+  /* 主内容区 */
+  .main-content {
+    max-width: 100%;
+    margin: 0;
+    padding: 1.5rem 0;
+  }
+
+  /* 标题样式 */
   .section-title {
     font-size: 1.5rem;
     margin-bottom: 1.2rem;
@@ -626,6 +636,7 @@ html[data-theme="dark"] body {
       3px 3px 6px rgba(102, 126, 234, 0.3);
   }
 
+  /* 卡片样式 */
   .cards-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -641,6 +652,7 @@ html[data-theme="dark"] body {
     font-size: 2rem;
   }
 
+  /* 滚动按钮 */
   .scroll-buttons {
     bottom: 1rem;
     right: 1rem;
@@ -654,13 +666,25 @@ html[data-theme="dark"] body {
     font-size: 1.2rem;
   }
 
+  /* 页脚样式 */
   .site-footer {
     padding: 1.5rem;
   }
+
+  /* Waline 评论区 */
+  .waline-wrapper {
+    width: 90%;
+    padding: 0 1rem;
+    margin: 2rem auto;
+  }
+  .content-section {
+    padding: 0 !important;
+  }
 }
 
-/* 小型手机设备 (480px) */
+/* 小型手机设备 (≤480px) */
 @media (max-width: 480px) {
+  /* 头部样式 */
   .logo-text {
     font-size: 1rem;
   }
@@ -669,16 +693,19 @@ html[data-theme="dark"] body {
     font-size: 1.2rem;
   }
 
+  /* 导航样式 */
   .nav-item {
     padding: 0.5rem 0.6rem;
     font-size: 0.75rem;
   }
 
+  /* 主内容区 */
   .main-content {
     max-width: 100%;
     padding: 1rem 0.5rem;
   }
 
+  /* 标题样式 */
   .section-title {
     font-size: 1.3rem;
     margin-bottom: 1rem;
@@ -686,9 +713,8 @@ html[data-theme="dark"] body {
       1px 1px 2px rgba(102, 126, 234, 0.25),
       2px 2px 4px rgba(102, 126, 234, 0.15);
   }
-  
 
-
+  /* 卡片样式 */
   .cards-grid {
     grid-template-columns: 1fr;
     gap: 0.8rem;
@@ -706,6 +732,7 @@ html[data-theme="dark"] body {
     font-size: 0.85rem;
   }
 
+  /* 滚动按钮 */
   .scroll-buttons {
     bottom: 1rem;
     right: 1rem;
@@ -719,6 +746,7 @@ html[data-theme="dark"] body {
     font-size: 1rem;
   }
 
+  /* 页脚样式 */
   .site-footer {
     padding: 1rem;
   }
@@ -726,11 +754,24 @@ html[data-theme="dark"] body {
   .site-footer p {
     font-size: 0.85rem;
   }
+
+  /* Waline 评论区 */
+  .waline-wrapper {
+    width: 95%;
+    padding: 0 0.5rem;
+    margin: 1.5rem auto;
+  }
+
+  .content-section {
+    padding: 0 !important;
+  }
 }
 
 /* ================================================
-   打印样式
+   特殊媒体查询
    ================================================ */
+
+/* 打印样式 */
 @media print {
   .site-header,
   .scroll-buttons,
@@ -743,9 +784,7 @@ html[data-theme="dark"] body {
   }
 }
 
-/* ================================================
-   暗黑主题
-   ================================================ */
+/* 暗黑主题偏好 */
 @media (prefers-color-scheme: dark) {
   :root {
     --text-primary: #e0e0e0;
@@ -769,29 +808,11 @@ html[data-theme="dark"] body {
 }
 
 /* ================================================
-   Waline 评论区样式
+   Waline 评论区基础样式
    ================================================ */
 .waline-wrapper {
-  /* max-width: 1200px; */
   width: 60%;
   margin: 3rem auto;
   padding: 0 2rem;
-  /* border-top: 1px solid var(--border-color); */
   padding-top: 2rem;
-}
-
-@media (max-width: 768px) {
-  .waline-wrapper {
-    width: 90%;
-    padding: 0 1rem;
-    margin: 2rem auto;
-  }
-}
-
-@media (max-width: 480px) {
-  .waline-wrapper {
-    width: 95%;
-    padding: 0 0.5rem;
-    margin: 1.5rem auto;
-  }
 }

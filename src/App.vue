@@ -385,6 +385,7 @@ html[data-theme="dark"] .datetime-display:hover::before {
 @media (max-width: 768px) {
   .datetime-display {
     padding: 12px 16px;
+    margin: 0 auto 10px;
   }
   
   .datetime-display .date {
@@ -490,6 +491,7 @@ html[data-theme="dark"] .category-btn.active {
     gap: 6px;
     padding: 12px 8px;
     margin: 10px auto;
+    justify-content: center;
   }
   
   .category-btn {
@@ -515,6 +517,7 @@ html[data-theme="dark"] .category-btn.active {
     gap: 4px;
     padding: 10px 4px;
     margin: 8px auto;
+    justify-content: center;
   }
   
   .category-btn {
