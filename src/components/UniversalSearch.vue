@@ -79,7 +79,7 @@ const searchEngines = ref([
     id: 'google',
     name: 'Google',
     desc: '全球最大的搜索引擎',
-    logo: 'https://www.google.com/favicon.ico',
+    logo: '/public/website-img/google.svg',
     searchUrl: 'https://www.google.com/search?q='
   },
   {
