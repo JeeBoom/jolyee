@@ -17,8 +17,8 @@
             <span class="category-title">{{ section.title }}</span>
           </button>
           <button
-            :class="['fixed-category-btn', { active: activeCategory === 14 }]"
-            @click="switchCategory(14)"
+            :class="['fixed-category-btn', { active: activeCategory === 15 }]"
+            @click="switchCategory(15)"
           >
             <span class="category-icon">📝</span>
             <span class="category-title">博客</span>
@@ -51,8 +51,8 @@
         </button>
         <!-- 博客按钮 -->
         <button
-          :class="['category-btn', { active: activeCategory === 14 }]"
-          @click="switchCategory(14)"
+          :class="['category-btn', { active: activeCategory === 15 }]"
+          @click="switchCategory(15)"
         >
           <span class="category-icon">📝</span>
           <span class="category-title">博客</span>
@@ -71,40 +71,43 @@
           <Ai v-if="visibleSections.section2" />
         </div>
         <div v-show="activeCategory === 3" class="content-section" ref="section3">
-          <News v-if="visibleSections.section3" />
+          <Shopping v-if="visibleSections.section3" />
         </div>
         <div v-show="activeCategory === 4" class="content-section" ref="section4">
-          <Crypto v-if="visibleSections.section4" />
+          <News v-if="visibleSections.section4" />
         </div>
         <div v-show="activeCategory === 5" class="content-section" ref="section5">
-          <Front v-if="visibleSections.section5" />
+          <Crypto v-if="visibleSections.section5" />
         </div>
         <div v-show="activeCategory === 6" class="content-section" ref="section6">
-          <Backend v-if="visibleSections.section6" />
+          <Front v-if="visibleSections.section6" />
         </div>
         <div v-show="activeCategory === 7" class="content-section" ref="section7">
-          <Devops v-if="visibleSections.section7" />
+          <Backend v-if="visibleSections.section7" />
         </div>
         <div v-show="activeCategory === 8" class="content-section" ref="section8">
-          <Tools v-if="visibleSections.section8" />
+          <Devops v-if="visibleSections.section8" />
         </div>
         <div v-show="activeCategory === 9" class="content-section" ref="section9">
-          <Movie v-if="visibleSections.section9" />
+          <Tools v-if="visibleSections.section9" />
         </div>
         <div v-show="activeCategory === 10" class="content-section" ref="section10">
-          <Music v-if="visibleSections.section10" />
+          <Movie v-if="visibleSections.section10" />
         </div>
         <div v-show="activeCategory === 11" class="content-section" ref="section11">
-          <Software v-if="visibleSections.section11" />
+          <Music v-if="visibleSections.section11" />
         </div>
         <div v-show="activeCategory === 12" class="content-section" ref="section12">
-          <English v-if="visibleSections.section12" />
+          <Software v-if="visibleSections.section12" />
         </div>
         <div v-show="activeCategory === 13" class="content-section" ref="section13">
-          <Crossborder v-if="visibleSections.section13" />
+          <English v-if="visibleSections.section13" />
         </div>
         <div v-show="activeCategory === 14" class="content-section" ref="section14">
-          <Blog v-if="visibleSections.section14" />
+          <Crossborder v-if="visibleSections.section14" />
+        </div>
+        <div v-show="activeCategory === 15" class="content-section" ref="section15">
+          <Blog v-if="visibleSections.section15" />
         </div>
       </div>
       
@@ -151,6 +154,7 @@ const Backend = defineAsyncComponent(() => import("./components/Backend.vue"));
 const Devops = defineAsyncComponent(() => import("./components/Devops.vue"));
 const Tools = defineAsyncComponent(() => import("./components/Tools.vue"));
 const Crossborder = defineAsyncComponent(() => import("./components/Crossborder.vue"));
+const Shopping = defineAsyncComponent(() => import("./components/Shopping.vue"));
 const News = defineAsyncComponent(() => import("./components/News.vue"));
 const Crypto = defineAsyncComponent(() => import("./components/Crypto.vue"));
 const Blog = defineAsyncComponent(() => import("./components/Blog.vue"));
@@ -176,7 +180,7 @@ const showFixedNav = ref(false)
 const switchCategory = (index) => {
   activeCategory.value = index
   // 切换时懒加载对应的组件（跳过第0个，因为默认已加载）
-  if (index > 0 && index <= 14) {
+  if (index > 0 && index <= 15) {
     const sectionKey = `section${index}`
     if (!visibleSections.value[sectionKey]) {
       visibleSections.value[sectionKey] = true
@@ -204,7 +208,8 @@ const visibleSections = ref({
   section11: false,
   section12: false,
   section13: false,
-  section14: false
+  section14: false,
+  section15: false
 })
 
 const updateDateTime = () => {
@@ -229,17 +234,18 @@ const menuSections = ref([
   { title: "优质社区", icon: "🌐", group: "学习资源", count: 0, shortcut: "1" },
   { title: "IT平台", icon: "💻", group: "学习资源", count: 0, shortcut: "2" },
   { title: "AI工具", icon: "🤖", group: "开发工具", count: 0, shortcut: "3" },
-  { title: "新闻资讯", icon: "📰", group: "学习资源", count: 0, shortcut: "4" },
-  { title: "股票虚拟币", icon: "💰", group: "商业资源", count: 0, shortcut: "5" },
-  { title: "前端", icon: "⚛️", group: "开发工具", count: 0, shortcut: "6" },
-  { title: "后端", icon: "🔧", group: "开发工具", count: 0, shortcut: "7" },
-  { title: "测试运维", icon: "🚀", group: "开发工具", count: 0, shortcut: "8" },
-  { title: "工具合集", icon: "🛠️", group: "开发工具", count: 0, shortcut: "9" },
-  { title: "影视资源", icon: "🎬", group: "娱乐资源", count: 0, shortcut: "10" },
-  { title: "音乐资源", icon: "🎵", group: "娱乐资源", count: 0, shortcut: "11" },
-  { title: "软件下载", icon: "📦", group: "娱乐资源", count: 0, shortcut: "12" },
-  { title: "英语", icon: "🌍", group: "学习资源", count: 0, shortcut: "13" },
-  { title: "跨境出海", icon: "🚢", group: "商业资源", count: 0, shortcut: "14" },
+  { title: "购物平台", icon: "🛒", group: "商业资源", count: 0, shortcut: "4" },
+  { title: "新闻资讯", icon: "📰", group: "学习资源", count: 0, shortcut: "5" },
+  { title: "股票虚拟币", icon: "💰", group: "商业资源", count: 0, shortcut: "6" },
+  { title: "前端", icon: "⚛️", group: "开发工具", count: 0, shortcut: "7" },
+  { title: "后端", icon: "🔧", group: "开发工具", count: 0, shortcut: "8" },
+  { title: "测试运维", icon: "🚀", group: "开发工具", count: 0, shortcut: "9" },
+  { title: "工具合集", icon: "🛠️", group: "开发工具", count: 0, shortcut: "10" },
+  { title: "影视资源", icon: "🎬", group: "娱乐资源", count: 0, shortcut: "11" },
+  { title: "音乐资源", icon: "🎵", group: "娱乐资源", count: 0, shortcut: "12" },
+  { title: "软件下载", icon: "📦", group: "娱乐资源", count: 0, shortcut: "13" },
+  { title: "英语", icon: "🌍", group: "学习资源", count: 0, shortcut: "14" },
+  { title: "跨境出海", icon: "🚢", group: "商业资源", count: 0, shortcut: "15" },
 ]);
 
 // 获取所有链接数据

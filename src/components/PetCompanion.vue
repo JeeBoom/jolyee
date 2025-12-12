@@ -777,7 +777,7 @@ watch(isLoggedIn, (newValue) => {
     loadPetState()
     if (isVisible.value) {
       setTimeout(() => {
-        showThought('主人回来啦！现在可以保存状态啦~')
+        showThought('主人回来啦！')
       }, 500)
     }
   } else {
