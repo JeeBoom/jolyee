@@ -2,8 +2,10 @@
   <header class="site-header">
     <!-- 所有顶部按钮容器 -->
     <div class="header-buttons">
-      <!-- 搜索框 -->
-      <SearchBar :all-links="allLinks" />
+       <!-- Google 登录 -->
+      <GoogleAuth />
+
+     
       
       <!-- 快捷键帮助 -->
       <button
@@ -23,6 +25,9 @@
         <span v-if="isDark">☀️</span>
         <span v-else>🌙</span>
       </button>
+
+       <!-- 搜索框 -->
+      <SearchBar :all-links="allLinks" />
     </div>
   </header>
 </template>
@@ -30,6 +35,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import SearchBar from './SearchBar.vue'
+import GoogleAuth from './GoogleAuth.vue'
 
 defineProps({
   allLinks: {
@@ -127,8 +133,8 @@ onMounted(() => {
   width: 40px !important;
   height: 40px !important;
   border-radius: 50% !important;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
-  border: 2px solid var(--primary-color) !important;
+  /* background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
+  border: 2px solid var(--primary-color) !important; */
   flex-shrink: 0;
   margin: 0 !important;
   padding: 0 !important;

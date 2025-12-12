@@ -2,12 +2,16 @@
   <div class="search-container">
     <!-- 搜索按钮 -->
     <button class="search-btn" @click="openSearch" title="搜索资源">
-      🔍
+      <svg t="1765515944038" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12842" width="16" height="16"><path d="M888.6 851.9L669.1 632.5c44.9-53.3 72-122.1 72-197 0-169-137.5-306.6-306.5-306.6S128 266.4 128 435.4 265.5 742 434.5 742c75.9 0 145.3-27.8 198.9-73.6l219.3 219.3c4.9 4.9 11.4 7.4 17.9 7.4 6.5 0 13-2.5 17.9-7.4 10-9.9 10-25.9 0.1-35.8z m-710-416.5c0-141.1 114.8-255.9 255.9-255.9s255.9 114.8 255.9 255.9c0 141.1-114.8 255.9-255.9 255.9S178.6 576.6 178.6 435.4z" p-id="12843" fill="#515151"></path></svg>
     </button>
 
     <!-- 搜索弹出框 -->
     <transition name="search-modal">
-      <div v-if="isSearchOpen" class="search-modal-overlay" @click="closeSearch">
+      <div
+        v-if="isSearchOpen"
+        class="search-modal-overlay"
+        @click="closeSearch"
+      >
         <div class="search-modal" @click.stop>
           <!-- 关闭按钮 -->
           <!-- <button class="search-close" @click="closeSearch" title="关闭搜索">
@@ -26,7 +30,11 @@
               ref="searchInputRef"
               autofocus
             />
-            <button class="search-execute" @click="performSearch" title="执行搜索">
+            <button
+              class="search-execute"
+              @click="performSearch"
+              title="执行搜索"
+            >
               搜索
             </button>
           </div>
@@ -49,7 +57,9 @@
                 <span class="result-icon">{{ item.icon }}</span>
                 <div class="result-content">
                   <span class="result-title">{{ item.title }}</span>
-                  <span v-if="item.description" class="result-description">{{ item.description }}</span>
+                  <span v-if="item.description" class="result-description">{{
+                    item.description
+                  }}</span>
                 </div>
                 <span class="result-match">{{ item.matchType }}</span>
               </a>
@@ -66,10 +76,7 @@
             <!-- <p class="tips-title">💡 搜索提示</p> -->
             <ul class="tips-list">
               <li v-for="(section, index) in sections" :key="index">
-                <a
-                  :href="`#section-${index}`"
-                  @click="selectResult(index)"
-                >
+                <a :href="`#section-${index}`" @click="selectResult(index)">
                   {{ section.icon }} {{ section.title }}
                 </a>
               </li>
@@ -82,59 +89,59 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, nextTick } from "vue";
 
 const props = defineProps({
   sections: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
   // 如果有实际的链接数据，可以通过这个属性传入
   allLinks: {
     type: Array,
-    default: () => []
-  }
-})
+    default: () => [],
+  },
+});
 
-const isSearchOpen = ref(false)
-const searchQuery = ref('')
-const searchInputRef = ref(null)
+const isSearchOpen = ref(false);
+const searchQuery = ref("");
+const searchInputRef = ref(null);
 
 const openSearch = async () => {
-  isSearchOpen.value = true
-  await nextTick()
-  searchInputRef.value?.focus()
-}
+  isSearchOpen.value = true;
+  await nextTick();
+  searchInputRef.value?.focus();
+};
 
 const closeSearch = () => {
-  isSearchOpen.value = false
-  searchQuery.value = ''
-}
+  isSearchOpen.value = false;
+  searchQuery.value = "";
+};
 
 const performSearch = () => {
   // 搜索逻辑会通过 searchResults 计算属性自动执行
-}
+};
 
 const selectResult = (sectionIndex) => {
-  closeSearch()
+  closeSearch();
   // 延迟滚动以确保DOM更新
   setTimeout(() => {
-    const element = document.getElementById(`section-${sectionIndex}`)
+    const element = document.getElementById(`section-${sectionIndex}`);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }, 100)
-}
+  }, 100);
+};
 
 // 计算搜索结果
 const searchResults = computed(() => {
   if (!searchQuery.value.trim()) {
-    return []
+    return [];
   }
 
-  const query = searchQuery.value.toLowerCase().trim()
-  const results = []
-  const addedSections = new Set()
+  const query = searchQuery.value.toLowerCase().trim();
+  const results = [];
+  const addedSections = new Set();
 
   // 1. 搜索分类名称和分组
   props.sections.forEach((section, index) => {
@@ -145,10 +152,10 @@ const searchResults = computed(() => {
           sectionIndex: index,
           title: section.title,
           icon: section.icon,
-          matchType: '分类',
-          priority: 1
-        })
-        addedSections.add(index)
+          matchType: "分类",
+          priority: 1,
+        });
+        addedSections.add(index);
       }
     }
     // 搜索分组名称
@@ -158,55 +165,58 @@ const searchResults = computed(() => {
           sectionIndex: index,
           title: section.title,
           icon: section.icon,
-          matchType: '分组',
-          priority: 2
-        })
-        addedSections.add(index)
+          matchType: "分组",
+          priority: 2,
+        });
+        addedSections.add(index);
       }
     }
-  })
+  });
 
   // 2. 搜索链接数据（如果有的话）
   if (props.allLinks && props.allLinks.length > 0) {
     props.allLinks.forEach((link, linkIndex) => {
-      const matchedFields = []
+      const matchedFields = [];
 
       // 搜索链接名称
       if (link.name && link.name.toLowerCase().includes(query)) {
-        matchedFields.push('name')
+        matchedFields.push("name");
       }
       // 搜索链接描述
       if (link.description && link.description.toLowerCase().includes(query)) {
-        matchedFields.push('description')
+        matchedFields.push("description");
       }
       // 搜索链接URL
       if (link.url && link.url.toLowerCase().includes(query)) {
-        matchedFields.push('url')
+        matchedFields.push("url");
       }
       // 搜索分类标题
-      if (link.categoryTitle && link.categoryTitle.toLowerCase().includes(query)) {
-        matchedFields.push('category')
+      if (
+        link.categoryTitle &&
+        link.categoryTitle.toLowerCase().includes(query)
+      ) {
+        matchedFields.push("category");
       }
 
       if (matchedFields.length > 0) {
-        const sectionIndex = link.categoryId || 0
+        const sectionIndex = link.categoryId || 0;
         results.push({
           sectionIndex: sectionIndex,
-          title: link.name || '未命名链接',
-          icon: link.icon || '🔗',
-          matchType: `链接${matchedFields.length > 1 ? '(多项)' : ''}`,
-          description: link.description || '',
-          url: link.url || '#',
+          title: link.name || "未命名链接",
+          icon: link.icon || "🔗",
+          matchType: `链接${matchedFields.length > 1 ? "(多项)" : ""}`,
+          description: link.description || "",
+          url: link.url || "#",
           priority: 0,
-          isLink: true
-        })
+          isLink: true,
+        });
       }
-    })
+    });
   }
 
   // 按优先级排序
-  return results.sort((a, b) => a.priority - b.priority)
-})
+  return results.sort((a, b) => a.priority - b.priority);
+});
 </script>
 
 <style scoped>
@@ -219,8 +229,8 @@ const searchResults = computed(() => {
 .search-btn {
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-  border: 2px solid var(--primary-color);
+  background: transparent;
+  border: 2px solid var(--border-color);
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -229,14 +239,13 @@ const searchResults = computed(() => {
   font-size: 1.2rem;
   z-index: 9995;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
   padding: 0;
   margin: 0;
 }
 
 .search-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  border-color: var(--primary-color);
+  transform: scale(1.05);
 }
 
 /* 搜索弹出框 */
@@ -339,7 +348,11 @@ const searchResults = computed(() => {
 
 .search-execute {
   padding: 12px 24px;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--secondary-color) 100%
+  );
   color: white;
   border: none;
   border-radius: 8px;
