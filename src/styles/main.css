@@ -250,10 +250,15 @@ html[data-theme="dark"] body {
 
 /* 7. 卡片网格 */
 .cards-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 1.5rem;
   margin-bottom: 3rem;
+}
+
+.cards-grid .card {
+  flex: 0 0 calc((100% - 7.5rem) / 6); /* 6个卡片，5个gap */
+  max-width: calc((100% - 7.5rem) / 6);
 }
 
 /* 8. 卡片基础样式 */
@@ -536,17 +541,26 @@ html[data-theme="dark"] body {
 /* 小屏笔记本 (≤1366px) */
 @media (max-width: 1366px) {
   .cards-grid {
-    grid-template-columns: repeat(4, 1fr);
     gap: 1.2rem;
+  }
+  
+  .cards-grid .card {
+    flex: 0 0 calc((100% - 3.6rem) / 4);
+    max-width: calc((100% - 3.6rem) / 4);
   }
 }
 
 /* 平板设备横屏/小屏笔记本 (≤1200px) */
 @media (max-width: 1200px) {
   .cards-grid {
-    grid-template-columns: repeat(3, 1fr);
     gap: 1.2rem;
   }
+  
+  .cards-grid .card {
+    flex: 0 0 calc((100% - 2.4rem) / 3);
+    max-width: calc((100% - 2.4rem) / 3);
+  }
+  
   .content-section {
     padding: 0 !important;
   }
@@ -572,17 +586,26 @@ html[data-theme="dark"] body {
   }
 
   .cards-grid {
-    grid-template-columns: repeat(3, 1fr);
     gap: 1.2rem;
+  }
+  
+  .cards-grid .card {
+    flex: 0 0 calc((100% - 2.4rem) / 3);
+    max-width: calc((100% - 2.4rem) / 3);
   }
 }
 
 /* 小平板 (≤900px) */
 @media (max-width: 900px) {
   .cards-grid {
-    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
+  
+  .cards-grid .card {
+    flex: 0 0 calc((100% - 1rem) / 2);
+    max-width: calc((100% - 1rem) / 2);
+  }
+  
   .content-section {
     padding: 0 !important;
   }
@@ -646,8 +669,12 @@ html[data-theme="dark"] body {
 
   /* 卡片样式 */
   .cards-grid {
-    grid-template-columns: 1fr;
     gap: 1rem;
+  }
+  
+  .cards-grid .card {
+    flex: 0 0 100%;
+    max-width: 100%;
   }
 
   .card {
@@ -724,8 +751,12 @@ html[data-theme="dark"] body {
 
   /* 卡片样式 */
   .cards-grid {
-    grid-template-columns: 1fr;
     gap: 0.8rem;
+  }
+  
+  .cards-grid .card {
+    flex: 0 0 100%;
+    max-width: 100%;
   }
 
   .card {
@@ -787,8 +818,9 @@ html[data-theme="dark"] body {
     display: none;
   }
 
-  .cards-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .cards-grid .card {
+    flex: 0 0 calc((100% - 1.5rem) / 2);
+    max-width: calc((100% - 1.5rem) / 2);
   }
 }
 
