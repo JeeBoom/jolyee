@@ -1,7 +1,7 @@
 <template>
   <div class="pet-companion-wrapper">
     <!-- 宠物主体 -->
-    <div v-if="isVisible" class="pet-companion">
+    <div v-if="isLoggedIn && isVisible" class="pet-companion">
       <div 
         class="pet"
         :class="[currentState, { 'dragging': isDragging }]"
@@ -26,6 +26,28 @@
         
         <!-- 思考泡泡 -->
         <div v-if="thought" class="thought-bubble">{{ thought }}</div>
+        
+        <!-- 状态栏 -->
+        <div class="pet-status-bar">
+          <div class="status-item" :title="`心情: ${mood}`">
+            <span class="status-icon">😊</span>
+            <div class="status-bar">
+              <div class="status-fill mood" :style="{ width: mood + '%' }"></div>
+            </div>
+          </div>
+          <div class="status-item" :title="`饥饿: ${hunger}`">
+            <span class="status-icon">🍖</span>
+            <div class="status-bar">
+              <div class="status-fill hunger" :style="{ width: (100 - hunger) + '%' }"></div>
+            </div>
+          </div>
+          <div class="status-item" :title="`能量: ${energy}`">
+            <span class="status-icon">⚡</span>
+            <div class="status-bar">
+              <div class="status-fill energy" :style="{ width: energy + '%' }"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- 右键菜单 -->
@@ -34,6 +56,22 @@
         class="pet-menu"
         :style="{ left: menuX + 'px', top: menuY + 'px' }"
       >
+        <div class="menu-status">
+          <div class="menu-status-title">{{ currentPet.name }}</div>
+          <div class="menu-status-item">
+            <span>😊 心情</span>
+            <span class="status-value" :class="{ low: mood < 30 }">{{ Math.round(mood) }}</span>
+          </div>
+          <div class="menu-status-item">
+            <span>🍖 饥饿</span>
+            <span class="status-value" :class="{ low: hunger > 70 }">{{ Math.round(hunger) }}</span>
+          </div>
+          <div class="menu-status-item">
+            <span>⚡ 能量</span>
+            <span class="status-value" :class="{ low: energy < 30 }">{{ Math.round(energy) }}</span>
+          </div>
+        </div>
+        <div class="menu-divider"></div>
         <div class="menu-item" @click="feedPet">🍖 喂食</div>
         <div class="menu-item" @click="playWithPet">🎾 玩耍</div>
         <div class="menu-item" @click="petPet">👋 抚摸</div>
@@ -46,26 +84,58 @@
 
     <!-- 唤出按钮 -->
     <button 
-      v-else
+      v-if="isLoggedIn && !isVisible"
       class="show-pet-button"
       @click="showPet"
       title="显示宠物伴侣 (Ctrl+P)"
     >
       🐾
     </button>
+    
+    <!-- 宠物选择器 -->
+    <transition name="selector-fade">
+      <div v-if="showPetSelector" class="pet-selector-overlay" @click="showPetSelector = false">
+        <div class="pet-selector" @click.stop>
+          <div class="selector-header">
+            <h3>选择你的宠物伴侣</h3>
+            <button class="selector-close" @click="showPetSelector = false">✕</button>
+          </div>
+          <div class="selector-grid">
+            <div 
+              v-for="(pet, index) in petTypes" 
+              :key="index"
+              class="pet-option"
+              :class="{ active: index === currentPetIndex }"
+              @click="selectPet(index)"
+            >
+              <div class="pet-preview">
+                <img v-if="pet.image" :src="pet.image" :alt="pet.name" />
+                <span v-else class="pet-preview-emoji">{{ pet.emoji }}</span>
+              </div>
+              <div class="pet-name">{{ pet.name }}</div>
+              <div v-if="index === currentPetIndex" class="current-badge">当前</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { useAuth } from '../utils/authStore'
+
+// 获取用户认证状态
+const { isLoggedIn, petData, savePetData, getPetData } = useAuth()
 
 // 宠物类型
 const petTypes = [
-  { name: 'capybara', emoji: '🦫', image: '/images/lulu.gif', sound: '噜噜~' },
-  { name: 'littleduck', emoji: '🦆', image: '/images/xly2.gif', sound: '小刘鸭~' },
-  { name: 'yellowduck', emoji: '🦆', image: '/images/pkq.gif', sound: '小黄鸭~' },
-  { name: 'paidaxing', emoji: '🦆', image: '/images/pdx.gif', sound: '派大星~' },
-  { name: 'jiqimao', emoji: '👧', image: '/images/jiqimao.gif', sound: '机器猫~' },
+  { name: '噜噜~', emoji: '🦫', image: '/images/lulu.gif', sound: '噜噜~' },
+  { name: '小刘鸭~', emoji: '🦆', image: '/images/xly2.gif', sound: '小刘鸭~' },
+  { name: '小黄鸭~', emoji: '🦆', image: '/images/pkq.gif', sound: '小黄鸭~' },
+  { name: '派大星~', emoji: '🦆', image: '/images/pdx.gif', sound: '派大星~' },
+  { name: '机器猫~', emoji: '👧', image: '/images/jiqimao.gif', sound: '机器猫~' },
 ]
 
 // 状态
@@ -80,7 +150,8 @@ const menuX = ref(0)
 const menuY = ref(0)
 const thought = ref('')
 const showStateIcon = ref(false)
-const isFollowing = ref(true)
+const isFollowing = ref(false)
+const showPetSelector = ref(false)
 
 // 鼠标位置
 const mouseX = ref(0)
@@ -253,7 +324,7 @@ const playWithPet = () => {
   currentState.value = 'playing'
   showStateIcon.value = true
   showThought('真开心！')
-  mood.value = Math.min(100, mood.value + 20)
+  mood.value = Math.min(100, mood.value + 5)
   energy.value = Math.max(0, energy.value - 20)
   
   // 随机跳跃
@@ -281,7 +352,7 @@ const petPet = () => {
   currentState.value = 'happy'
   showStateIcon.value = true
   showThought(currentPet.value.sound)
-  mood.value = Math.min(100, mood.value + 15)
+  mood.value = Math.min(100, mood.value + 5)
   
   setTimeout(() => {
     currentState.value = 'idle'
@@ -289,13 +360,19 @@ const petPet = () => {
   }, 1500)
 }
 
-// 切换宠物类型
+// 打开宠物选择器
 const changePetType = () => {
   showMenu.value = false
-  currentPetIndex.value = (currentPetIndex.value + 1) % petTypes.length
+  showPetSelector.value = true
+}
+
+// 选择宠物
+const selectPet = (index) => {
+  showPetSelector.value = false
+  currentPetIndex.value = index
   showThought('嗨！是我~')
-  // 立即保存到localStorage
-  localStorage.setItem('petCompanionType', currentPetIndex.value.toString())
+  // 立即保存（会自动触发watch保存）
+  savePetState()
 }
 
 // 切换跟随状态
@@ -314,13 +391,13 @@ const toggleFollow = () => {
 const hidePet = () => {
   showMenu.value = false
   isVisible.value = false
-  localStorage.setItem('petCompanionVisible', 'false')
+  // 会自动触发watch保存
 }
 
 // 显示宠物
 const showPet = () => {
   isVisible.value = true
-  localStorage.setItem('petCompanionVisible', 'true')
+  // 会自动触发watch保存
   setTimeout(() => {
     showThought('我回来啦！')
   }, 100)
@@ -369,11 +446,24 @@ const autoAction = () => {
     showThought(thoughts[Math.floor(Math.random() * thoughts.length)])
   }
   
-  // 饥饿和能量缓慢变化
-  hunger.value = Math.min(100, hunger.value + 0.01)
-  if (energy.value < 100 && currentState.value === 'sleeping') {
-    energy.value = Math.min(100, energy.value + 0.1)
+  // 饥饿值：模拟人类两餐间隔（约6小时从0到100）
+  // 6小时 = 21600秒，60帧/秒 = 1,296,000帧
+  // 100 / 1,296,000 ≈ 0.000077
+  hunger.value = Math.min(100, hunger.value + 0.000077)
+  
+  // 心情值：每3分钟自动-1（睡觉时不变化）
+  // 3分钟 = 180秒，60帧/秒 = 10,800帧
+  // -1 / 10,800 ≈ -0.000093
+  if (currentState.value !== 'sleeping' && mood.value > 0) {
+    mood.value = Math.max(0, mood.value - 0.000093)
   }
+  
+  // 能量值：根据心情和饥饿计算（0-100）
+  // 能量 = (心情 + (100 - 饥饿)) / 2
+  // 心情好且不饿时能量高，心情差或很饿时能量低
+  const moodFactor = mood.value
+  const hungerFactor = 100 - hunger.value
+  energy.value = (moodFactor + hungerFactor) / 2
 }
 
 // 游戏循环
@@ -384,22 +474,99 @@ const gameLoop = () => {
   animationFrame = requestAnimationFrame(gameLoop)
 }
 
-// 生命周期
-onMounted(() => {
-  // 从localStorage读取设置
-  const savedVisible = localStorage.getItem('petCompanionVisible')
-  if (savedVisible === 'false') {
+// 加载宠物数据
+const loadPetState = () => {
+  if (isLoggedIn.value && petData.value) {
+    // 从用户账号加载宠物数据
+    const data = getPetData()
+    if (data) {
+      currentPetIndex.value = data.petType || 0
+      isVisible.value = data.isVisible !== false
+      mood.value = data.mood || 50
+      hunger.value = data.hunger || 50
+      energy.value = data.energy || 100
+      isFollowing.value = data.isFollowing !== false
+      if (data.position) {
+        petX.value = data.position.x || window.innerWidth - 150
+        petY.value = data.position.y || window.innerHeight - 150
+      }
+    }
+  } else {
+    // 未登录时使用localStorage（本地数据）
+    const savedVisible = localStorage.getItem('petCompanionVisible')
+    if (savedVisible === 'false') {
+      isVisible.value = false
+    }
+    
+    const savedPetType = localStorage.getItem('petCompanionType')
+    if (savedPetType) {
+      currentPetIndex.value = parseInt(savedPetType) || 0
+    }
+  }
+  
+  // 确保初始位置
+  if (!petX.value || petX.value < 0) {
+    petX.value = window.innerWidth - 150
+  }
+  if (!petY.value || petY.value < 0) {
+    petY.value = window.innerHeight - 150
+  }
+}
+
+// 保存宠物数据
+const savePetState = () => {
+  const data = {
+    petType: currentPetIndex.value,
+    isVisible: isVisible.value,
+    mood: mood.value,
+    hunger: hunger.value,
+    energy: energy.value,
+    position: { x: petX.value, y: petY.value },
+    isFollowing: isFollowing.value
+  }
+  
+  if (isLoggedIn.value) {
+    // 保存到用户账号
+    savePetData(data)
+  } else {
+    // 保存到localStorage（本地）
+    localStorage.setItem('petCompanionVisible', isVisible.value.toString())
+    localStorage.setItem('petCompanionType', currentPetIndex.value.toString())
+  }
+}
+
+// 监听用户登录状态变化
+watch(isLoggedIn, (newValue) => {
+  if (newValue) {
+    // 用户登录后，加载云端数据并自动显示宠物
+    loadPetState()
+    isVisible.value = true
+    setTimeout(() => {
+      showThought('主人回来啦！')
+    }, 500)
+  } else {
+    // 用户登出后，隐藏宠物
     isVisible.value = false
   }
+})
+
+// 监听宠物状态变化，自动保存
+watch([currentPetIndex, isVisible, mood, hunger, energy, petX, petY, isFollowing], () => {
+  savePetState()
+}, { deep: true })
+
+// 生命周期
+onMounted(() => {
+  // 加载宠物状态
+  loadPetState()
   
-  const savedPetType = localStorage.getItem('petCompanionType')
-  if (savedPetType) {
-    currentPetIndex.value = parseInt(savedPetType) || 0
+  // 如果没有设置初始位置，设置默认位置
+  if (!petX.value) {
+    petX.value = window.innerWidth - 150
   }
-  
-  // 初始位置
-  petX.value = window.innerWidth - 150
-  petY.value = window.innerHeight - 150
+  if (!petY.value) {
+    petY.value = window.innerHeight - 150
+  }
   
   // 点击外部关闭菜单
   const handleClickOutside = (e) => {
@@ -429,8 +596,8 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
   cancelAnimationFrame(animationFrame)
   
-  // 保存设置
-  localStorage.setItem('petCompanionType', currentPetIndex.value.toString())
+  // 最后保存一次状态
+  savePetState()
 })
 
 // 暴露方法供外部调用
@@ -468,8 +635,8 @@ defineExpose({
 
 .pet-body {
   position: relative;
-  width: 50px;
-  height: 50px;
+  width: 90px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -477,13 +644,13 @@ defineExpose({
 }
 
 .pet-emoji {
-  font-size: 40px;
+  font-size: 70px;
   animation: petIdle 2s ease-in-out infinite;
 }
 
 .pet-image {
-  width: 60px;
-  height: 60px;
+  width: 100px;
+  height: 100px;
   object-fit: contain;
   animation: petIdle 2s ease-in-out infinite;
 }
@@ -564,6 +731,65 @@ defineExpose({
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-5px); }
+}
+
+/* 状态栏 */
+.pet-status-bar {
+  position: absolute;
+  bottom: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 4px 8px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.pet:hover .pet-status-bar {
+  opacity: 1;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.status-icon {
+  font-size: 12px;
+}
+
+.status-bar {
+  width: 30px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.status-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+  border-radius: 3px;
+}
+
+.status-fill.mood {
+  background: linear-gradient(90deg, #ff6b9d 0%, #ffa07a 100%);
+}
+
+.status-fill.hunger {
+  background: linear-gradient(90deg, #ffd700 0%, #ffa500 100%);
+}
+
+.status-fill.energy {
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
 }
 
 /* 思考泡泡 */
@@ -658,9 +884,54 @@ html[data-theme="dark"] .thought-bubble::after {
   margin: 4px 0;
 }
 
+.menu-status {
+  padding: 8px;
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 6px;
+  margin-bottom: 4px;
+}
+
+.menu-status-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.menu-status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: 4px 0;
+  color: var(--text-secondary);
+}
+
+.status-value {
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 30px;
+  text-align: right;
+}
+
+.status-value.low {
+  color: #ff6b6b;
+  animation: statusPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
 html[data-theme="dark"] .pet-menu {
   background: var(--bg-primary);
   color: var(--text-primary);
+}
+
+html[data-theme="dark"] .menu-status {
+  background: rgba(102, 126, 234, 0.1);
 }
 
 /* 显示宠物按钮 */
@@ -696,6 +967,149 @@ html[data-theme="dark"] .pet-menu {
   }
 }
 
+/* 宠物选择器 */
+.pet-selector-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  z-index: 10003;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pet-selector {
+  background: var(--bg-primary);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: selectorAppear 0.3s ease;
+}
+
+@keyframes selectorAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.selector-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: var(--text-primary);
+}
+
+.selector-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.selector-close:hover {
+  background: rgba(102, 126, 234, 0.2);
+  transform: scale(1.1);
+}
+
+.selector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+}
+
+.pet-option {
+  position: relative;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.pet-option:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border-color: var(--primary-color);
+}
+
+.pet-option.active {
+  border-color: var(--primary-color);
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.pet-preview {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+
+.pet-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pet-preview-emoji {
+  font-size: 48px;
+}
+
+.pet-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.current-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--primary-color);
+  color: white;
+  font-size: 11px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.selector-fade-enter-active,
+.selector-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.selector-fade-enter-from,
+.selector-fade-leave-to {
+  opacity: 0;
+}
+
 /* 移动端优化 */
 @media (max-width: 768px) {
   .pet-body {
@@ -718,6 +1132,20 @@ html[data-theme="dark"] .pet-menu {
     width: 50px;
     height: 50px;
     font-size: 24px;
+  }
+  
+  .selector-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+  }
+  
+  .pet-preview {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .pet-preview-emoji {
+    font-size: 36px;
   }
 }
 </style>
