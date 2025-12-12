@@ -3,11 +3,23 @@
     <div class="blog-header">
       <h2 class="blog-title">📝 博客文章</h2>
       <p class="blog-subtitle">分享技术、记录生活、传递价值</p>
+      
+      <!-- 博客分类标签 -->
+      <div class="blog-categories">
+        <button 
+          v-for="category in categories" 
+          :key="category.id"
+          :class="['category-tag', { active: activeCategory === category.id }]"
+          @click="filterByCategory(category.id)"
+        >
+          {{ category.icon }} {{ category.name }}
+        </button>
+      </div>
     </div>
 
     <div class="posts-grid">
       <article
-        v-for="post in posts"
+        v-for="post in filteredPosts"
         :key="post.id"
         class="post-card"
         @click="openPost(post)"
@@ -41,8 +53,8 @@
     </div>
 
     <!-- 如果没有文章 -->
-    <div v-if="posts.length === 0" class="no-posts">
-      <p>📭 暂无文章，敬请期待...</p>
+    <div v-if="filteredPosts.length === 0" class="no-posts">
+      <p>📭 该分类暂无文章，敬请期待...</p>
     </div>
 
     <!-- 文章详情模态框 -->
@@ -73,7 +85,7 @@
             </header>
             
             <div v-if="selectedPost.coverImage" class="post-cover-large">
-              <img :src="selectedPost.coverImage" :alt="selectedPost.title" />
+              <!-- <img :src="selectedPost.coverImage" :alt="selectedPost.title" /> -->
             </div>
             
             <div class="post-body" v-html="renderedContent"></div>
@@ -96,8 +108,33 @@ import { getAllPosts } from '../utils/blogData'
 import { marked } from 'marked'
 import BlogGiscus from './BlogGiscus.vue'
 
+// 博客分类
+const categories = ref([
+  { id: 'all', name: '全部', icon: '📚' },
+  { id: 'notes', name: '开发笔记', icon: '📝' },
+  { id: 'casual', name: '随便写写', icon: '✍️' },
+  { id: 'game', name: '游戏', icon: '🎮' },
+  { id: 'recommend', name: '各种推荐', icon: '⭐' },
+  { id: 'travel', name: '旅行日记', icon: '✈️' },
+  { id: 'misc', name: '杂七杂八', icon: '🎨' },
+])
+
+const activeCategory = ref('all')
 const posts = ref(getAllPosts())
 const selectedPost = ref(null)
+
+// 根据分类过滤文章
+const filteredPosts = computed(() => {
+  if (activeCategory.value === 'all') {
+    return posts.value
+  }
+  return posts.value.filter(post => post.blogCategory === activeCategory.value)
+})
+
+// 切换分类
+const filterByCategory = (categoryId) => {
+  activeCategory.value = categoryId
+}
 
 const formatDate = (dateString) => {
   const date = new Date(dateString)
@@ -117,6 +154,13 @@ const closePost = () => {
   selectedPost.value = null
   document.body.style.overflow = ''
 }
+
+// 配置 marked 支持表格等扩展语法
+marked.setOptions({
+  gfm: true, // 启用 GitHub Flavored Markdown
+  breaks: true, // 支持换行
+  tables: true, // 启用表格支持
+})
 
 const renderedContent = computed(() => {
   if (!selectedPost.value) return ''
@@ -150,6 +194,42 @@ const renderedContent = computed(() => {
 .blog-subtitle {
   font-size: 1.1rem;
   color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+/* 博客分类标签 */
+.blog-categories {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.category-tag {
+  padding: 0.4rem 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.category-tag:hover {
+  background: var(--bg-hover);
+  border-color: var(--primary-color);
+  color: var(--text-primary);
+}
+
+.category-tag.active {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  color: white;
+  border-color: transparent;
+  font-weight: 600;
 }
 
 .posts-grid {
@@ -430,6 +510,34 @@ const renderedContent = computed(() => {
   margin: 2rem 0;
 }
 
+.post-body :deep(table) {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5rem 0;
+  border: 1px solid var(--border-color);
+}
+
+.post-body :deep(th),
+.post-body :deep(td) {
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.post-body :deep(th) {
+  background-color: rgba(102, 126, 234, 0.1);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.post-body :deep(td) {
+  color: var(--text-secondary);
+}
+
+.post-body :deep(tr:hover) {
+  background-color: rgba(102, 126, 234, 0.05);
+}
+
 /* 动画 */
 .modal-fade-enter-active,
 .modal-fade-leave-active {
@@ -460,6 +568,17 @@ const renderedContent = computed(() => {
 
   .blog-title {
     font-size: 2rem;
+  }
+
+  .blog-categories {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .category-tag {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
   }
 
   .post-modal-overlay {
