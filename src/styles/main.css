@@ -533,10 +533,18 @@ html[data-theme="dark"] body {
    响应式设计
    ================================================ */
 
-/* 大屏平板/小屏笔记本 (≤1200px) */
-@media (max-width: 1200px) {
+/* 小屏笔记本 (≤1366px) */
+@media (max-width: 1366px) {
   .cards-grid {
     grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+  }
+}
+
+/* 平板设备横屏/小屏笔记本 (≤1200px) */
+@media (max-width: 1200px) {
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.2rem;
   }
   .content-section {
@@ -544,7 +552,7 @@ html[data-theme="dark"] body {
   }
 }
 
-/* 平板设备 (≤1024px) */
+/* 平板设备竖屏 (≤1024px) */
 @media (max-width: 1024px) {
   .header-container {
     flex-direction: column;
