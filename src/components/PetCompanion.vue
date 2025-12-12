@@ -114,8 +114,33 @@
               </div>
               <div class="pet-name">{{ pet.name }}</div>
               <div v-if="index === currentPetIndex" class="current-badge">当前</div>
+              <div v-if="pet.isCustom" class="custom-badge">自定义</div>
+              <!-- 删除按钮（仅自定义宠物） -->
+              <button 
+                v-if="pet.isCustom" 
+                class="delete-pet-btn"
+                @click.stop="deleteCustomPet(index)"
+                title="删除此宠物"
+              >
+                🗑️
+              </button>
+            </div>
+            
+            <!-- 上传自定义宠物 -->
+            <div class="pet-option upload-option" @click="triggerUpload">
+              <div class="pet-preview">
+                <span class="upload-icon">➕</span>
+              </div>
+              <div class="pet-name">上传GIF</div>
             </div>
           </div>
+          <input 
+            ref="fileInput" 
+            type="file" 
+            accept=".gif,image/gif" 
+            style="display: none" 
+            @change="handleUploadPet"
+          />
         </div>
       </div>
     </transition>
@@ -127,16 +152,22 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useAuth } from '../utils/authStore'
 
 // 获取用户认证状态
-const { isLoggedIn, petData, savePetData, getPetData } = useAuth()
+const { isLoggedIn, user, petData, savePetData, getPetData } = useAuth()
 
-// 宠物类型
-const petTypes = [
+// 默认宠物类型
+const defaultPets = [
   { name: '噜噜~', emoji: '🦫', image: '/images/lulu.gif', sound: '噜噜~' },
   { name: '小刘鸭~', emoji: '🦆', image: '/images/xly2.gif', sound: '小刘鸭~' },
   { name: '小黄鸭~', emoji: '🦆', image: '/images/pkq.gif', sound: '小黄鸭~' },
   { name: '派大星~', emoji: '🦆', image: '/images/pdx.gif', sound: '派大星~' },
   { name: '机器猫~', emoji: '👧', image: '/images/jiqimao.gif', sound: '机器猫~' },
 ]
+
+// 自定义宠物
+const customPets = ref([])
+
+// 合并所有宠物类型（默认 + 自定义）
+const petTypes = computed(() => [...defaultPets, ...customPets.value])
 
 // 状态
 const isVisible = ref(false)
@@ -170,7 +201,7 @@ const hunger = ref(50)
 const energy = ref(100)
 
 // 计算属性
-const currentPet = computed(() => petTypes[currentPetIndex.value])
+const currentPet = computed(() => petTypes.value[currentPetIndex.value])
 
 const stateIcon = computed(() => {
   switch(currentState.value) {
@@ -375,6 +406,116 @@ const selectPet = (index) => {
   savePetState()
 }
 
+// 删除自定义宠物
+const deleteCustomPet = (index) => {
+  // 计算在customPets数组中的索引（需要减去默认宠物数量）
+  const defaultPetsCount = 5
+  const customIndex = index - defaultPetsCount
+  
+  if (customIndex < 0 || customIndex >= customPets.value.length) return
+  
+  // 确认删除
+  if (!confirm(`确定要删除 "${petTypes.value[index].name}" 吗？`)) return
+  
+  // 如果删除的是当前选中的宠物，切换到第一个宠物
+  if (index === currentPetIndex.value) {
+    currentPetIndex.value = 0
+    showThought('换个伙伴陪你~')
+  } else if (index < currentPetIndex.value) {
+    // 如果删除的宠物在当前宠物之前，需要调整索引
+    currentPetIndex.value--
+  }
+  
+  // 从数组中删除
+  customPets.value.splice(customIndex, 1)
+  
+  // 保存到localStorage
+  saveCustomPets()
+  
+  showThought('再见啦~')
+}
+
+// 文件输入引用
+const fileInput = ref(null)
+
+// 触发文件上传
+const triggerUpload = () => {
+  fileInput.value?.click()
+}
+
+// 处理宠物图片上传
+const handleUploadPet = (event) => {
+  const file = event.target.files?.[0]
+  if (!file) return
+  
+  // 验证文件类型
+  if (file.type !== 'image/gif') {
+    showThought('只能上传GIF图片哦~')
+    return
+  }
+  
+  // 验证文件大小（限制为5MB）
+  if (file.size > 5 * 1024 * 1024) {
+    showThought('图片太大啦，请选择5MB以下的GIF')
+    return
+  }
+  
+  // 读取文件为base64
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    const base64Image = e.target?.result
+    if (!base64Image) return
+    
+    // 添加到自定义宠物列表
+    const customPet = {
+      name: file.name.replace('.gif', ''),
+      emoji: '🐾',
+      image: base64Image,
+      sound: '喵~',
+      isCustom: true
+    }
+    
+    customPets.value.push(customPet)
+    
+    // 保存自定义宠物到用户数据
+    saveCustomPets()
+    
+    // 自动选择新上传的宠物
+    const newIndex = petTypes.value.length - 1
+    selectPet(newIndex)
+    
+    showThought('新伙伴加入啦！')
+  }
+  
+  reader.readAsDataURL(file)
+  
+  // 清空输入框，允许重复上传同一文件
+  event.target.value = ''
+}
+
+// 保存自定义宠物
+const saveCustomPets = () => {
+  if (!isLoggedIn.value) return
+  
+  const key = `customPets_${user.value?.id || 'guest'}`
+  localStorage.setItem(key, JSON.stringify(customPets.value))
+}
+
+// 加载自定义宠物
+const loadCustomPets = () => {
+  if (!isLoggedIn.value) return
+  
+  try {
+    const key = `customPets_${user.value?.id || 'guest'}`
+    const saved = localStorage.getItem(key)
+    if (saved) {
+      customPets.value = JSON.parse(saved)
+    }
+  } catch (error) {
+    console.error('加载自定义宠物失败:', error)
+  }
+}
+
 // 切换跟随状态
 const toggleFollow = () => {
   showMenu.value = false
@@ -476,6 +617,9 @@ const gameLoop = () => {
 
 // 加载宠物数据
 const loadPetState = () => {
+  // 加载自定义宠物
+  loadCustomPets()
+  
   if (isLoggedIn.value && petData.value) {
     // 从用户账号加载宠物数据
     const data = getPetData()
@@ -897,6 +1041,13 @@ html[data-theme="dark"] .thought-bubble::after {
   color: var(--primary-color);
   margin-bottom: 8px;
   text-align: center;
+  /* 超出省略 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 80%;
+  text-align: center;
+  margin: auto;
 }
 
 .menu-status-item {
@@ -1088,6 +1239,10 @@ html[data-theme="dark"] .menu-status {
   font-weight: 500;
   color: var(--text-primary);
   margin-bottom: 4px;
+  /* 超出省略 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .current-badge {
@@ -1098,6 +1253,72 @@ html[data-theme="dark"] .menu-status {
   font-size: 11px;
   border-radius: 10px;
   font-weight: 600;
+}
+
+.custom-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #ff6b9d;
+  color: white;
+  font-size: 11px;
+  border-radius: 10px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.delete-pet-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: rgba(255, 75, 75, 0.9);
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.pet-option:hover .delete-pet-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.delete-pet-btn:hover {
+  background: rgba(255, 50, 50, 1);
+  transform: scale(1.1);
+}
+
+.delete-pet-btn:active {
+  transform: scale(0.95);
+}
+
+.upload-option {
+  border: 2px dashed var(--border-color);
+  background: transparent;
+}
+
+.upload-option:hover {
+  border-color: var(--primary-color);
+  border-style: dashed;
+}
+
+.upload-icon {
+  font-size: 48px;
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.upload-option:hover .upload-icon {
+  color: var(--primary-color);
+  opacity: 1;
 }
 
 .selector-fade-enter-active,
