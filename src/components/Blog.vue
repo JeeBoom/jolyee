@@ -59,43 +59,64 @@
 
     <!-- 文章详情模态框 -->
     <transition name="modal-fade">
-      <div v-if="selectedPost" class="post-modal-overlay" @click.self="closePost">
+      <div v-if="selectedPost" class="post-modal-overlay">
         <div class="post-modal">
-          <button class="close-btn" @click="closePost">✕</button>
+          <div class="close-header">
+            <span class="close-tip">按 ESC 或点击关闭</span>
+            <button class="close-btn" @click="closePost">✕</button>
+          </div>
           
-          <article class="post-detail">
-            <header class="post-header">
-              <div class="post-meta">
-                <span class="post-category">{{ selectedPost.category }}</span>
-                <span class="post-date">{{ formatDate(selectedPost.date) }}</span>
-                <span class="read-time">⏱️ {{ selectedPost.readTime }}</span>
+          <div class="post-content-wrapper">
+            <article class="post-detail">
+              <header class="post-header">
+                <div class="post-meta">
+                  <span class="post-category">{{ selectedPost.category }}</span>
+                  <span class="post-date">{{ formatDate(selectedPost.date) }}</span>
+                  <span class="read-time">⏱️ {{ selectedPost.readTime }}</span>
+                </div>
+                
+                <h1 class="post-title">{{ selectedPost.title }}</h1>
+                
+                <div class="post-tags">
+                  <span v-for="tag in selectedPost.tags" :key="tag" class="tag">
+                    #{{ tag }}
+                  </span>
+                </div>
+                
+                <div class="post-author">
+                  <span>作者：{{ selectedPost.author }}</span>
+                </div>
+              </header>
+              
+              <div v-if="selectedPost.coverImage" class="post-cover-large">
+                <!-- <img :src="selectedPost.coverImage" :alt="selectedPost.title" /> -->
               </div>
               
-              <h1 class="post-title">{{ selectedPost.title }}</h1>
-              
-              <div class="post-tags">
-                <span v-for="tag in selectedPost.tags" :key="tag" class="tag">
-                  #{{ tag }}
-                </span>
-              </div>
-              
-              <div class="post-author">
-                <span>作者：{{ selectedPost.author }}</span>
-              </div>
-            </header>
-            
-            <div v-if="selectedPost.coverImage" class="post-cover-large">
-              <!-- <img :src="selectedPost.coverImage" :alt="selectedPost.title" /> -->
-            </div>
-            
-            <div class="post-body" v-html="renderedContent"></div>
+              <div class="post-body" v-html="renderedContent"></div>
 
-            <!-- 评论区 -->
-            <BlogGiscus 
-              v-if="selectedPost"
-              :article-id="selectedPost.id"
-            />
-          </article>
+              <!-- 评论区 -->
+              <BlogGiscus 
+                v-if="selectedPost"
+                :article-id="selectedPost.id"
+              />
+            </article>
+
+            <!-- 右侧目录导航 -->
+            <aside v-if="tableOfContents.length > 0" class="post-toc">
+              <div class="toc-title">📑 目录</div>
+              <nav class="toc-items">
+                <a 
+                  v-for="item in tableOfContents" 
+                  :key="item.id"
+                  :class="['toc-link', { active: activeHeadingId === item.id }]"
+                  :href="`#${item.id}`"
+                  @click.prevent="scrollToHeading(item.id)"
+                >
+                  {{ item.text }}
+                </a>
+              </nav>
+            </aside>
+          </div>
         </div>
       </div>
     </transition>
@@ -148,11 +169,30 @@ const formatDate = (dateString) => {
 const openPost = (post) => {
   selectedPost.value = post
   document.body.style.overflow = 'hidden'
+  // 监听ESC键关闭
+  document.addEventListener('keydown', handleEscKey)
+  // 提取标题生成目录
+  extractHeadings()
 }
 
 const closePost = () => {
   selectedPost.value = null
   document.body.style.overflow = ''
+  tableOfContents.value = []
+  activeHeadingId.value = ''
+  // 移除ESC键监听
+  document.removeEventListener('keydown', handleEscKey)
+  // 移除滚动监听
+  const modalElement = document.querySelector('.post-detail')
+  if (modalElement) {
+    modalElement.removeEventListener('scroll', updateActiveHeading)
+  }
+}
+
+const handleEscKey = (e) => {
+  if (e.key === 'Escape' && selectedPost.value) {
+    closePost()
+  }
 }
 
 // 配置 marked 支持表格等扩展语法
@@ -166,6 +206,70 @@ const renderedContent = computed(() => {
   if (!selectedPost.value) return ''
   return marked(selectedPost.value.content)
 })
+
+// 文章目录
+const tableOfContents = ref([])
+const activeHeadingId = ref('')
+
+// 提取文章h3标题生成目录
+const extractHeadings = () => {
+  if (!selectedPost.value) return
+  
+  setTimeout(() => {
+    const headings = document.querySelectorAll('.post-body h3')
+    const toc = []
+    
+    headings.forEach((heading, index) => {
+      const id = `heading-${index}`
+      heading.id = id
+      
+      toc.push({
+        id,
+        text: heading.textContent
+      })
+    })
+    
+    tableOfContents.value = toc
+    
+    // 监听滚动
+    const modalElement = document.querySelector('.post-detail')
+    if (modalElement) {
+      modalElement.addEventListener('scroll', updateActiveHeading)
+    }
+  }, 100)
+}
+
+// 滚动到指定标题
+const scrollToHeading = (id) => {
+  const element = document.getElementById(id)
+  const modalElement = document.querySelector('.post-detail')
+  
+  if (element && modalElement) {
+    const offsetTop = element.offsetTop - 150
+    modalElement.scrollTo({
+      top: offsetTop,
+      behavior: 'smooth'
+    })
+  }
+}
+
+// 更新活动标题
+const updateActiveHeading = () => {
+  const modalElement = document.querySelector('.post-detail')
+  if (!modalElement) return
+  
+  const scrollTop = modalElement.scrollTop
+  const headings = document.querySelectorAll('.post-body h3')
+  
+  let currentId = ''
+  headings.forEach((heading) => {
+    if (heading.offsetTop - 200 <= scrollTop) {
+      currentId = heading.id
+    }
+  })
+  
+  activeHeadingId.value = currentId
+}
 </script>
 
 <style scoped>
@@ -377,10 +481,10 @@ const renderedContent = computed(() => {
 .post-modal {
   background: var(--bg-primary);
   border-radius: 12px;
-  max-width: 900px;
+  max-width: 1400px;
   width: 100%;
-  height: 85vh;
-  max-height: 85vh;
+  height: 95vh;
+  max-height: 95vh;
   position: relative;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   overflow-y: auto;
@@ -388,10 +492,32 @@ const renderedContent = computed(() => {
   flex-direction: column;
 }
 
-.close-btn {
+.close-header {
   position: absolute;
   top: 1rem;
   right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 10;
+}
+
+.close-tip {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.close-header:hover .close-tip {
+  opacity: 1;
+}
+
+.close-btn {
   background: var(--bg-secondary);
   border: none;
   width: 40px;
@@ -402,10 +528,10 @@ const renderedContent = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
   transition: all 0.3s ease;
   color: var(--text-primary);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
 }
 
 .close-btn:hover {
@@ -415,15 +541,78 @@ const renderedContent = computed(() => {
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
+.post-content-wrapper {
+  display: flex;
+  gap: 2rem;
+  height: 100%;
+  overflow: hidden;
+}
+
 .post-detail {
+  flex: 1;
   padding: 2rem;
   padding-top: 4rem;
-  flex: 1;
   overflow-y: auto;
+  min-width: 0;
+  /* 隐藏滚动条但保留滚动功能 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.post-detail::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
 
 .post-header {
   margin-bottom: 2rem;
+}
+
+/* 右侧目录导航 */
+.post-toc {
+  width: 240px;
+  flex-shrink: 0;
+  padding: 4rem 1.5rem 2rem 0;
+  overflow-y: hidden;
+}
+
+.toc-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.toc-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.toc-link:hover {
+  color: var(--primary-color);
+  background: rgba(102, 126, 234, 0.05);
+  border-left-color: var(--primary-color);
+}
+
+.toc-link.active {
+  color: var(--primary-color);
+  background: rgba(102, 126, 234, 0.1);
+  border-left-color: var(--primary-color);
+  font-weight: 600;
 }
 
 .post-header .post-meta {
