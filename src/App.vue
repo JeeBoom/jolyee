@@ -3,7 +3,29 @@
     <!-- 页头 -->
     <Header :all-links="allLinks" @open-shortcuts="openShortcuts" />
     
-
+    <!-- 固定顶部分类导航 (滚动时显示) -->
+    <transition name="slide-down">
+      <div v-if="showFixedNav" class="fixed-category-nav">
+        <div class="fixed-nav-container">
+          <button
+            v-for="(section, index) in menuSections"
+            :key="index"
+            :class="['fixed-category-btn', { active: activeCategory === index }]"
+            @click="switchCategory(index)"
+          >
+            <span class="category-icon">{{ section.icon }}</span>
+            <span class="category-title">{{ section.title }}</span>
+          </button>
+          <button
+            :class="['fixed-category-btn', { active: activeCategory === 14 }]"
+            @click="switchCategory(14)"
+          >
+            <span class="category-icon">📝</span>
+            <span class="category-title">博客</span>
+          </button>
+        </div>
+      </div>
+    </transition>
 
     <!-- 主内容区域 -->
     <main class="main-content">
@@ -17,7 +39,7 @@
       <UniversalSearch />
       
       <!-- 分类导航栏 -->
-      <div class="category-nav">
+      <div class="category-nav" ref="categoryNavRef">
         <button
           v-for="(section, index) in menuSections"
           :key="index"
@@ -107,7 +129,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, defineAsyncComponent } from "vue";
+import { ref, computed, onMounted,onUnmounted, defineAsyncComponent } from "vue";
 import Header from "./components/Header.vue";
 import BackToTop from "./components/BackToTop.vue";
 import Footer from "./components/Footer.vue";
@@ -139,12 +161,16 @@ import { setupKeyboardShortcuts } from "./utils/keyboardShortcuts"
 const { getAllLinks } = useLinksStore()
 const shortcutsHelpRef = ref(null)
 const footerRef = ref(null)
+const categoryNavRef = ref(null)
 
 const currentDate = ref('')
 const currentTime = ref('')
 
 // 当前激活的分类索引，默认为0（优质社区）
 const activeCategory = ref(0)
+
+// 固定导航栏显示状态
+const showFixedNav = ref(false)
 
 // 切换分类
 const switchCategory = (index) => {
@@ -156,6 +182,11 @@ const switchCategory = (index) => {
       visibleSections.value[sectionKey] = true
     }
   }
+  // 滚动到页面顶部
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
 }
 
 // 懒加载状态：跟踪哪些分类已经可见
@@ -238,6 +269,30 @@ onMounted(() => {
   // 生成 Schema.org 结构化数据
   generateSchemaMarkup()
   
+  // 监听滚动，控制固定导航显示
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        // 当原始导航栏完全不可见时，显示固定导航
+        showFixedNav.value = !entry.isIntersecting
+      })
+    },
+    {
+      threshold: 0,
+      rootMargin: '0px' // 元素完全离开视口时触发
+    }
+  )
+  
+  if (categoryNavRef.value) {
+    observer.observe(categoryNavRef.value)
+  }
+  
+  onUnmounted(() => {
+    if (categoryNavRef.value) {
+      observer.unobserve(categoryNavRef.value)
+    }
+  })
+  
   // 设置全局快捷键
   setupKeyboardShortcuts((e) => {
     // 禁用Tab键
@@ -276,6 +331,114 @@ onMounted(() => {
 .content-section {
   scroll-margin-top: 80px;
   padding: 0 10%;
+}
+
+/* 固定顶部分类导航 */
+.fixed-category-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9990;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+html[data-theme="dark"] .fixed-category-nav {
+  background: rgba(26, 26, 26, 0.98);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.fixed-nav-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  /* max-width: 1400px; */
+  margin: 0 auto;
+  padding: 0 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.fixed-nav-container::-webkit-scrollbar {
+  display: none;
+}
+
+.fixed-category-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.fixed-category-btn:hover {
+  background: var(--bg-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+.fixed-category-btn.active {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  color: white;
+  border-color: var(--primary-color);
+  box-shadow: 0 2px 12px rgba(102, 126, 234, 0.3);
+}
+
+.fixed-category-btn .category-icon {
+  font-size: 14px;
+}
+
+.fixed-category-btn .category-title {
+  font-size: 13px;
+}
+
+/* 滑入动画 */
+.slide-down-enter-active {
+  animation: slideDown 0.3s ease-out;
+}
+
+.slide-down-leave-active {
+  animation: slideDown 0.3s ease-out reverse;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 深色模式 */
+html[data-theme="dark"] .fixed-category-btn {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+html[data-theme="dark"] .fixed-category-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="dark"] .fixed-category-btn.active {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  box-shadow: 0 2px 12px rgba(102, 126, 234, 0.4);
 }
 
 /* 日期时间显示 */
@@ -510,6 +673,11 @@ html[data-theme="dark"] .category-btn.active {
   .category-content {
     min-height: 300px;
   }
+  
+  /* 平板端隐藏固定导航 */
+  .fixed-category-nav {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
@@ -539,6 +707,11 @@ html[data-theme="dark"] .category-btn.active {
 
   .content-section {
     padding: 0 ;
+  }
+  
+  /* 手机端隐藏固定导航 */
+  .fixed-category-nav {
+    display: none;
   }
 }
 </style>
