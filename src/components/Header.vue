@@ -29,6 +29,9 @@
           <div class="user-info">
             <span class="user-email">{{ user.email }}</span>
           </div>
+          <button @click="openUserStats" class="menu-item">
+            📊 我的足迹
+          </button>
           <button @click="handleSync" class="menu-item">
             🔄 同步数据
           </button>
@@ -63,6 +66,9 @@
 
     <!-- 认证弹窗 -->
     <AuthModal ref="authModalRef" @auth-success="handleAuthSuccess" />
+    
+    <!-- 用户统计弹窗 -->
+    <UserStats ref="userStatsRef" />
   </header>
 </template>
 
@@ -70,6 +76,7 @@
 import { ref, computed, onMounted } from 'vue'
 import SearchBar from './SearchBar.vue'
 import AuthModal from './AuthModal.vue'
+import UserStats from './UserStats.vue'
 import { getCurrentUser, syncFromCloud, syncLocalToCloud, signOut } from '../utils/syncService'
 import { supabase } from '../config/supabase'
 
@@ -86,6 +93,7 @@ const isDark = ref(false)
 const user = ref(null)
 const showUserMenu = ref(false)
 const authModalRef = ref(null)
+const userStatsRef = ref(null)
 
 // 获取用户头像
 const userAvatar = computed(() => {
@@ -136,6 +144,11 @@ const handleAuthSuccess = async (authUser) => {
     message += `\n📥 ${downloadResult.message}`
   }
   alert(message)
+}
+
+const openUserStats = () => {
+  showUserMenu.value = false
+  userStatsRef.value?.openStats()
 }
 
 const handleSync = async () => {

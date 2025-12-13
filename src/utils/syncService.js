@@ -124,52 +124,54 @@ export const syncFromCloud = async () => {
   }
 }
 
-// 获取用户的访问统计
-export const getUserStats = async () => {
-  // 先从本地获取
+// 获取所有交互记录（合并本地和云端）
+const getAllInteractions = async () => {
   const localInteractions = JSON.parse(localStorage.getItem('userInteractions')) || []
   
-  // 如果已登录，合并云端数据
   if (isSupabaseConfigured()) {
     try {
       const user = await getCurrentUser()
       if (user) {
         const { data, error } = await supabase
           .from('user_interactions')
-          .select('target, type, url')
+          .select('*')
           .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
 
         if (!error && data) {
-          // 统计访问次数
-          const stats = {}
+          // 合并并去重
+          const allInteractions = [...data.map(item => ({
+            type: item.type,
+            target: item.target,
+            url: item.url,
+            timestamp: item.created_at
+          })), ...localInteractions]
           
-          ;[...localInteractions, ...data].forEach(item => {
-            const key = item.target
-            if (!stats[key]) {
-              stats[key] = {
-                name: item.target,
-                type: item.type,
-                url: item.url,
-                count: 0
-              }
-            }
-            stats[key].count++
+          // 按时间戳去重
+          const seen = new Set()
+          return allInteractions.filter(item => {
+            const key = `${item.timestamp}-${item.target}`
+            if (seen.has(key)) return false
+            seen.add(key)
+            return true
           })
-
-          // 转换为数组并排序
-          return Object.values(stats)
-            .sort((a, b) => b.count - a.count)
-            .slice(0, 10) // 返回前10个最常访问的网站
         }
       }
     } catch (error) {
-      console.warn('获取云端统计失败:', error)
+      console.warn('获取云端数据失败:', error)
     }
   }
+  
+  return localInteractions
+}
 
-  // 如果没有云端数据，只返回本地统计
+// 获取用户的访问统计
+export const getUserStats = async () => {
+  const interactions = await getAllInteractions()
+  
+  // 统计访问次数
   const stats = {}
-  localInteractions.forEach(item => {
+  interactions.forEach(item => {
     const key = item.target
     if (!stats[key]) {
       stats[key] = {
@@ -185,6 +187,72 @@ export const getUserStats = async () => {
   return Object.values(stats)
     .sort((a, b) => b.count - a.count)
     .slice(0, 10)
+}
+
+// 获取分类统计
+export const getCategoryStats = async () => {
+  const interactions = await getAllInteractions()
+  
+  const categoryMap = {}
+  interactions.forEach(item => {
+    const category = item.type || '其他'
+    if (!categoryMap[category]) {
+      categoryMap[category] = 0
+    }
+    categoryMap[category]++
+  })
+  
+  return Object.entries(categoryMap)
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count)
+}
+
+// 获取每周热力图数据
+export const getWeeklyHeatmap = async () => {
+  const interactions = await getAllInteractions()
+  
+  // 初始化7天x24小时的矩阵
+  const heatmap = Array.from({ length: 7 }, () => Array(24).fill(0))
+  
+  interactions.forEach(item => {
+    const date = new Date(item.timestamp)
+    const day = date.getDay() // 0-6 (周日到周六)
+    const hour = date.getHours() // 0-23
+    heatmap[day][hour]++
+  })
+  
+  return heatmap
+}
+
+// 获取总体统计数据
+export const getOverallStats = async () => {
+  const interactions = await getAllInteractions()
+  
+  const totalClicks = interactions.length
+  const uniqueSites = new Set(interactions.map(item => item.target)).size
+  
+  // 计算活跃天数
+  const uniqueDays = new Set(
+    interactions.map(item => new Date(item.timestamp).toDateString())
+  ).size
+  
+  // 计算最常用的分类
+  const categoryCount = {}
+  interactions.forEach(item => {
+    const category = item.type || '其他'
+    categoryCount[category] = (categoryCount[category] || 0) + 1
+  })
+  
+  const topCategory = Object.entries(categoryCount)
+    .sort((a, b) => b[1] - a[1])[0]
+  
+  return {
+    totalClicks,
+    uniqueSites,
+    activeDays: uniqueDays,
+    topCategory: topCategory ? topCategory[0] : '暂无',
+    totalCategories: Object.keys(categoryCount).length
+  }
 }
 
 // 清除所有数据
