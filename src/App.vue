@@ -16,13 +16,6 @@
             <span class="category-icon">{{ section.icon }}</span>
             <span class="category-title">{{ section.title }}</span>
           </button>
-          <button
-            :class="['fixed-category-btn', { active: activeCategory === 15 }]"
-            @click="switchCategory(15)"
-          >
-            <span class="category-icon">📝</span>
-            <span class="category-title">博客</span>
-          </button>
         </div>
       </div>
     </transition>
@@ -49,65 +42,21 @@
           <span class="category-icon">{{ section.icon }}</span>
           <span class="category-title">{{ section.title }}</span>
         </button>
-        <!-- 博客按钮 -->
-        <button
-          :class="['category-btn', { active: activeCategory === 15 }]"
-          @click="switchCategory(15)"
-        >
-          <span class="category-icon">📝</span>
-          <span class="category-title">博客</span>
-        </button>
       </div>
 
       <!-- 分类内容 -->
       <div class="category-content">
-        <div v-show="activeCategory === 0" class="content-section">
-          <Communities ref="communitiesRef" />
-        </div>
-        <div v-show="activeCategory === 1" class="content-section" ref="section1">
-          <It v-if="visibleSections.section1" />
-        </div>
-        <div v-show="activeCategory === 2" class="content-section" ref="section2">
-          <Ai v-if="visibleSections.section2" />
-        </div>
-        <div v-show="activeCategory === 3" class="content-section" ref="section3">
-          <Shopping v-if="visibleSections.section3" />
-        </div>
-        <div v-show="activeCategory === 4" class="content-section" ref="section4">
-          <News v-if="visibleSections.section4" />
-        </div>
-        <div v-show="activeCategory === 5" class="content-section" ref="section5">
-          <Crypto v-if="visibleSections.section5" />
-        </div>
-        <div v-show="activeCategory === 6" class="content-section" ref="section6">
-          <Front v-if="visibleSections.section6" />
-        </div>
-        <div v-show="activeCategory === 7" class="content-section" ref="section7">
-          <Backend v-if="visibleSections.section7" />
-        </div>
-        <div v-show="activeCategory === 8" class="content-section" ref="section8">
-          <Devops v-if="visibleSections.section8" />
-        </div>
-        <div v-show="activeCategory === 9" class="content-section" ref="section9">
-          <Tools v-if="visibleSections.section9" />
-        </div>
-        <div v-show="activeCategory === 10" class="content-section" ref="section10">
-          <Movie v-if="visibleSections.section10" />
-        </div>
-        <div v-show="activeCategory === 11" class="content-section" ref="section11">
-          <Music v-if="visibleSections.section11" />
-        </div>
-        <div v-show="activeCategory === 12" class="content-section" ref="section12">
-          <Software v-if="visibleSections.section12" />
-        </div>
-        <div v-show="activeCategory === 13" class="content-section" ref="section13">
-          <English v-if="visibleSections.section13" />
-        </div>
-        <div v-show="activeCategory === 14" class="content-section" ref="section14">
-          <Crossborder v-if="visibleSections.section14" />
-        </div>
-        <div v-show="activeCategory === 15" class="content-section" ref="section15">
-          <Blog v-if="visibleSections.section15" />
+        <div 
+          v-for="(section, index) in menuSections" 
+          :key="index"
+          v-show="activeCategory === index" 
+          class="content-section"
+        >
+          <component 
+            :is="section.component" 
+            v-if="index === 0 || loadedSections.has(index)"
+            :ref="index === 0 ? 'communitiesRef' : undefined"
+          />
         </div>
       </div>
       
@@ -142,22 +91,25 @@ import PetCompanion from "./components/PetCompanion.vue";
 import CookieConsent from "./components/CookieConsent.vue";
 
 // 懒加载分类组件，减少初始加载时间
-const Communities = defineAsyncComponent(() => import("./components/Communities.vue"));
-const It = defineAsyncComponent(() => import("./components/IT.vue"));
-const Software = defineAsyncComponent(() => import("./components/Software.vue"));
-const English = defineAsyncComponent(() => import("./components/English.vue"));
-const Music = defineAsyncComponent(() => import("./components/Music.vue"));
-const Movie = defineAsyncComponent(() => import("./components/Movie.vue"));
-const Ai = defineAsyncComponent(() => import("./components/AI.vue"));
-const Front = defineAsyncComponent(() => import("./components/Front.vue"));
-const Backend = defineAsyncComponent(() => import("./components/Backend.vue"));
-const Devops = defineAsyncComponent(() => import("./components/Devops.vue"));
-const Tools = defineAsyncComponent(() => import("./components/Tools.vue"));
-const Crossborder = defineAsyncComponent(() => import("./components/Crossborder.vue"));
-const Shopping = defineAsyncComponent(() => import("./components/Shopping.vue"));
-const News = defineAsyncComponent(() => import("./components/News.vue"));
-const Crypto = defineAsyncComponent(() => import("./components/Crypto.vue"));
-const Blog = defineAsyncComponent(() => import("./components/Blog.vue"));
+const componentMap = {
+  Communities: defineAsyncComponent(() => import("./components/Communities.vue")),
+  It: defineAsyncComponent(() => import("./components/IT.vue")),
+  Ai: defineAsyncComponent(() => import("./components/AI.vue")),
+  Shopping: defineAsyncComponent(() => import("./components/Shopping.vue")),
+  ShortVideo: defineAsyncComponent(() => import("./components/ShortVideo.vue")),
+  News: defineAsyncComponent(() => import("./components/News.vue")),
+  Crypto: defineAsyncComponent(() => import("./components/Crypto.vue")),
+  Front: defineAsyncComponent(() => import("./components/Front.vue")),
+  Backend: defineAsyncComponent(() => import("./components/Backend.vue")),
+  Devops: defineAsyncComponent(() => import("./components/Devops.vue")),
+  Tools: defineAsyncComponent(() => import("./components/Tools.vue")),
+  Movie: defineAsyncComponent(() => import("./components/Movie.vue")),
+  Music: defineAsyncComponent(() => import("./components/Music.vue")),
+  Software: defineAsyncComponent(() => import("./components/Software.vue")),
+  English: defineAsyncComponent(() => import("./components/English.vue")),
+  Crossborder: defineAsyncComponent(() => import("./components/Crossborder.vue")),
+  Blog: defineAsyncComponent(() => import("./components/Blog.vue")),
+}
 import { useLinksStore } from "./utils/linksStore"
 import { setPageMeta, generateSchemaMarkup } from "./utils/seoManager"
 import { setupKeyboardShortcuts } from "./utils/keyboardShortcuts"
@@ -176,15 +128,15 @@ const activeCategory = ref(0)
 // 固定导航栏显示状态
 const showFixedNav = ref(false)
 
+// 懒加载状态：使用Set追踪已加载的分类
+const loadedSections = ref(new Set())
+
 // 切换分类
 const switchCategory = (index) => {
   activeCategory.value = index
   // 切换时懒加载对应的组件（跳过第0个，因为默认已加载）
-  if (index > 0 && index <= 15) {
-    const sectionKey = `section${index}`
-    if (!visibleSections.value[sectionKey]) {
-      visibleSections.value[sectionKey] = true
-    }
+  if (index > 0) {
+    loadedSections.value.add(index)
   }
   // 滚动到页面顶部
   window.scrollTo({
@@ -192,25 +144,6 @@ const switchCategory = (index) => {
     behavior: 'smooth'
   })
 }
-
-// 懒加载状态：跟踪哪些分类已经可见
-const visibleSections = ref({
-  section1: false,
-  section2: false,
-  section3: false,
-  section4: false,
-  section5: false,
-  section6: false,
-  section7: false,
-  section8: false,
-  section9: false,
-  section10: false,
-  section11: false,
-  section12: false,
-  section13: false,
-  section14: false,
-  section15: false
-})
 
 const updateDateTime = () => {
   const now = new Date()
@@ -231,21 +164,23 @@ const updateDateTime = () => {
 }
 
 const menuSections = ref([
-  { title: "优质社区", icon: "🌐", group: "学习资源", count: 0, shortcut: "1" },
-  { title: "IT平台", icon: "💻", group: "学习资源", count: 0, shortcut: "2" },
-  { title: "AI工具", icon: "🤖", group: "开发工具", count: 0, shortcut: "3" },
-  { title: "购物平台", icon: "🛒", group: "商业资源", count: 0, shortcut: "4" },
-  { title: "新闻资讯", icon: "📰", group: "学习资源", count: 0, shortcut: "5" },
-  { title: "股票虚拟币", icon: "💰", group: "商业资源", count: 0, shortcut: "6" },
-  { title: "前端", icon: "⚛️", group: "开发工具", count: 0, shortcut: "7" },
-  { title: "后端", icon: "🔧", group: "开发工具", count: 0, shortcut: "8" },
-  { title: "测试运维", icon: "🚀", group: "开发工具", count: 0, shortcut: "9" },
-  { title: "工具合集", icon: "🛠️", group: "开发工具", count: 0, shortcut: "10" },
-  { title: "影视资源", icon: "🎬", group: "娱乐资源", count: 0, shortcut: "11" },
-  { title: "音乐资源", icon: "🎵", group: "娱乐资源", count: 0, shortcut: "12" },
-  { title: "软件下载", icon: "📦", group: "娱乐资源", count: 0, shortcut: "13" },
-  { title: "英语", icon: "🌍", group: "学习资源", count: 0, shortcut: "14" },
-  { title: "跨境出海", icon: "🚢", group: "商业资源", count: 0, shortcut: "15" },
+  { title: "优质社区", icon: "🌐", group: "学习资源", count: 0, shortcut: "1", component: componentMap.Communities },
+  { title: "IT平台", icon: "💻", group: "学习资源", count: 0, shortcut: "2", component: componentMap.It },
+  { title: "AI工具", icon: "🤖", group: "开发工具", count: 0, shortcut: "3", component: componentMap.Ai },
+  { title: "购物平台", icon: "🛒", group: "商业资源", count: 0, shortcut: "4", component: componentMap.Shopping },
+  { title: "短视频", icon: "🎥", group: "娱乐资源", count: 0, shortcut: "5", component: componentMap.ShortVideo },
+  { title: "新闻资讯", icon: "📰", group: "学习资源", count: 0, shortcut: "6", component: componentMap.News },
+  { title: "股票虚拟币", icon: "💰", group: "商业资源", count: 0, shortcut: "7", component: componentMap.Crypto },
+  { title: "前端", icon: "⚛️", group: "开发工具", count: 0, shortcut: "8", component: componentMap.Front },
+  { title: "后端", icon: "🔧", group: "开发工具", count: 0, shortcut: "9", component: componentMap.Backend },
+  { title: "测试运维", icon: "🚀", group: "开发工具", count: 0, shortcut: "10", component: componentMap.Devops },
+  { title: "工具合集", icon: "🛠️", group: "开发工具", count: 0, shortcut: "11", component: componentMap.Tools },
+  { title: "影视资源", icon: "🎬", group: "娱乐资源", count: 0, shortcut: "12", component: componentMap.Movie },
+  { title: "音乐资源", icon: "🎵", group: "娱乐资源", count: 0, shortcut: "13", component: componentMap.Music },
+  { title: "软件下载", icon: "📦", group: "娱乐资源", count: 0, shortcut: "14", component: componentMap.Software },
+  { title: "英语", icon: "🌍", group: "学习资源", count: 0, shortcut: "15", component: componentMap.English },
+  { title: "跨境出海", icon: "🚢", group: "商业资源", count: 0, shortcut: "16", component: componentMap.Crossborder },
+  { title: "博客", icon: "📝", group: "学习资源", count: 0, shortcut: "17", component: componentMap.Blog },
 ]);
 
 // 获取所有链接数据
@@ -579,14 +514,14 @@ html[data-theme="dark"] .datetime-display:hover::before {
   gap: 12px;
   padding: 24px 20px;
   margin: 20px auto;
-  max-width: 1200px;
+  max-width: 1400px;
 }
 
 .category-btn {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 20px;
+  padding: 10px 28px;
   border: 2px solid transparent;
   border-radius: 12px;
   background: var(--bg-secondary);
