@@ -69,11 +69,20 @@
     
     <!-- 用户统计弹窗 -->
     <UserStats ref="userStatsRef" />
+
+    <!-- 同步状态提示 -->
+    <div v-if="isSyncing" class="sync-loading-overlay">
+      <div class="sync-loading-spinner"></div>
+      <p>同步中...</p>
+    </div>
+    <div v-if="syncMessage" class="sync-message">
+      {{ syncMessage }}
+    </div>
   </header>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import SearchBar from './SearchBar.vue'
 import AuthModal from './AuthModal.vue'
 import UserStats from './UserStats.vue'
@@ -94,6 +103,8 @@ const user = ref(null)
 const showUserMenu = ref(false)
 const authModalRef = ref(null)
 const userStatsRef = ref(null)
+const isSyncing = ref(false)
+const syncMessage = ref('')
 
 // 获取用户头像
 const userAvatar = computed(() => {
@@ -153,15 +164,29 @@ const openUserStats = () => {
 
 const handleSync = async () => {
   showUserMenu.value = false
+  isSyncing.value = true
+  syncMessage.value = ''
+
   const result = await syncFromCloud()
-  alert(result.message)
+
+  isSyncing.value = false
+  syncMessage.value = result.message
+
+  setTimeout(() => {
+    syncMessage.value = ''
+  }, 3000); // 3秒后隐藏提示
 }
 
 const handleSignOut = async () => {
-  await signOut()
-  user.value = null
-  showUserMenu.value = false
-  alert('已退出登录')
+  await signOut();
+  user.value = null;
+  showUserMenu.value = false;
+
+  syncMessage.value = '已退出登录';
+
+  setTimeout(() => {
+    syncMessage.value = '';
+  }, 3000); // 3秒后隐藏提示
 }
 
 // 检查用户登录状态
@@ -181,10 +206,22 @@ supabase.auth.onAuthStateChange((event, session) => {
   }
 })
 
+const handleClickOutside = (event) => {
+  const userMenu = document.querySelector('.user-menu');
+  if (userMenu && !userMenu.contains(event.target)) {
+    showUserMenu.value = false;
+  }
+};
+
 onMounted(() => {
   loadTheme()
   checkUser()
-})
+  document.addEventListener('click', handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <style scoped>
@@ -367,5 +404,54 @@ onMounted(() => {
     border-width: 1px !important;
     font-size: 0.9rem;
   }
+}
+
+/* 同步状态提示样式 */
+.sync-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.sync-loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sync-loading-overlay p {
+  margin-top: 16px;
+  color: white;
+  font-size: 16px;
+}
+
+.sync-message {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 10001;
 }
 </style>
