@@ -1062,9 +1062,10 @@ defineExpose({
 /* 思考泡泡 */
 .thought-bubble {
   position: absolute;
-  bottom: 60px;
+  bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
+  margin-bottom: 12px;
   background: rgba(255, 255, 255, 0.95);
   padding: 8px 12px;
   border-radius: 12px;
@@ -1078,14 +1079,15 @@ defineExpose({
 .thought-bubble::after {
   content: '';
   position: absolute;
-  bottom: -8px;
+  top: 100%;
   left: 50%;
   transform: translateX(-50%);
   width: 0;
   height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-top: 8px solid rgba(255, 255, 255, 0.95);
+  border-bottom: 8px solid rgba(255, 255, 255, 0.95);
+  border-top: none;
 }
 
 @keyframes bubbleAppear {
@@ -1106,7 +1108,7 @@ html[data-theme="dark"] .thought-bubble {
 }
 
 html[data-theme="dark"] .thought-bubble::after {
-  border-top-color: rgba(50, 50, 50, 0.95);
+  border-bottom-color: rgba(50, 50, 50, 0.95);
 }
 
 /* 右键菜单 */

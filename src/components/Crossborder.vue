@@ -34,6 +34,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useLinksStore } from "../utils/linksStore";
+import { logUserInteraction } from '../utils/syncService';
 
 const { addLinks } = useLinksStore();
 
@@ -162,7 +163,7 @@ const resources = ref([
 
 const handleResourceCardClick = (resource) => {
   console.log(`点击了资源: ${resource.name}`);
-  logUserInteraction("crossborder", resource.name);
+  logUserInteraction("crossborder", resource.name, resource.url);
 
   if (resource.url) {
     window.open(resource.url, "_blank");
@@ -179,28 +180,6 @@ const handleImageError = (event) => {
     span.className = "fallback-icon";
     span.textContent = "🌍";
     parent.appendChild(span);
-  }
-};
-
-const logUserInteraction = (type, target) => {
-  const timestamp = new Date().toLocaleString();
-  console.log(`[${timestamp}] 用户交互: ${type} - ${target}`);
-
-  try {
-    const interactions = JSON.parse(localStorage.getItem("userInteractions")) || [];
-    interactions.push({
-      type,
-      target,
-      timestamp,
-    });
-
-    if (interactions.length > 100) {
-      interactions.shift();
-    }
-
-    localStorage.setItem("userInteractions", JSON.stringify(interactions));
-  } catch (e) {
-    console.warn("无法访问 localStorage:", e);
   }
 };
 

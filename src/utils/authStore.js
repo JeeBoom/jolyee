@@ -1,39 +1,18 @@
 import { ref, computed } from 'vue'
+import { supabase } from '../config/supabase'
 
-// 用户状态管理
+// 用户状态管理（从 Supabase 同步）
 const user = ref(null)
 const isLoggedIn = computed(() => !!user.value)
 
 // 宠物状态管理
 const petData = ref(null)
 
-// 从 localStorage 恢复用户信息
-const loadUser = () => {
-  try {
-    const savedUser = localStorage.getItem('user')
-    if (savedUser) {
-      user.value = JSON.parse(savedUser)
-      // 加载用户的宠物数据
-      loadPetData()
-    }
-  } catch (error) {
-    console.error('加载用户信息失败:', error)
-  }
-}
-
-// 保存用户信息
-const saveUser = (userData) => {
-  user.value = userData
-  localStorage.setItem('user', JSON.stringify(userData))
-  // 加载该用户的宠物数据
-  loadPetData()
-}
-
-// 登出
-const logout = () => {
+// 登出（调用 Supabase）
+const logout = async () => {
+  await supabase.auth.signOut()
   user.value = null
   petData.value = null
-  localStorage.removeItem('user')
 }
 
 // 加载宠物数据
@@ -79,16 +58,49 @@ const getPetData = () => {
   return petData.value
 }
 
-// 初始化时加载用户
-loadUser()
+// 同步 Supabase 认证状态
+const syncSupabaseAuth = async () => {
+  try {
+    const { data: { user: supabaseUser } } = await supabase.auth.getUser()
+    if (supabaseUser) {
+      // 如果 Supabase 已登录，同步到 authStore
+      user.value = {
+        id: supabaseUser.id,
+        email: supabaseUser.email,
+        name: supabaseUser.user_metadata?.name || supabaseUser.email?.split('@')[0],
+        provider: supabaseUser.app_metadata?.provider || 'email'
+      }
+      loadPetData()
+    }
+  } catch (error) {
+    console.warn('同步 Supabase 认证失败:', error)
+  }
+}
+
+// 监听 Supabase 认证状态变化
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_IN' && session?.user) {
+    user.value = {
+      id: session.user.id,
+      email: session.user.email,
+      name: session.user.user_metadata?.name || session.user.email?.split('@')[0],
+      provider: session.user.app_metadata?.provider || 'email'
+    }
+    loadPetData()
+  } else if (event === 'SIGNED_OUT') {
+    user.value = null
+    petData.value = null
+  }
+})
+
+// 初始化时从 Supabase 加载用户
+syncSupabaseAuth()
 
 export const useAuth = () => {
   return {
     user,
     isLoggedIn,
-    saveUser,
     logout,
-    loadUser,
     petData,
     savePetData,
     getPetData

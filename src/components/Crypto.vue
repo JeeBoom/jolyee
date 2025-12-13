@@ -33,8 +33,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useLinksStore } from "../utils/linksStore";
-
+import { useLinksStore } from "../utils/linksStore";import { logUserInteraction } from '../utils/syncService'
 const { addLinks } = useLinksStore();
 
 const cryptoList = ref([
@@ -194,7 +193,7 @@ const cryptoList = ref([
 
 const handleCardClick = (site) => {
   window.open(site.url, "_blank");
-  logUserInteraction(site.name, site.url);
+  logUserInteraction("crypto", site.name, site.url);
 };
 
 const handleImageError = (e) => {
@@ -205,23 +204,7 @@ const handleImageError = (e) => {
   }
 };
 
-const logUserInteraction = (name, url) => {
-  try {
-    const interaction = {
-      name,
-      url,
-      timestamp: new Date().toISOString(),
-      category: "股票虚拟币",
-    };
-    const logs =
-      JSON.parse(localStorage.getItem("userInteractions")) || [];
-    logs.push(interaction);
-    if (logs.length > 100) logs.shift();
-    localStorage.setItem("userInteractions", JSON.stringify(logs));
-  } catch (e) {
-    console.warn("无法访问 localStorage:", e);
-  }
-};
+
 
 onMounted(() => {
   addLinks(4, "股票虚拟币", cryptoList.value);

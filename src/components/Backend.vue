@@ -29,6 +29,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useLinksStore } from '../utils/linksStore'
+import { logUserInteraction } from '../utils/syncService'
 
 const { addLinks } = useLinksStore()
 
@@ -150,34 +151,11 @@ onMounted(() => {
 
 const handleCommunityCardClick = (community) => {
   console.log(`点击了社区: ${community.name}`)
-  logUserInteraction('community', community.name)
-  
-  if (community.url) {
+  logUserInteraction('community', community.name, community.url)
     window.open(community.url, '_blank')
   }
 }
 
-const logUserInteraction = (type, target) => {
-  const timestamp = new Date().toLocaleString()
-  console.log(`[${timestamp}] 用户交互: ${type} - ${target}`)
-
-  try {
-    const interactions = JSON.parse(localStorage.getItem('userInteractions')) || []
-    interactions.push({
-      type,
-      target,
-      timestamp
-    })
-
-    if (interactions.length > 100) {
-      interactions.shift()
-    }
-
-    localStorage.setItem('userInteractions', JSON.stringify(interactions))
-  } catch (e) {
-    console.warn('无法访问 localStorage:', e)
-  }
-}
 
 const handleImageError = (event) => {
   // 当图片加载失败时，用备用图标替换
