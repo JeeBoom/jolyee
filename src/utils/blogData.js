@@ -1,6 +1,7 @@
 // 博客文章数据管理
 export const blogPosts = [
   {
+    // 随机字符串
     id: 8,
     title: "Markdown 常用语法指南",
     slug: "markdown-syntax-guide",
@@ -9,7 +10,8 @@ export const blogPosts = [
     category: "开发笔记",
     blogCategory: "notes",
     tags: ["Markdown", "语法", "写作"],
-    excerpt: "从来没有认认真真的去记markdown语法，考虑到后面需要长期更新博客文章所以记录一下...",
+    excerpt:
+      "从来没有认认真真的去记markdown语法，考虑到后面需要长期更新博客文章所以记录一下...",
     coverImage: "/images/blog.webp",
     content: `
 ## 前言
@@ -311,6 +313,28 @@ Markdown 支持部分 HTML 标签：
     published: true,
   },
   {
+    // 随机字符串
+    id: 9,
+    title: "Epic 喜加一",
+    slug: "epic-free-game-gta5",
+    author: "ssuperjee",
+    date: "2025-12-12",
+    category: "游戏推荐",
+    blogCategory: "game",
+    tags: ["Epic Games", "霍格沃茨之遗", "免费游戏"],
+    excerpt:
+      "Epic 假日特卖已开启，不仅有游戏折扣和奖励返利，更有重磅免费游戏可领，错过血亏！",
+    coverImage: "/images/blog.webp",
+    content: `
+## Epic 假日福利提醒：免费领 3A 大作，速冲！
+
+领取地址：https://www.epicgames.com/store
+    `,
+    readTime: "1 分钟",
+    views: 0,
+    published: true,
+  },
+  {
     id: 1,
     title: "我的导航站诞生记",
     slug: "my-navigation-site-journey",
@@ -544,8 +568,7 @@ Git 增强工具。能看到每一行代码是谁写的，什么时候写的，�
     category: "网站推荐",
     blogCategory: "game",
     tags: ["小游戏", "摸鱼", "休闲"],
-    excerpt:
-      "来把魂斗罗...",
+    excerpt: "来把魂斗罗...",
     coverImage: "/images/blog.webp",
     content: `
 ## 我发现
