@@ -33,6 +33,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useLinksStore } from "../utils/linksStore";
+import { logUserInteraction } from '../utils/syncService';
 
 const { addLinks } = useLinksStore();
 
@@ -148,6 +149,7 @@ const shoppingList = ref([
 ]);
 
 const handleShopCardClick = (shop) => {
+  logUserInteraction("shop", shop.name, shop.url);
   window.open(shop.url, "_blank", "noopener,noreferrer");
 };
 

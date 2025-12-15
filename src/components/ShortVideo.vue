@@ -30,6 +30,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useLinksStore } from "../utils/linksStore";
+import { logUserInteraction } from '../utils/syncService';
 
 const { addLinks } = useLinksStore();
 
@@ -102,11 +103,11 @@ onMounted(() => {
   addLinks(4, "短视频", videoList.value);
 });
 
-const handleVideoCardClick = (video) => {
-  console.log(`点击了短视频平台: ${video.name}`);
-
-  if (video.url) {
-    window.open(video.url, "_blank");
+const handleVideoCardClick = (ShortVideo) => {
+  console.log(`点击了短视频平台: ${ShortVideo.name}`);
+  logUserInteraction("community", ShortVideo.name, ShortVideo.url);
+  if (ShortVideo.url) {
+    window.open(ShortVideo.url, "_blank");
   }
 };
 

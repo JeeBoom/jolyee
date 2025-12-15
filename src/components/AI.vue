@@ -126,7 +126,7 @@ onMounted(() => {
 
 const handleCommunityCardClick = (community) => {
   console.log(`点击了社区: ${community.name}`);
-  logUserInteraction("community", community.name, community.url);
+  logUserInteraction("ai", community.name, community.url);
 
   if (community.url) {
     window.open(community.url, "_blank");

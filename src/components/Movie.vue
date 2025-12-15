@@ -121,12 +121,12 @@ onMounted(() => {
   addLinks(9, "影视资源", communities.value);
 });
 
-const handleCommunityCardClick = (community) => {
-  console.log(`点击了社区: ${community.name}`);
-  logUserInteraction("community", community.name, community.url);
+const handleCommunityCardClick = (movie) => {
+  console.log(`点击了社区: ${movie.name}`);
+  logUserInteraction("movie", movie.name, movie.url);
 
-  if (community.url) {
-    window.open(community.url, "_blank");
+  if (movie.url) {
+    window.open(movie.url, "_blank");
   }
 };
 
