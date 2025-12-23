@@ -26,6 +26,11 @@
         @blur="inputFocused = false"
       >
 
+      <!-- 清空按钮 -->
+      <button v-if="searchQuery" class="clear-button" @click="clearSearch" title="清空">
+        ✖
+      </button>
+
       <!-- 搜索按钮 -->
       <button class="search-button" @click="handleSearch" title="搜索">
         <span class="search-icon">
@@ -317,6 +322,11 @@ const handleSearch = () => {
   logSearchAction(currentEngine.value.name, query)
 }
 
+// 清空搜索框内容
+const clearSearch = () => {
+  searchQuery.value = ''
+}
+
 // 图片加载错误处理
 const handleImageError = (e) => {
   e.target.style.display = 'none'
@@ -457,6 +467,21 @@ onUnmounted(() => {
 
 .search-input::placeholder {
   color: var(--text-tertiary);
+}
+
+/* 清空按钮样式 */
+.clear-button {
+  padding: 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-tertiary);
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.clear-button:hover {
+  color: var(--text-primary);
 }
 
 /* 搜索按钮 */

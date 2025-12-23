@@ -1,5 +1,23 @@
 // 博客文章数据管理
 export const blogPosts = [
+  // {
+  //   // 随机字符串
+  //   id: 10,
+  //   title: "2026 年！Vue3.x 生态最能打的组合！",
+  //   slug: "vue3-ecosystem-combo-2026",
+  //   author: "ssuperjee",
+  //   date: "2025-12-12",
+  //   category: "开发笔记",
+  //   blogCategory: "notes",
+  //   tags: ["Vue3", "生态", "组合"],
+  //   excerpt:
+  //     "2026 年了，前端技术日新月异，Vue3.x 生态也在不断壮大。作为一名前端开发者，我总结了一套目前最能打的 Vue3 生态组合，分享给大家参考...",
+  //   coverImage: "/images/blog.webp",
+  //   content:``,
+  //   readTime: "5 分钟",
+  //   views: 0,
+  //   published: true,
+  // },
   {
     // 随机字符串
     id: 8,
