@@ -8,8 +8,8 @@
           <p>
             我们使用 Cookie 和类似技术来改善您的浏览体验，提供个性化内容和广告（包括 Google AdSense）。
             继续使用本网站即表示您同意我们的 
-            <a @click="openPrivacy" class="policy-link">隐私政策</a> 和 
-            <a @click="openTerms" class="policy-link">服务条款</a>。
+            <router-link to="/privacy" class="policy-link">隐私政策</router-link> 和 
+            <router-link to="/terms" class="policy-link">服务条款</router-link>。
           </p>
         </div>
         <div class="cookie-actions">
@@ -25,16 +25,6 @@
 import { ref, onMounted } from 'vue'
 
 const showBanner = ref(false)
-
-const emit = defineEmits(['open-privacy', 'open-terms'])
-
-const openPrivacy = () => {
-  emit('open-privacy')
-}
-
-const openTerms = () => {
-  emit('open-terms')
-}
 
 const acceptCookies = () => {
   localStorage.setItem('cookieConsent', 'accepted')

@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
-import App from './App.vue'
+import Root from './Root.vue'
+import router from './router'
 import { supabase } from './config/supabase'
 
 // 处理 OAuth 回调
@@ -27,7 +28,10 @@ const initApp = async () => {
   }
 
   // 创建并挂载应用
-  const app = createApp(App)
+  const app = createApp(Root)
+  
+  // 使用路由
+  app.use(router)
 
   // 导出公共 API (可选)
   window.NavigationPortal = {

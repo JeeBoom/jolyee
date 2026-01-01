@@ -73,10 +73,7 @@
     <PetCompanion />
 
     <!-- Cookie 同意弹窗 -->
-    <CookieConsent 
-      @open-privacy="footerRef?.openPrivacy()" 
-      @open-terms="footerRef?.openTerms()" 
-    />
+    <CookieConsent />
   </div>
 </template>
 

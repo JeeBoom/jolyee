@@ -58,6 +58,9 @@ const saveToLocalStorage = (interaction) => {
     }
 
     localStorage.setItem('userInteractions', JSON.stringify(interactions))
+    
+    // 触发自定义事件，通知其他组件更新
+    window.dispatchEvent(new CustomEvent('userInteractionAdded', { detail: interaction }))
   } catch (e) {
     console.warn('无法访问 localStorage:', e)
   }

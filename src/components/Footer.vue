@@ -33,13 +33,13 @@
 
     <!-- 政策链接 -->
     <div class="footer-policies">
-      <a @click="openAbout" class="policy-link">关于我们</a>
+      <router-link to="/about" class="policy-link">关于我们</router-link>
       <span class="separator">|</span>
-      <a @click="openContact" class="policy-link">联系我们</a>
+      <router-link to="/contact" class="policy-link">联系我们</router-link>
       <span class="separator">|</span>
-      <a @click="openPrivacy" class="policy-link">隐私政策</a>
+      <router-link to="/privacy" class="policy-link">隐私政策</router-link>
       <span class="separator">|</span>
-      <a @click="openTerms" class="policy-link">服务条款</a>
+      <router-link to="/terms" class="policy-link">服务条款</router-link>
     </div>
 
     <!-- 底部版权 -->
@@ -51,42 +51,17 @@
     <QRModal ref="wechatQRModal" title="微信赞赏" :qr-image="wechatQR" />
     <QRModal ref="alipayQRModal" title="支付宝赞赏" :qr-image="alipayQR" />
     <QRModal ref="contactAuthorModal" title="联系作者" :qr-image="contactAuthorQR" />
-
-    <!-- 政策模态框 -->
-    <PolicyModal ref="aboutModal" title="关于我们">
-      <AboutContent />
-    </PolicyModal>
-    <PolicyModal ref="contactModal" title="联系我们">
-      <ContactContent />
-    </PolicyModal>
-    <PolicyModal ref="privacyModal" title="隐私政策">
-      <PrivacyContent />
-    </PolicyModal>
-    <PolicyModal ref="termsModal" title="服务条款">
-      <TermsContent />
-    </PolicyModal>
   </footer>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import QRModal from './QRModal.vue'
-import PolicyModal from './PolicyModal.vue'
-import AboutContent from './policies/AboutContent.vue'
-import ContactContent from './policies/ContactContent.vue'
-import PrivacyContent from './policies/PrivacyContent.vue'
-import TermsContent from './policies/TermsContent.vue'
 
 const lastUpdateTime = ref('2025-12-09')
 const wechatQRModal = ref(null)
 const alipayQRModal = ref(null)
 const contactAuthorModal = ref(null)
-
-// 政策模态框引用
-const aboutModal = ref(null)
-const contactModal = ref(null)
-const privacyModal = ref(null)
-const termsModal = ref(null)
 
 // 在此处填入你的二维码图片URL（可以是public目录中的图片或外部URL）
 // 例如: const wechatQR = '/qr-wechat.png'
@@ -105,25 +80,6 @@ const openAlipayQR = () => {
 const openContactAuthorQR = () => {
   contactAuthorModal.value?.open()
 }
-
-// 打开政策页面
-const openAbout = () => {
-  aboutModal.value?.open()
-}
-
-const openContact = () => {
-  contactModal.value?.open()
-}
-
-const openPrivacy = () => {
-  privacyModal.value?.open()
-}
-
-const openTerms = () => {
-  termsModal.value?.open()
-}
-
-defineExpose({ openPrivacy, openTerms })
 
 onMounted(() => {
   // 获取当前日期作为最后更新时间
