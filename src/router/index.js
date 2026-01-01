@@ -8,6 +8,7 @@ const AboutPage = () => import('../pages/AboutPage.vue')
 const ContactPage = () => import('../pages/ContactPage.vue')
 const PrivacyPage = () => import('../pages/PrivacyPage.vue')
 const TermsPage = () => import('../pages/TermsPage.vue')
+const GuidePage = () => import('../pages/GuidePage.vue')
 
 const routes = [
   {
@@ -16,6 +17,15 @@ const routes = [
     component: App,
     meta: {
       title: '导航中心 - 优质资源导航平台'
+    }
+  },
+  {
+    path: '/guide',
+    name: 'Guide',
+    component: GuidePage,
+    meta: {
+      title: '使用指南 - 导航中心',
+      description: '详细的使用指南，帮助您快速掌握网站功能'
     }
   },
   {

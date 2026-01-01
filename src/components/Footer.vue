@@ -33,6 +33,8 @@
 
     <!-- 政策链接 -->
     <div class="footer-policies">
+        <router-link to="/guide" class="policy-link">使用指南</router-link>
+        <span class="separator">|</span>
       <router-link to="/about" class="policy-link">关于我们</router-link>
       <span class="separator">|</span>
       <router-link to="/contact" class="policy-link">联系我们</router-link>

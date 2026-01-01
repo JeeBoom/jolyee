@@ -261,6 +261,34 @@ html[data-theme="dark"] body {
   max-width: calc((100% - 7.5rem) / 6);
 }
 
+/* 分类介绍样式 */
+.category-intro {
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  border-left: 4px solid var(--primary-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.category-intro-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.category-intro-desc {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin: 0;
+  text-align: justify;
+}
+
 /* 8. 卡片基础样式 */
 .card {
   background: var(--bg-primary);

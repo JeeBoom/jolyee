@@ -1,5 +1,16 @@
 <template>
   <section class="communities" id="communities-section">
+    <!-- 分类介绍 -->
+    <div class="category-intro">
+      <h2 class="category-intro-title">优质社区推荐</h2>
+      <p class="category-intro-desc">
+        精选国内外优质技术社区和开发者论坛，汇聚全球程序员智慧。这些平台不仅提供技术问答、经验分享，
+        还能让您结识志同道合的开发者，获取最新的技术资讯和行业动态。无论您是初学者还是资深开发者，
+        都能在这里找到适合自己的学习资源和交流机会。我们严格筛选每一个推荐社区，确保内容质量和活跃度，
+        助力您的技术成长之路。
+      </p>
+    </div>
+
     <div class="cards-grid">
       <article
         v-for="community in communities"

@@ -1,5 +1,15 @@
 <template>
   <section class="communities" id="it-section">
+    <!-- 分类介绍 -->
+    <div class="category-intro">
+      <h2 class="category-intro-title">IT平台精选</h2>
+      <p class="category-intro-desc">
+        汇集全球顶尖IT资讯平台和技术媒体，为您提供最新的科技动态、行业趋势和技术评测。
+        从CSDN、博客园等国内知名平台，到InfoQ、DZone等国际技术社区，这里聚集了丰富的技术文章、
+        教程和案例分析。无论您关注前沿技术动向、寻求问题解决方案，还是想要深入学习特定技术栈，
+        这些平台都能为您提供专业、权威的内容支持，助您紧跟技术发展脉搏。
+      </p>
+    </div>
 
     <div class="cards-grid">
       <article
