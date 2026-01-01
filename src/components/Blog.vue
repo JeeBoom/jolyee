@@ -24,9 +24,9 @@
         class="post-card"
         @click="openPost(post)"
       >
-        <div v-if="post.coverImage" class="post-cover">
+        <!-- <div v-if="post.coverImage" class="post-cover">
           <img :src="post.coverImage" :alt="post.title" />
-        </div>
+        </div> -->
         
         <div class="post-content">
           <div class="post-meta">
@@ -88,9 +88,9 @@
                 </div>
               </header>
               
-              <div v-if="selectedPost.coverImage" class="post-cover-large">
-                <!-- <img :src="selectedPost.coverImage" :alt="selectedPost.title" /> -->
-              </div>
+              <!-- <div v-if="selectedPost.coverImage" class="post-cover-large">
+                <img :src="selectedPost.coverImage" :alt="selectedPost.title" />
+              </div> -->
               
               <div class="post-body" v-html="renderedContent"></div>
 
@@ -125,6 +125,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { getAllPosts } from '../utils/blogData'
 import { marked } from 'marked'
 import BlogGiscus from './BlogGiscus.vue'
@@ -132,6 +133,7 @@ import BlogGiscus from './BlogGiscus.vue'
 // 博客分类
 const categories = ref([
   { id: 'all', name: '全部', icon: '📚' },
+  { id: 'frontend', name: '前端技术', icon: '💻' },
   { id: 'notes', name: '开发笔记', icon: '📝' },
   { id: 'casual', name: '随便写写', icon: '✍️' },
   { id: 'game', name: '游戏', icon: '🎮' },
@@ -143,6 +145,7 @@ const categories = ref([
 const activeCategory = ref('all')
 const posts = ref(getAllPosts())
 const selectedPost = ref(null)
+const router = useRouter()
 
 // 根据分类过滤文章
 const filteredPosts = computed(() => {
@@ -167,12 +170,7 @@ const formatDate = (dateString) => {
 }
 
 const openPost = (post) => {
-  selectedPost.value = post
-  document.body.style.overflow = 'hidden'
-  // 监听ESC键关闭
-  document.addEventListener('keydown', handleEscKey)
-  // 提取标题生成目录
-  extractHeadings()
+  router.push({ name: 'BlogPost', params: { slug: post.slug } })
 }
 
 const closePost = () => {
@@ -408,8 +406,8 @@ const updateActiveHeading = () => {
   margin-bottom: 1rem;
   line-height: 1.4;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

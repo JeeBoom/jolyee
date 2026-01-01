@@ -1,17 +1,5 @@
 <template>
   <section class="communities" id="tools-section">
-    <!-- 分类介绍 -->
-    <div class="category-intro">
-      <h2 class="category-intro-title">开发工具精选</h2>
-      <p class="category-intro-desc">
-        精选开发者必备的效率工具和在线服务。包括代码编辑器、版本控制、项目管理、API测试、
-        性能分析、代码格式化、正则表达式测试等各类实用工具。从Visual Studio Code、Git到Postman、
-        Chrome DevTools，从本地开发环境到云端协作平台，这里汇集了能够显著提升开发效率的利器。
-        每个工具都有详细的使用说明和应用场景介绍，帮助开发者快速上手，优化工作流程，
-        让开发过程更加高效便捷。
-      </p>
-    </div>
-
     <div class="cards-grid">
       <article
         v-for="tool in tools"

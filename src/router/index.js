@@ -9,6 +9,8 @@ const ContactPage = () => import('../pages/ContactPage.vue')
 const PrivacyPage = () => import('../pages/PrivacyPage.vue')
 const TermsPage = () => import('../pages/TermsPage.vue')
 const GuidePage = () => import('../pages/GuidePage.vue')
+const BlogPage = () => import('../pages/BlogPage.vue')
+const BlogPostPage = () => import('../pages/BlogPostPage.vue')
 
 const routes = [
   {
@@ -26,6 +28,24 @@ const routes = [
     meta: {
       title: '使用指南 - 导航中心',
       description: '详细的使用指南，帮助您快速掌握网站功能'
+    }
+  },
+  {
+    path: '/blog',
+    name: 'Blog',
+    component: BlogPage,
+    meta: {
+      title: '博客 - 导航中心',
+      description: '博客文章列表与技术实践分享'
+    }
+  },
+  {
+    path: '/blog/:slug',
+    name: 'BlogPost',
+    component: BlogPostPage,
+    meta: {
+      title: '博客文章 - 导航中心',
+      description: '博客文章详情页'
     }
   },
   {

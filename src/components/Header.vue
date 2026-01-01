@@ -79,6 +79,21 @@
         <span v-else>🌙</span>
       </button>
 
+      <!-- 设置菜单 -->
+      <div class="settings-menu">
+        <button
+          class="header-btn"
+          @click="toggleSettingsMenu"
+          title="设置"
+        >
+          ⚙️
+        </button>
+        <div v-if="showSettingsMenu" class="settings-dropdown">
+          <button class="menu-item" @click="enableBlackScreen">🕶️ 黑屏全屏</button>
+          <p class="menu-hint">点击后屏幕全黑并进入全屏，按 Esc 或点击退出</p>
+        </div>
+      </div>
+
       <!-- 搜索框 -->
       <SearchBar :all-links="allLinks" />
 
@@ -159,6 +174,14 @@
     <div v-if="syncMessage" class="sync-message">
       {{ syncMessage }}
     </div>
+
+    <!-- 黑屏全屏覆盖层 -->
+    <div
+      v-if="isBlackScreen"
+      class="black-screen-overlay"
+      @click="disableBlackScreen"
+    >
+    </div>
   </header>
 </template>
 
@@ -194,6 +217,8 @@ const isSyncing = ref(false);
 const syncMessage = ref("");
 const showTopSites = ref(false);
 const loadingTopSites = ref(true);
+const showSettingsMenu = ref(false);
+const isBlackScreen = ref(false);
 
 // 获取用户头像
 const userAvatar = computed(() => {
@@ -208,6 +233,45 @@ const toggleTheme = () => {
     isDark.value ? "dark" : "light"
   );
   localStorage.setItem("theme", isDark.value ? "dark" : "light");
+};
+
+const toggleSettingsMenu = () => {
+  showSettingsMenu.value = !showSettingsMenu.value;
+  showUserMenu.value = false;
+};
+
+const requestFullscreen = async () => {
+  const el = document.documentElement;
+  if (!document.fullscreenElement && el.requestFullscreen) {
+    try {
+      await el.requestFullscreen();
+    } catch (error) {
+      console.warn("进入全屏失败:", error);
+    }
+  }
+};
+
+const exitFullscreen = async () => {
+  if (document.fullscreenElement && document.exitFullscreen) {
+    try {
+      await document.exitFullscreen();
+    } catch (error) {
+      console.warn("退出全屏失败:", error);
+    }
+  }
+};
+
+const enableBlackScreen = async () => {
+  showSettingsMenu.value = false;
+  isBlackScreen.value = true;
+  document.body.classList.add("black-screen-mode");
+  await requestFullscreen();
+};
+
+const disableBlackScreen = async () => {
+  isBlackScreen.value = false;
+  document.body.classList.remove("black-screen-mode");
+  await exitFullscreen();
 };
 
 const loadTheme = () => {
@@ -306,6 +370,11 @@ const handleClickOutside = (event) => {
   if (userMenu && !userMenu.contains(event.target)) {
     showUserMenu.value = false;
   }
+
+  const settingsMenu = document.querySelector(".settings-menu");
+  if (settingsMenu && !settingsMenu.contains(event.target)) {
+    showSettingsMenu.value = false;
+  }
 };
 
 let hideTimeout;
@@ -320,15 +389,32 @@ const handleLeave = () => {
   }, 200); // 延迟隐藏，给用户时间移动鼠标
 };
 
+const handleFullscreenChange = () => {
+  if (!document.fullscreenElement && isBlackScreen.value) {
+    isBlackScreen.value = false;
+    document.body.classList.remove("black-screen-mode");
+  }
+};
+
+const handleBlackKeydown = (event) => {
+  if (isBlackScreen.value && event.key === "Escape") {
+    disableBlackScreen();
+  }
+};
+
 onMounted(() => {
   loadTheme();
   checkUser();
   loadData();
   document.addEventListener("click", handleClickOutside);
+  document.addEventListener("fullscreenchange", handleFullscreenChange);
+  window.addEventListener("keydown", handleBlackKeydown);
 });
 
 onBeforeUnmount(() => {
   document.removeEventListener("click", handleClickOutside);
+  document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  window.removeEventListener("keydown", handleBlackKeydown);
 });
 
 const topSites = ref([]);
@@ -351,7 +437,7 @@ const loadData = async () => {
 <style scoped>
 .site-header {
   position: fixed;
-  top: 100px;
+  top: 120px;
   right: 0;
   left: 0;
   z-index: 9995 !important;
@@ -403,6 +489,31 @@ const loadData = async () => {
   min-width: 200px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   z-index: 10000;
+}
+
+.settings-menu {
+  position: relative;
+}
+
+.settings-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 200px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+}
+
+.menu-hint {
+  margin: 8px 0 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
 }
 
 .user-avatar {
@@ -581,6 +692,27 @@ const loadData = async () => {
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   z-index: 10001;
+}
+
+.black-screen-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.black-screen-tip {
+  color: #888;
+  font-size: 14px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .often-site {

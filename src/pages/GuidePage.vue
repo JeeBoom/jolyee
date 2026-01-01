@@ -81,62 +81,6 @@
           </div>
         </section>
 
-        <!-- 分类介绍 -->
-        <section class="guide-section">
-          <h2>📚 分类导航</h2>
-          
-          <div class="category-grid">
-            <div class="category-item">
-              <h4>🌐 优质社区</h4>
-              <p>V2EX、Stack Overflow等全球顶尖技术社区</p>
-            </div>
-            <div class="category-item">
-              <h4>💻 IT平台</h4>
-              <p>CSDN、博客园、InfoQ等技术资讯平台</p>
-            </div>
-            <div class="category-item">
-              <h4>🤖 AI工具</h4>
-              <p>ChatGPT、Midjourney等前沿AI应用</p>
-            </div>
-            <div class="category-item">
-              <h4>⚛️ 前端开发</h4>
-              <p>React、Vue、Angular官方文档及工具</p>
-            </div>
-            <div class="category-item">
-              <h4>🔧 后端开发</h4>
-              <p>Spring、Django、Express等后端框架</p>
-            </div>
-            <div class="category-item">
-              <h4>🚀 测试运维</h4>
-              <p>Docker、Kubernetes、Jenkins等运维工具</p>
-            </div>
-            <div class="category-item">
-              <h4>🛠️ 工具合集</h4>
-              <p>VSCode、Postman、Git等开发必备工具</p>
-            </div>
-            <div class="category-item">
-              <h4>🛒 购物平台</h4>
-              <p>淘宝、京东、拼多多等主流电商</p>
-            </div>
-            <div class="category-item">
-              <h4>🎥 短视频</h4>
-              <p>抖音、快手、B站等视频平台</p>
-            </div>
-            <div class="category-item">
-              <h4>📰 新闻资讯</h4>
-              <p>36氪、虎嗅、今日头条等资讯网站</p>
-            </div>
-            <div class="category-item">
-              <h4>💰 股票虚拟币</h4>
-              <p>同花顺、币安等投资理财平台</p>
-            </div>
-            <div class="category-item">
-              <h4>🎬 影视资源</h4>
-              <p>爱奇艺、腾讯视频、Netflix等</p>
-            </div>
-          </div>
-        </section>
-
         <!-- 使用技巧 -->
         <section class="guide-section">
           <h2>💡 使用技巧</h2>

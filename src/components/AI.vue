@@ -1,16 +1,5 @@
 <template>
   <section class="communities" id="ai-section">
-    <!-- 分类介绍 -->
-    <div class="category-intro">
-      <h2 class="category-intro-title">AI工具大全</h2>
-      <p class="category-intro-desc">
-        探索人工智能时代最强大的生产力工具。从ChatGPT、Claude等对话式AI，到Midjourney、Stable Diffusion等AI绘画工具，
-        再到各类AI写作、编程、视频制作助手，这里汇集了当今最热门、最实用的AI应用。
-        每个工具都经过精心筛选和测试，配有详细的功能介绍和使用场景说明。无论您是内容创作者、开发者还是设计师，
-        都能在这里找到提升工作效率的AI利器。拥抱AI，让智能助手成为您的得力帮手。
-      </p>
-    </div>
-
     <div class="cards-grid">
       <article
         v-for="community in communities"

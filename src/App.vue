@@ -79,6 +79,7 @@
 
 <script setup>
 import { ref, computed, onMounted,onUnmounted, defineAsyncComponent } from "vue";
+import { useRouter } from 'vue-router'
 import Header from "./components/Header.vue";
 import BackToTop from "./components/BackToTop.vue";
 import Footer from "./components/Footer.vue";
@@ -115,6 +116,7 @@ const { getAllLinks } = useLinksStore()
 const shortcutsHelpRef = ref(null)
 const footerRef = ref(null)
 const categoryNavRef = ref(null)
+const router = useRouter()
 
 const currentDate = ref('')
 const currentTime = ref('')
@@ -130,6 +132,14 @@ const loadedSections = ref(new Set())
 
 // 切换分类
 const switchCategory = (index) => {
+  const target = menuSections.value[index]
+
+  // 如果定义了路由，则跳转到单独页面
+  if (target?.route) {
+    router.push(target.route)
+    return
+  }
+
   activeCategory.value = index
   // 切换时懒加载对应的组件（跳过第0个，因为默认已加载）
   if (index > 0) {
@@ -177,7 +187,7 @@ const menuSections = ref([
   { title: "软件下载", icon: "📦", group: "娱乐资源", count: 0, shortcut: "14", component: componentMap.Software },
   { title: "英语", icon: "🌍", group: "学习资源", count: 0, shortcut: "15", component: componentMap.English },
   { title: "跨境出海", icon: "🚢", group: "商业资源", count: 0, shortcut: "16", component: componentMap.Crossborder },
-  { title: "博客", icon: "📝", group: "学习资源", count: 0, shortcut: "17", component: componentMap.Blog },
+  { title: "博客", icon: "📝", group: "学习资源", count: 0, shortcut: "17", component: componentMap.Blog, route: '/blog' },
 ]);
 
 // 获取所有链接数据

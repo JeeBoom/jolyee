@@ -1,16 +1,5 @@
 <template>
   <section class="communities" id="backend-section">
-    <!-- 分类介绍 -->
-    <div class="category-intro">
-      <h2 class="category-intro-title">后端开发中心</h2>
-      <p class="category-intro-desc">
-        后端开发技术栈的完整资源库。涵盖Java、Python、Go、Node.js、PHP等主流后端语言的官方文档、框架教程和最佳实践。
-        从Spring Boot、Django到Express.js，从数据库设计到微服务架构，从API开发到系统优化，
-        这里汇集了后端开发所需的各类学习资源和开发工具。无论您是后端新手还是资深架构师，
-        都能找到适合的学习路径和技术方案。掌握这些资源，构建稳定高效的服务端应用。
-      </p>
-    </div>
-
     <div class="cards-grid">
       <article
         v-for="community in communities"

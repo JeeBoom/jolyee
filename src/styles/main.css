@@ -444,8 +444,9 @@ html[data-theme="dark"] body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 100%;
+  width: 80%;
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .card-desc {
@@ -883,4 +884,9 @@ html[data-theme="dark"] body {
   margin: 3rem auto;
   padding: 0 2rem;
   padding-top: 2rem;
+}
+
+/* 黑屏模式隐藏宠物伴侣 */
+.black-screen-mode .pet-companion-wrapper {
+  display: none !important;
 }

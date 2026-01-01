@@ -1,16 +1,5 @@
 <template>
   <section class="communities" id="front-section">
-    <!-- 分类介绍 -->
-    <div class="category-intro">
-      <h2 class="category-intro-title">前端开发资源</h2>
-      <p class="category-intro-desc">
-        前端开发领域的优质学习资源和工具平台集合。涵盖JavaScript、TypeScript、React、Vue、Angular等主流框架的官方文档、
-        教程网站和开发工具。从基础的HTML/CSS到高级的前端工程化，从UI组件库到性能优化工具，
-        为前端开发者提供全方位的技术支持。这里不仅有官方文档和权威教程，还有社区精选的最佳实践、
-        设计规范和开发工具推荐，帮助您构建现代化的Web应用，提升开发效率和用户体验。
-      </p>
-    </div>
-
     <div class="cards-grid">
       <article
         v-for="community in communities"
