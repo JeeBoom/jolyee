@@ -3,7 +3,7 @@ id: 16
 title: "Vite 常用插件：从开发效率到产物分析"
 slug: "vite-top-plugins"
 author: "ssuperjee"
-date: "2026-01-01"
+date: "2025-01-01"
 category: "前端技术"
 blogCategory: "frontend"
 tags:

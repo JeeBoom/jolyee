@@ -31,7 +31,7 @@
         <div class="post-content">
           <div class="post-meta">
             <span class="post-category">{{ post.category }}</span>
-            <span class="post-date">{{ formatDate(post.date) }}</span>
+            <!-- <span class="post-date">{{ formatDate(post.date) }}</span> -->
           </div>
           
           <h3 class="post-title">{{ post.title }}</h3>

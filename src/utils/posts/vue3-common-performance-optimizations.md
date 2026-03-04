@@ -3,7 +3,7 @@ id: 17
 title: "Vue 3 常见性能与代码优化手册（高频技巧实用版）"
 slug: "vue3-common-performance-optimizations"
 author: "ssuperjee"
-date: "2026-01-01"
+date: "2025-01-01"
 category: "前端技术"
 blogCategory: "frontend"
 tags:

@@ -3,7 +3,7 @@ id: 8
 title: "Markdown 常用语法指南"
 slug: "markdown-syntax-guide"
 author: "ssuperjee"
-date: "2025-12-12"
+date: "2024-06-30"
 category: "开发笔记"
 blogCategory: "notes"
 tags:

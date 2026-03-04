@@ -3,7 +3,7 @@ id: 6
 title: "VS Code 插件推荐：这些我每天都在用"
 slug: "vscode-extensions-i-use"
 author: "ssuperjee"
-date: "2025-09-30"
+date: "2024-11-23"
 category: "工具推荐"
 blogCategory: "recommend"
 tags:

@@ -2,7 +2,7 @@
 title: navigator.sendBeacon 埋点实战：页面离开时数据也不丢失
 slug: navigator-sendbeacon-tracking
 author: ssuperjee
-date: 2026-01-12
+date: 2025-01-12
 category: 前端技术
 blogCategory: frontend
 tags:

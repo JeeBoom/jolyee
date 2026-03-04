@@ -3,7 +3,7 @@ id: 18
 title: "Vue3 后台管理系统权限设计实战指南"
 slug: "vue3-permission-guide"
 author: "ssuperjee"
-date: "2026-01-01"
+date: "2025-01-01"
 category: "前端技术"
 blogCategory: "frontend"
 tags:
