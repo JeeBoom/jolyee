@@ -609,39 +609,56 @@ const loadData = async () => {
 /* 移动设备适配 */
 @media (max-width: 768px) {
   .site-header {
-    padding-right: 80px;
-    display: none;
+    top: 8px;
+    bottom: auto;
+    right: 8px;
+    left: auto;
+    padding-right: 0;
+    height: auto;
+    display: flex;
   }
 
   .header-buttons {
-    gap: 8px;
+    flex-direction: row;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: calc(100vw - 16px);
   }
 
   .header-btn,
   :deep(.search-btn) {
-    width: 36px !important;
-    height: 36px !important;
-    font-size: 1rem;
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 0.9rem;
+  }
+
+  .user-dropdown,
+  .settings-dropdown,
+  .top-sites-panel {
+    right: 0;
+    top: 100%;
+    margin-top: 8px;
   }
 }
 
 /* 超小屏幕 */
 @media (max-width: 480px) {
   .site-header {
-    padding-right: 70px;
-    display: none;
+    top: 6px;
+    right: 6px;
   }
 
   .header-buttons {
-    gap: 6px;
+    gap: 5px;
   }
 
   .header-btn,
   :deep(.search-btn) {
-    width: 32px !important;
-    height: 32px !important;
+    width: 30px !important;
+    height: 30px !important;
     border-width: 1px !important;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 }
 
