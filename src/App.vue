@@ -599,15 +599,25 @@ html[data-theme="dark"] .category-btn.active {
 /* 移动端适配 */
 @media (max-width: 768px) {
   .category-nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     gap: 6px;
-    padding: 12px 8px;
-    margin: 10px auto;
-    justify-content: center;
+    padding: 12px 12px;
+    margin: 10px 0;
+    justify-content: flex-start;
+  }
+
+  .category-nav::-webkit-scrollbar {
+    display: none;
   }
   
   .category-btn {
-    padding: 6px 10px;
+    padding: 6px 12px;
     font-size: 12px;
+    flex-shrink: 0;
   }
   
   .category-icon {
@@ -630,14 +640,13 @@ html[data-theme="dark"] .category-btn.active {
 
 @media (max-width: 480px) {
   .category-nav {
-    gap: 4px;
-    padding: 10px 4px;
-    margin: 8px auto;
-    justify-content: center;
+    gap: 6px;
+    padding: 10px 8px;
+    margin: 8px 0;
   }
   
   .category-btn {
-    padding: 5px 8px;
+    padding: 5px 10px;
     font-size: 11px;
   }
   
@@ -654,7 +663,7 @@ html[data-theme="dark"] .category-btn.active {
   }
 
   .content-section {
-    padding: 0 ;
+    padding: 0;
   }
   
   /* 手机端隐藏固定导航 */

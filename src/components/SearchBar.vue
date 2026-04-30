@@ -494,7 +494,7 @@ const searchResults = computed(() => {
 
 @media (max-width: 768px) {
   .search-modal-overlay {
-    padding-top: 20px;
+    padding-top: 56px;
   }
 
   .search-modal {

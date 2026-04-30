@@ -15,8 +15,12 @@
   --accent-color: #f093fb;
   --text-primary: #333;
   --text-secondary: #666;
+  --text-tertiary: #999;
   --bg-primary: #ffffff;
   --bg-secondary: #f7f9fc;
+  --bg-hover: #eef2ff;
+  --card-background: #ffffff;
+  --hover-background: #f0f4ff;
   --border-color: #e0e0e0;
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
@@ -30,8 +34,12 @@ html[data-theme="dark"] {
   --accent-color: #f093fb;
   --text-primary: #e5e5e5;
   --text-secondary: #b8b8b8;
+  --text-tertiary: #808080;
   --bg-primary: #1a1a1a;
   --bg-secondary: #2a2a2a;
+  --bg-hover: #2d2d4e;
+  --card-background: #1a1a1a;
+  --hover-background: rgba(255, 255, 255, 0.05);
   --border-color: #404040;
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
@@ -162,7 +170,7 @@ html[data-theme="dark"] body {
   width: 100%;
   /* max-width: 1600px; */
   margin: 0 auto;
-  padding: 3rem 4rem;
+  padding: 2rem 3rem;
 }
 
 /* 6. 分区标题 */
@@ -581,6 +589,10 @@ html[data-theme="dark"] body {
 
 /* 平板设备横屏/小屏笔记本 (≤1200px) */
 @media (max-width: 1200px) {
+  .main-content {
+    padding: 1.5rem 2rem;
+  }
+
   .cards-grid {
     gap: 1.2rem;
   }
@@ -607,7 +619,7 @@ html[data-theme="dark"] body {
   }
 
   .main-content {
-    padding: 2rem 1.5rem;
+    padding: 1.5rem 1.5rem;
   }
 
   .content-section {
@@ -626,6 +638,10 @@ html[data-theme="dark"] body {
 
 /* 小平板 (≤900px) */
 @media (max-width: 900px) {
+  .main-content {
+    padding: 1.2rem 1rem;
+  }
+
   .cards-grid {
     gap: 1rem;
   }
@@ -677,7 +693,8 @@ html[data-theme="dark"] body {
   .main-content {
     max-width: 100%;
     margin: 0;
-    padding: 1.5rem 0;
+    padding: 1rem 0.75rem;
+    padding-top: 56px;
   }
 
   /* 标题样式 */
@@ -698,16 +715,17 @@ html[data-theme="dark"] body {
 
   /* 卡片样式 */
   .cards-grid {
-    gap: 1rem;
+    gap: 0.75rem;
   }
   
   .cards-grid .card {
-    flex: 0 0 100%;
-    max-width: 100%;
+    flex: 0 0 calc((100% - 0.75rem) / 2);
+    max-width: calc((100% - 0.75rem) / 2);
   }
 
   .card {
-    padding: 1.2rem;
+    padding: 1rem;
+    min-height: 120px;
   }
 
   .card-icon {
@@ -720,6 +738,7 @@ html[data-theme="dark"] body {
   .scroll-buttons {
     bottom: 1rem;
     right: 1rem;
+    left: auto;
     gap: 0.8rem;
   }
 
@@ -766,7 +785,8 @@ html[data-theme="dark"] body {
   /* 主内容区 */
   .main-content {
     max-width: 100%;
-    padding: 1rem 0.5rem;
+    padding: 0.75rem 0.5rem;
+    padding-top: 48px;
   }
 
   /* 标题样式 */
@@ -780,30 +800,32 @@ html[data-theme="dark"] body {
 
   /* 卡片样式 */
   .cards-grid {
-    gap: 0.8rem;
+    gap: 0.6rem;
   }
   
   .cards-grid .card {
-    flex: 0 0 100%;
-    max-width: 100%;
+    flex: 0 0 calc((100% - 0.6rem) / 2);
+    max-width: calc((100% - 0.6rem) / 2);
   }
 
   .card {
-    padding: 1rem;
+    padding: 0.75rem;
+    min-height: 100px;
   }
 
   .card-title {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .card-desc {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
 
   /* 滚动按钮 */
   .scroll-buttons {
     bottom: 1rem;
     right: 1rem;
+    left: auto;
     gap: 0.6rem;
   }
 
